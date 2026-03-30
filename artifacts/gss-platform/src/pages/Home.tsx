@@ -78,40 +78,99 @@ export default function Home() {
   return (
     <div className="w-full overflow-hidden">
       {/* Hero Section */}
-      <section className="relative bg-primary pt-24 pb-32 lg:pt-32 lg:pb-40 overflow-hidden text-white">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1497366216548-37526070297c')] bg-cover bg-center opacity-10 mix-blend-overlay"></div>
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/90 to-primary/100"></div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <section className="relative min-h-[90vh] flex items-center overflow-hidden text-white">
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          <img
+            src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1600&auto=format&fit=crop&q=80"
+            alt="GSS Platform"
+            className="w-full h-full object-cover object-center"
+          />
+          {/* Dark gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-l from-primary/95 via-primary/85 to-slate-900/70"></div>
+          {/* Subtle pattern overlay */}
+          <div className="absolute inset-0 opacity-5"
+            style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+            }}
+          ></div>
+        </div>
+
+        {/* Floating Stats Cards */}
+        <div className="absolute left-4 top-1/4 hidden xl:block">
           <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={fadeInUp}
-            className="text-center max-w-4xl mx-auto"
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.8, duration: 0.6 }}
+            className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-5 text-center mb-4 w-40"
           >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-              مدير العمليات الخارجي لخدمات منشأتكم التشغيلية
-            </h1>
-            <p className="text-lg md:text-xl text-slate-300 mb-10 leading-relaxed max-w-2xl mx-auto">
+            <p className="text-3xl font-black text-secondary">+١٢</p>
+            <p className="text-xs text-slate-300 mt-1">نوع خدمة تشغيلية</p>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 1, duration: 0.6 }}
+            className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-5 text-center w-40"
+          >
+            <p className="text-3xl font-black text-secondary">٣</p>
+            <p className="text-xs text-slate-300 mt-1">نماذج تعاون مرنة</p>
+          </motion.div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full py-24 lg:py-32">
+          <div className="max-w-3xl">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="inline-flex items-center gap-2 bg-secondary/20 border border-secondary/40 rounded-full px-5 py-2 text-secondary text-sm font-bold mb-8"
+            >
+              <span className="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+              General Support Services — GSS
+            </motion.div>
+
+            <motion.h1
+              initial="hidden"
+              animate="visible"
+              variants={fadeInUp}
+              className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6"
+            >
+              مدير العمليات الخارجي
+              <br />
+              <span className="text-secondary">لخدمات منشأتكم التشغيلية</span>
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.6 }}
+              className="text-lg md:text-xl text-slate-300 mb-10 leading-relaxed max-w-2xl"
+            >
               تعمل منصة GSS كمدير عمليات خارجي يدعم منشأتكم في تنظيم الطلبات التشغيلية ومتابعة الموردين وتحليل المصروفات واقتراح الحلول الأكثر كفاءة، دون الحاجة إلى توظيف فريق تشغيل داخلي.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            </motion.p>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 0.6 }}
+              className="flex flex-col sm:flex-row gap-4"
+            >
               <Link href="/register/company">
                 <Button
                   size="lg"
-                  className="w-full sm:w-auto bg-secondary hover:bg-secondary/90 text-primary font-bold h-14 px-8 text-lg"
+                  className="w-full sm:w-auto bg-secondary hover:bg-secondary/90 text-primary font-bold h-14 px-8 text-lg shadow-lg shadow-secondary/30"
                   data-testid="hero-btn-company"
                 >
-                  أنا منشأة
+                  أنا منشأة — سجّل الآن
                 </Button>
               </Link>
               <Link href="/register/vendor">
                 <Button
                   size="lg"
                   variant="outline"
-                  className="w-full sm:w-auto h-14 px-8 text-lg text-white border-white hover:bg-white/10"
+                  className="w-full sm:w-auto h-14 px-8 text-lg text-white border-white/60 hover:bg-white/10 backdrop-blur-sm"
                   data-testid="hero-btn-vendor"
                 >
-                  أنا مقدم خدمة (مورد)
+                  أنا مورد / فني
                 </Button>
               </Link>
               <Link href="/register/consultant">
@@ -124,8 +183,23 @@ export default function Home() {
                   أنا مستشار / شريك نجاح
                 </Button>
               </Link>
-            </div>
-          </motion.div>
+            </motion.div>
+
+            {/* Trust indicators */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.9, duration: 0.6 }}
+              className="mt-12 flex flex-wrap gap-6 items-center"
+            >
+              {["نقطة اتصال واحدة لجميع الخدمات", "لا عمولات مخفية", "بدء سريع دون التزام"].map((item, i) => (
+                <div key={i} className="flex items-center gap-2 text-slate-300 text-sm">
+                  <CheckCircle2 size={16} className="text-secondary flex-shrink-0" />
+                  {item}
+                </div>
+              ))}
+            </motion.div>
+          </div>
         </div>
       </section>
 
