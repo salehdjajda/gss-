@@ -1,15 +1,20 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: GSS Platform API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: registrations
+    description: Registration forms for companies, vendors, and consultants
+  - name: contact
+    description: Contact form
+  - name: dashboard
+    description: Dashboard data for different user types
 paths:
   /healthz:
     get:
@@ -24,6 +29,146 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /registrations/company:
+    post:
+      operationId: registerCompany
+      tags: [registrations]
+      summary: Register a company
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompanyRegistrationBody"
+      responses:
+        "201":
+          description: Company registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegistrationResult"
+        "400":
+          description: Invalid data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /registrations/vendor:
+    post:
+      operationId: registerVendor
+      tags: [registrations]
+      summary: Register a vendor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VendorRegistrationBody"
+      responses:
+        "201":
+          description: Vendor registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegistrationResult"
+        "400":
+          description: Invalid data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /registrations/consultant:
+    post:
+      operationId: registerConsultant
+      tags: [registrations]
+      summary: Register a consultant (success partner)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ConsultantRegistrationBody"
+      responses:
+        "201":
+          description: Consultant registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegistrationResult"
+        "400":
+          description: Invalid data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /contact:
+    post:
+      operationId: submitContact
+      tags: [contact]
+      summary: Submit a contact form message
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContactBody"
+      responses:
+        "201":
+          description: Message sent successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegistrationResult"
+        "400":
+          description: Invalid data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /dashboard/company:
+    get:
+      operationId: getCompanyDashboard
+      tags: [dashboard]
+      summary: Get company dashboard summary
+      responses:
+        "200":
+          description: Company dashboard data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompanyDashboard"
+
+  /dashboard/vendor:
+    get:
+      operationId: getVendorDashboard
+      tags: [dashboard]
+      summary: Get vendor dashboard summary
+      responses:
+        "200":
+          description: Vendor dashboard data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VendorDashboard"
+
+  /dashboard/consultant:
+    get:
+      operationId: getConsultantDashboard
+      tags: [dashboard]
+      summary: Get consultant dashboard summary
+      responses:
+        "200":
+          description: Consultant dashboard data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConsultantDashboard"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +179,289 @@ components:
       required:
         - status
 
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
+
+    RegistrationResult:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        id:
+          type: integer
+      required:
+        - success
+        - message
+        - id
+
+    CompanyRegistrationBody:
+      type: object
+      properties:
+        companyName:
+          type: string
+        commercialRegister:
+          type: string
+        city:
+          type: string
+        address:
+          type: string
+        branchCount:
+          type: integer
+        activityType:
+          type: string
+        contactName:
+          type: string
+        jobTitle:
+          type: string
+        department:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+        authorizationConfirmed:
+          type: boolean
+        agreementConfirmed:
+          type: boolean
+        requestedServices:
+          type: array
+          items:
+            type: string
+        currentVendors:
+          type: string
+        operationVolume:
+          type: string
+        collaborationModel:
+          type: string
+      required:
+        - companyName
+        - city
+        - contactName
+        - phone
+        - email
+        - collaborationModel
+
+    VendorRegistrationBody:
+      type: object
+      properties:
+        vendorType:
+          type: string
+        name:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+        services:
+          type: array
+          items:
+            type: string
+        serviceScope:
+          type: string
+        financialModelAccepted:
+          type: boolean
+      required:
+        - vendorType
+        - name
+        - phone
+        - email
+        - services
+        - serviceScope
+
+    ConsultantRegistrationBody:
+      type: object
+      properties:
+        name:
+          type: string
+        city:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+        expertiseArea:
+          type: string
+        contributionType:
+          type: string
+        yearsOfExperience:
+          type: integer
+        revenueModelAccepted:
+          type: boolean
+      required:
+        - name
+        - city
+        - phone
+        - email
+        - expertiseArea
+
+    ContactBody:
+      type: object
+      properties:
+        name:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+        subject:
+          type: string
+        message:
+          type: string
+      required:
+        - name
+        - email
+        - message
+
+    ServiceRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        status:
+          type: string
+        serviceType:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required:
+        - id
+        - title
+        - status
+        - serviceType
+        - createdAt
+        - updatedAt
+
+    CompanyDashboard:
+      type: object
+      properties:
+        totalRequests:
+          type: integer
+        activeRequests:
+          type: integer
+        completedRequests:
+          type: integer
+        pendingRequests:
+          type: integer
+        recentRequests:
+          type: array
+          items:
+            $ref: "#/components/schemas/ServiceRequest"
+        monthlyCostSavings:
+          type: number
+        vendorRatingsAvg:
+          type: number
+      required:
+        - totalRequests
+        - activeRequests
+        - completedRequests
+        - pendingRequests
+        - recentRequests
+        - monthlyCostSavings
+        - vendorRatingsAvg
+
+    AssignedRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        companyName:
+          type: string
+        status:
+          type: string
+        serviceType:
+          type: string
+        assignedAt:
+          type: string
+      required:
+        - id
+        - title
+        - companyName
+        - status
+        - serviceType
+        - assignedAt
+
+    VendorDashboard:
+      type: object
+      properties:
+        totalAssigned:
+          type: integer
+        activeJobs:
+          type: integer
+        completedJobs:
+          type: integer
+        pendingQuotes:
+          type: integer
+        assignedRequests:
+          type: array
+          items:
+            $ref: "#/components/schemas/AssignedRequest"
+        performanceScore:
+          type: number
+      required:
+        - totalAssigned
+        - activeJobs
+        - completedJobs
+        - pendingQuotes
+        - assignedRequests
+        - performanceScore
+
+    ConsultationItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        status:
+          type: string
+        linkedCompany:
+          type: string
+        rewardAmount:
+          type: number
+        createdAt:
+          type: string
+      required:
+        - id
+        - title
+        - status
+        - linkedCompany
+        - rewardAmount
+        - createdAt
+
+    ConsultantDashboard:
+      type: object
+      properties:
+        totalConsultations:
+          type: integer
+        activeConsultations:
+          type: integer
+        completedConsultations:
+          type: integer
+        totalEarnings:
+          type: number
+        pendingEarnings:
+          type: number
+        consultations:
+          type: array
+          items:
+            $ref: "#/components/schemas/ConsultationItem"
+      required:
+        - totalConsultations
+        - activeConsultations
+        - completedConsultations
+        - totalEarnings
+        - pendingEarnings
+        - consultations
