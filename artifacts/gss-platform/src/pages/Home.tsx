@@ -97,16 +97,16 @@ export default function Home() {
           ></div>
 
           {/* Logo — inside background container so blend mode composites directly with hero */}
-          <div className="absolute top-8 left-8" style={{ height: "84px", width: "330px" }}>
+          <div className="absolute top-8 left-8" style={{ height: "110px", width: "380px" }}>
             <img
               src={logoImg}
               alt="GSS - General Support Services"
               style={{
-                height: "260px",
+                height: "340px",
                 width: "auto",
-                marginTop: "-88px",
+                marginTop: "-112px",
                 mixBlendMode: "screen",
-                filter: "invert(1) contrast(9999%) brightness(500%)",
+                filter: "invert(1) hue-rotate(180deg) brightness(1.15) contrast(1.1)",
               }}
             />
           </div>
