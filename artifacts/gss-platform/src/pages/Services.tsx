@@ -8,8 +8,119 @@ import { useToast } from "@/hooks/use-toast";
 import {
   Wrench, Sparkles, Truck, Users, Monitor, FileText, Building2,
   ShieldCheck, Car, Home, Calendar, Brain, ArrowLeft,
-  CheckCircle2, ClipboardList, Send, Star, Zap, Phone
+  CheckCircle2, ClipboardList, Send, Star, Zap, Phone,
+  Wind, Droplets, Lightbulb, PaintBucket, HardHat, Leaf,
+  Layers, Thermometer, Bug, LayoutGrid, Anchor,
+  Square, AlignJustify, ParkingSquare
 } from "lucide-react";
+
+const SPECIALIZED = [
+  {
+    label: "تكييف",
+    icon: Wind,
+    image: "https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=600&auto=format&fit=crop&q=80",
+    desc: "تركيب وصيانة أجهزة التكييف والتبريد بجميع أنواعها",
+    color: "from-sky-500 to-blue-600",
+  },
+  {
+    label: "سباكة",
+    icon: Droplets,
+    image: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=600&auto=format&fit=crop&q=80",
+    desc: "أعمال السباكة والعزل المائي وصيانة شبكات المياه",
+    color: "from-cyan-500 to-teal-600",
+  },
+  {
+    label: "كهرباء",
+    icon: Lightbulb,
+    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&auto=format&fit=crop&q=80",
+    desc: "تمديدات وصيانة الأعمال الكهربائية والإنارة",
+    color: "from-yellow-400 to-amber-600",
+  },
+  {
+    label: "دهانات",
+    icon: PaintBucket,
+    image: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=600&auto=format&fit=crop&q=80",
+    desc: "دهانات داخلية وخارجية بمعايير تشطيب احترافية",
+    color: "from-orange-400 to-red-500",
+  },
+  {
+    label: "نجارة وتركيبات",
+    icon: HardHat,
+    image: "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=600&auto=format&fit=crop&q=80",
+    desc: "أعمال النجارة والتركيبات الخشبية وتجهيز المكاتب",
+    color: "from-amber-600 to-yellow-700",
+  },
+  {
+    label: "عشب صناعي",
+    icon: Leaf,
+    image: "https://images.unsplash.com/photo-1558904541-efa843a96f01?w=600&auto=format&fit=crop&q=80",
+    desc: "تركيب وصيانة العشب الصناعي للمساحات الخارجية",
+    color: "from-green-500 to-emerald-600",
+  },
+  {
+    label: "لياسة",
+    icon: Layers,
+    image: "https://images.unsplash.com/photo-1572879023364-ab4f53e9d5fa?w=600&auto=format&fit=crop&q=80",
+    desc: "أعمال اللياسة والتشطيبات الجدارية بجميع أنواعها",
+    color: "from-slate-400 to-gray-600",
+  },
+  {
+    label: "غرف التبريد",
+    icon: Thermometer,
+    image: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=600&auto=format&fit=crop&q=80",
+    desc: "تركيب وصيانة وتشغيل غرف التبريد والحفظ البارد",
+    color: "from-blue-400 to-indigo-600",
+  },
+  {
+    label: "مكافحة الحشرات",
+    icon: Bug,
+    image: "https://images.unsplash.com/photo-1530126483408-aa533e55bdb2?w=600&auto=format&fit=crop&q=80",
+    desc: "رش وقاية دورية ومكافحة الحشرات والقوارض",
+    color: "from-lime-500 to-green-700",
+  },
+  {
+    label: "تنظيف",
+    icon: Sparkles,
+    image: "https://images.unsplash.com/photo-1563453392212-326f5e854473?w=600&auto=format&fit=crop&q=80",
+    desc: "تنظيف يومي وعميق للمنشآت والفروع بمواد معتمدة",
+    color: "from-violet-500 to-purple-700",
+  },
+  {
+    label: "أرضيات",
+    icon: LayoutGrid,
+    image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&auto=format&fit=crop&q=80",
+    desc: "تركيب وصيانة جميع أنواع الأرضيات والبلاط",
+    color: "from-stone-500 to-slate-600",
+  },
+  {
+    label: "حوض سباحة",
+    icon: Anchor,
+    image: "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?w=600&auto=format&fit=crop&q=80",
+    desc: "تنظيف وصيانة وتشغيل أحواض السباحة",
+    color: "from-teal-400 to-cyan-600",
+  },
+  {
+    label: "أعمال جبسية",
+    icon: Square,
+    image: "https://images.unsplash.com/photo-1571504211935-1c936b327411?w=600&auto=format&fit=crop&q=80",
+    desc: "تركيب وتشكيل الجبس والديكورات الجبسية المتنوعة",
+    color: "from-pink-400 to-rose-500",
+  },
+  {
+    label: "باركيه",
+    icon: AlignJustify,
+    image: "https://images.unsplash.com/photo-1562663474-6cbb3eaa4d14?w=600&auto=format&fit=crop&q=80",
+    desc: "تركيب وصيانة وتلميع أرضيات الباركيه الخشبي",
+    color: "from-yellow-600 to-amber-800",
+  },
+  {
+    label: "مضلات المواقف",
+    icon: ParkingSquare,
+    image: "https://images.unsplash.com/photo-1614854262340-ab1ca7d079c7?w=600&auto=format&fit=crop&q=80",
+    desc: "تصنيع وتركيب وصيانة مظلات مواقف السيارات",
+    color: "from-indigo-500 to-blue-700",
+  },
+];
 
 const CATEGORIES = [
   {
@@ -309,8 +420,59 @@ export default function Services() {
         </div>
       </section>
 
+      {/* Specialized Services Grid */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <span className="inline-block bg-secondary/10 text-primary text-sm font-bold px-4 py-1.5 rounded-full mb-4">الخدمات التخصصية</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">أعمال الصيانة والتجهيز المتخصصة</h2>
+            <p className="text-gray-500 text-lg max-w-2xl mx-auto">
+              نغطي جميع أعمال الصيانة والتجهيز المتخصصة من خلال شبكة موردين معتمدين — سواء طلب واحد أو مشروع كامل.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            {SPECIALIZED.map((item, i) => (
+              <motion.div
+                key={item.label}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.05 }}
+                className="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all cursor-pointer"
+              >
+                {/* Background Image */}
+                <div className="h-40 relative">
+                  <img
+                    src={item.image}
+                    alt={item.label}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className={`absolute inset-0 bg-gradient-to-t ${item.color} opacity-75 group-hover:opacity-85 transition-opacity`} />
+                  {/* Icon */}
+                  <div className="absolute top-3 right-3 w-9 h-9 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
+                    <item.icon size={18} className="text-white" />
+                  </div>
+                </div>
+                {/* Label */}
+                <div className="p-3 bg-white border border-gray-100 border-t-0">
+                  <p className="font-bold text-gray-900 text-sm text-center">{item.label}</p>
+                  <p className="text-gray-500 text-xs text-center mt-1 leading-relaxed hidden group-hover:block">{item.desc}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+          <div className="text-center mt-10">
+            <Link href="/register/company">
+              <Button size="lg" className="h-12 px-10 font-bold">
+                اطلب أي خدمة من هذه الخدمات <ArrowLeft className="mr-2" size={18} />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Service Cards */}
-      <section className="py-16">
+      <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-14">
           {CATEGORIES.map((cat, idx) => {
             const colors = colorMap[cat.color];
