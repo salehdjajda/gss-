@@ -96,21 +96,7 @@ export default function Home() {
             }}
           ></div>
 
-          {/* Logo — top-left corner on all screen sizes */}
-          <div className="absolute top-4 left-4 md:top-8 md:left-8" style={{ height: "70px", width: "240px" }}>
-            <img
-              src={logoImg}
-              alt="GSS - General Support Services"
-              className="md:hidden"
-              style={{
-                height: "215px",
-                width: "auto",
-                marginTop: "-72px",
-                mixBlendMode: "screen",
-                filter: "invert(1) hue-rotate(180deg) brightness(1.15) contrast(1.1)",
-              }}
-            />
-          </div>
+          {/* Logo — desktop only; navbar already shows the logo on mobile */}
           <div className="absolute top-8 left-8 hidden md:block" style={{ height: "110px", width: "380px" }}>
             <img
               src={logoImg}
@@ -126,7 +112,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full pt-28 pb-16 md:pt-24 lg:pt-28 lg:pb-28">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full pt-16 pb-16 md:pt-24 lg:pt-28 lg:pb-28">
           <div className="max-w-3xl">
 
             <motion.div
@@ -555,6 +541,30 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-950 border-t border-gray-800 py-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-gray-500 text-sm text-center sm:text-right order-2 sm:order-1">
+            جميع الحقوق محفوظة © {new Date().getFullYear()} — GSS General Support Services
+          </p>
+          <Link href="/" className="order-1 sm:order-2 flex-shrink-0">
+            <div className="overflow-hidden" style={{ height: "34px", width: "170px" }}>
+              <img
+                src={logoImg}
+                alt="GSS"
+                style={{
+                  height: "110px",
+                  width: "auto",
+                  marginTop: "-38px",
+                  filter: "brightness(0) invert(1)",
+                  opacity: 0.85,
+                }}
+              />
+            </div>
+          </Link>
+        </div>
+      </footer>
     </div>
   );
 }
