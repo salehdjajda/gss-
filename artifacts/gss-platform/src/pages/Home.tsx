@@ -97,131 +97,136 @@ export default function Home() {
           ></div>
         </div>
 
-        {/* Floating Stats Cards */}
-        <div className="absolute left-4 top-1/4 hidden xl:block">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.8, duration: 0.6 }}
-            className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-5 text-center mb-4 w-40"
-          >
-            <p className="text-3xl font-black text-secondary">+١٢</p>
-            <p className="text-xs text-slate-300 mt-1">نوع خدمة تشغيلية</p>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 1, duration: 0.6 }}
-            className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-5 text-center w-40"
-          >
-            <p className="text-3xl font-black text-secondary">٣</p>
-            <p className="text-xs text-slate-300 mt-1">نماذج تعاون مرنة</p>
-          </motion.div>
-        </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full py-20 lg:py-28">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full py-24 lg:py-32">
-          <div className="max-w-3xl">
-            {/* GSS Logo — prominent in hero */}
+            {/* Right column — text content (RTL: appears on right) */}
+            <div>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="inline-flex items-center gap-2 bg-secondary/20 border border-secondary/40 rounded-full px-5 py-2 text-secondary text-sm font-bold mb-8"
+              >
+                <span className="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+                General Support Services — GSS
+              </motion.div>
+
+              <motion.h1
+                initial="hidden"
+                animate="visible"
+                variants={fadeInUp}
+                className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6"
+              >
+                مدير العمليات الخارجي
+                <br />
+                <span className="text-secondary">لخدمات منشأتكم التشغيلية</span>
+              </motion.h1>
+
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, duration: 0.6 }}
+                className="text-lg md:text-xl text-slate-300 mb-10 leading-relaxed"
+              >
+                تعمل منصة GSS كمدير عمليات خارجي يدعم منشأتكم في تنظيم الطلبات التشغيلية ومتابعة الموردين وتحليل المصروفات واقتراح الحلول الأكثر كفاءة، مما يساهم في رفع جودة الأداء التشغيلي وتقليل الأعباء الإدارية دون الحاجة إلى إنشاء فريق تشغيل داخلي إضافي.
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5, duration: 0.6 }}
+                className="flex flex-col sm:flex-row gap-4"
+              >
+                <Link href="/register/company">
+                  <Button
+                    size="lg"
+                    className="w-full sm:w-auto bg-secondary hover:bg-secondary/90 text-primary font-bold h-14 px-8 text-lg shadow-lg shadow-secondary/30"
+                    data-testid="hero-btn-company"
+                  >
+                    أنا منشأة — سجّل الآن
+                  </Button>
+                </Link>
+                <Link href="/register/vendor">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="w-full sm:w-auto h-14 px-8 text-lg text-white border-white/60 hover:bg-white/10 backdrop-blur-sm"
+                    data-testid="hero-btn-vendor"
+                  >
+                    أنا مورد / فني
+                  </Button>
+                </Link>
+                <Link href="/register/consultant">
+                  <Button
+                    size="lg"
+                    variant="ghost"
+                    className="w-full sm:w-auto h-14 px-8 text-lg text-slate-300 hover:text-white hover:bg-white/5"
+                    data-testid="hero-btn-consultant"
+                  >
+                    أنا مستشار / شريك نجاح
+                  </Button>
+                </Link>
+              </motion.div>
+
+              {/* Trust indicators */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.9, duration: 0.6 }}
+                className="mt-10 flex flex-wrap gap-6 items-center"
+              >
+                {["نقطة اتصال واحدة لجميع الخدمات", "لا عمولات مخفية", "بدء سريع دون التزام"].map((item, i) => (
+                  <div key={i} className="flex items-center gap-2 text-slate-300 text-sm">
+                    <CheckCircle2 size={16} className="text-secondary flex-shrink-0" />
+                    {item}
+                  </div>
+                ))}
+              </motion.div>
+            </div>
+
+            {/* Left column — GSS Logo (RTL: appears on left) */}
             <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="mb-10 inline-block"
+              initial={{ opacity: 0, x: -40 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.4, duration: 0.7 }}
+              className="flex items-center justify-center"
             >
-              <div className="bg-white rounded-2xl shadow-2xl px-4 py-2 inline-flex items-center">
-                <div className="overflow-hidden" style={{ height: "64px", width: "280px" }}>
-                  <img
-                    src={logoImg}
-                    alt="GSS - General Support Services"
-                    style={{
-                      height: "200px",
-                      width: "auto",
-                      marginTop: "-68px",
-                    }}
-                  />
+              <div className="relative">
+                {/* Glow ring */}
+                <div className="absolute inset-0 rounded-3xl bg-secondary/20 blur-3xl scale-110" />
+                {/* Logo card */}
+                <div className="relative bg-white rounded-3xl shadow-2xl p-8 flex items-center justify-center" style={{ minWidth: "320px" }}>
+                  <div className="overflow-hidden" style={{ height: "90px", width: "340px" }}>
+                    <img
+                      src={logoImg}
+                      alt="GSS - General Support Services"
+                      style={{ height: "280px", width: "auto", marginTop: "-95px" }}
+                    />
+                  </div>
                 </div>
+                {/* Stats floating cards */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1, duration: 0.6 }}
+                  className="absolute -bottom-6 -right-6 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 text-center"
+                >
+                  <p className="text-2xl font-black text-secondary">+١٢</p>
+                  <p className="text-xs text-slate-300 mt-0.5">نوع خدمة تشغيلية</p>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1.2, duration: 0.6 }}
+                  className="absolute -top-6 -left-6 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 text-center"
+                >
+                  <p className="text-2xl font-black text-secondary">٣</p>
+                  <p className="text-xs text-slate-300 mt-0.5">نماذج تعاون مرنة</p>
+                </motion.div>
               </div>
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 bg-secondary/20 border border-secondary/40 rounded-full px-5 py-2 text-secondary text-sm font-bold mb-8"
-            >
-              <span className="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
-              General Support Services — GSS
-            </motion.div>
-
-            <motion.h1
-              initial="hidden"
-              animate="visible"
-              variants={fadeInUp}
-              className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6"
-            >
-              مدير العمليات الخارجي
-              <br />
-              <span className="text-secondary">لخدمات منشأتكم التشغيلية</span>
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.6 }}
-              className="text-lg md:text-xl text-slate-300 mb-10 leading-relaxed max-w-2xl"
-            >
-              تعمل منصة GSS كمدير عمليات خارجي يدعم منشأتكم في تنظيم الطلبات التشغيلية ومتابعة الموردين وتحليل المصروفات واقتراح الحلول الأكثر كفاءة، مما يساهم في رفع جودة الأداء التشغيلي وتقليل الأعباء الإدارية دون الحاجة إلى إنشاء فريق تشغيل داخلي إضافي.
-            </motion.p>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.6 }}
-              className="flex flex-col sm:flex-row gap-4"
-            >
-              <Link href="/register/company">
-                <Button
-                  size="lg"
-                  className="w-full sm:w-auto bg-secondary hover:bg-secondary/90 text-primary font-bold h-14 px-8 text-lg shadow-lg shadow-secondary/30"
-                  data-testid="hero-btn-company"
-                >
-                  أنا منشأة — سجّل الآن
-                </Button>
-              </Link>
-              <Link href="/register/vendor">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="w-full sm:w-auto h-14 px-8 text-lg text-white border-white/60 hover:bg-white/10 backdrop-blur-sm"
-                  data-testid="hero-btn-vendor"
-                >
-                  أنا مورد / فني
-                </Button>
-              </Link>
-              <Link href="/register/consultant">
-                <Button
-                  size="lg"
-                  variant="ghost"
-                  className="w-full sm:w-auto h-14 px-8 text-lg text-slate-300 hover:text-white hover:bg-white/5"
-                  data-testid="hero-btn-consultant"
-                >
-                  أنا مستشار / شريك نجاح
-                </Button>
-              </Link>
-            </motion.div>
-
-            {/* Trust indicators */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.9, duration: 0.6 }}
-              className="mt-12 flex flex-wrap gap-6 items-center"
-            >
-              {["نقطة اتصال واحدة لجميع الخدمات", "لا عمولات مخفية", "بدء سريع دون التزام"].map((item, i) => (
-                <div key={i} className="flex items-center gap-2 text-slate-300 text-sm">
-                  <CheckCircle2 size={16} className="text-secondary flex-shrink-0" />
-                  {item}
-                </div>
-              ))}
-            </motion.div>
           </div>
         </div>
       </section>
