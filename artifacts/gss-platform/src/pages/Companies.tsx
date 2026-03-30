@@ -5,8 +5,72 @@ import {
   ShieldCheck, TrendingDown, Users, RefreshCcw, Network,
   BarChart3, CheckCircle2, ArrowLeft, X, UserCheck,
   PhoneCall, FileText, Wrench, Calendar, AlertCircle,
-  Building2, Star, Banknote, Clock, Layers
+  Building2, Star, Banknote, Clock, Layers,
+  Zap, Car, Home, ClipboardList, Send
 } from "lucide-react";
+
+const EMPLOYEE_TASKS = [
+  {
+    icon: Wrench,
+    category: "الصيانة والتشغيل",
+    tasks: [
+      "استقبال بلاغات الصيانة من الفروع",
+      "التنسيق مع الفني المناسب وتحديد موعد",
+      "متابعة التنفيذ وإغلاق البلاغ بعد التأكد",
+      "الصيانة الدورية والاستباقية للمعدات",
+    ],
+  },
+  {
+    icon: Zap,
+    category: "الكهرباء والمياه والاتصالات",
+    tasks: [
+      "استلام ومراجعة الفواتير الشهرية لكل فرع",
+      "التواصل مع شركات الكهرباء والمياه عند الانقطاع",
+      "إدارة خطوط الهاتف والإنترنت ومتابعة الأعطال",
+      "متابعة الدفع مع المالية وتسوية الفروقات",
+    ],
+  },
+  {
+    icon: FileText,
+    category: "التراخيص والشؤون الحكومية",
+    tasks: [
+      "متابعة تواريخ انتهاء جميع التراخيص",
+      "تجديد السجل التجاري والتراخيص البلدية",
+      "شهادات السلامة ومتطلبات الدفاع المدني",
+      "التعامل مع الجهات الحكومية نيابةً عن المنشأة",
+    ],
+  },
+  {
+    icon: Car,
+    category: "الأسطول والمركبات",
+    tasks: [
+      "تتبع المركبات المملوكة والمستأجرة وعقودها",
+      "الصيانة الدورية والمخالفات والتجديدات",
+      "إدارة تصاريح السائقين ومتابعة ورودياتهم",
+      "إعداد التقارير المالية الشهرية للأسطول",
+    ],
+  },
+  {
+    icon: Home,
+    category: "السكن والنقل",
+    tasks: [
+      "البحث عن وحدات سكن للموظفين وإتمام العقود",
+      "متابعة تصاريح السكن الجماعي والإيجارات",
+      "تنسيق النقل اليومي بين السكن ومواقع العمل",
+      "الإشراف على إخلاء المواقع عند انتهاء العقود",
+    ],
+  },
+  {
+    icon: ClipboardList,
+    category: "الخدمات الإدارية اليومية",
+    tasks: [
+      "الإشراف على موظفي الاستقبال والخدمات",
+      "إدارة المراسلين وورديات التوصيل والبريد",
+      "طلبات المواد الاستهلاكية (مطبخ، نظافة، مياه)",
+      "متابعة البريد السعودي وصناديق البريد",
+    ],
+  },
+];
 
 const PAIN_POINTS = [
   { icon: PhoneCall,   text: "عشرات أرقام الهواتف لكل مورد وجهة حكومية في كل فرع" },
@@ -101,8 +165,106 @@ export default function Companies() {
         </div>
       </section>
 
+      {/* WE ARE YOUR EMPLOYEES — CORE POSITIONING */}
+      <section className="py-24 bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+
+          {/* Main Positioning Statement */}
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+            className="bg-primary rounded-3xl p-10 md:p-14 text-white text-center mb-16 relative overflow-hidden">
+            <div className="absolute inset-0 opacity-5 bg-[url('https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1200&auto=format&fit=crop&q=80')] bg-cover bg-center" />
+            <div className="relative z-10">
+              <p className="text-secondary font-bold text-sm uppercase tracking-widest mb-6">الفكرة الأساسية</p>
+              <h2 className="text-3xl md:text-5xl font-black leading-tight mb-6">
+                نحن موظفوكم التشغيليون
+              </h2>
+              <p className="text-white/80 text-xl leading-relaxed max-w-3xl mx-auto mb-8">
+                معظم المنشآت لا تُضيف خدمات المساندة الإدارية التشغيلية لأنها تعتقد أن هذه المهام تحتاج موظفين فعليين. هذا صحيح — لكن هؤلاء الموظفين يمكن أن يكونوا فريق GSS.
+              </p>
+              <div className="inline-block bg-secondary text-primary font-black text-xl md:text-2xl px-8 py-4 rounded-2xl">
+                فقط أرسلوا طلبكم — ونحن نتابع حتى الإنجاز ✓
+              </div>
+            </div>
+          </motion.div>
+
+          {/* The Insight */}
+          <div className="grid lg:grid-cols-2 gap-10 items-center mb-16">
+            <div>
+              <span className="inline-block bg-amber-50 text-amber-700 font-bold text-sm px-4 py-1.5 rounded-full mb-5">لماذا لا تفعله كثير من الشركات؟</span>
+              <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-5 leading-tight">
+                هذه المهام لا يُنجزها نظام — تحتاج إنساناً يتابع
+              </h3>
+              <p className="text-gray-600 text-lg leading-relaxed mb-5">
+                الفاتورة المتأخرة، البلاغ المعلّق، الترخيص على وشك الانتهاء، الموظف الذي لم يُجدَّد له التأمين — هذه مشاكل لا تُحلّها برامج إدارة، بل تحتاج شخصاً يرفع الهاتف ويتابع.
+              </p>
+              <p className="text-gray-700 font-bold text-lg leading-relaxed">
+                لهذا السبب تحديداً كثير من الشركات تعاني: إما تُوظّف ناساً لهذا الغرض وتتحمل التكاليف، أو تتجاهل هذه المهام وتتحمل العواقب.
+              </p>
+            </div>
+            <div className="bg-amber-50 border border-amber-100 rounded-3xl p-8">
+              <p className="font-black text-gray-900 text-xl mb-5">GSS هو الخيار الثالث:</p>
+              <ul className="space-y-4">
+                {[
+                  { icon: CheckCircle2, text: "فريق بشري حقيقي يعرف منشأتكم ويتابع كل شيء", color: "text-green-600" },
+                  { icon: CheckCircle2, text: "بدون رواتب، مكاتب، تأمين، أو تدريب", color: "text-green-600" },
+                  { icon: CheckCircle2, text: "متاح يومياً — للطلبات العادية والحالات الطارئة", color: "text-green-600" },
+                  { icon: CheckCircle2, text: "يُصدر تقارير شهرية واضحة لكل الإدارات", color: "text-green-600" },
+                  { icon: CheckCircle2, text: "يُنبّه مسبقاً قبل انتهاء أي ترخيص أو عقد", color: "text-green-600" },
+                ].map((item, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <item.icon size={20} className={`${item.color} mt-0.5 flex-shrink-0`} />
+                    <span className="text-gray-800 font-medium">{item.text}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* What we handle — the full task grid */}
+          <div className="mb-4">
+            <h3 className="text-2xl font-bold text-gray-900 text-center mb-3">
+              ما الذي يتابعه فريق GSS نيابةً عنكم؟
+            </h3>
+            <p className="text-gray-500 text-center mb-10">كل هذه المهام كان الموظفون يقومون بها — الآن يتولاها فريق GSS</p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {EMPLOYEE_TASKS.map((block, i) => (
+              <motion.div key={i} initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
+                className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+                <div className="bg-primary px-5 py-4 flex items-center gap-3">
+                  <div className="w-9 h-9 bg-white/15 rounded-xl flex items-center justify-center">
+                    <block.icon size={18} className="text-secondary" />
+                  </div>
+                  <p className="text-white font-bold text-sm">{block.category}</p>
+                </div>
+                <ul className="p-5 space-y-3">
+                  {block.tasks.map((task, j) => (
+                    <li key={j} className="flex items-start gap-2.5 text-sm text-gray-700">
+                      <Send size={12} className="text-primary mt-1 flex-shrink-0" />
+                      {task}
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* CTA inside the section */}
+          <div className="text-center mt-12">
+            <p className="text-gray-500 text-lg mb-6">
+              كل هذه المهام أصبحت الآن مهمة GSS — لا مهمة موظفيكم
+            </p>
+            <Link href="/register/company">
+              <Button size="lg" className="h-14 px-12 text-lg font-bold" data-testid="cta-employees-section">
+                سجّل منشأتك وابدأ الآن <ArrowLeft className="mr-2" size={20} />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* REAL SCENARIO */}
-      <section id="scenario" className="py-20 bg-white">
+      <section id="scenario" className="py-20 bg-gray-50">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <span className="inline-block bg-red-50 text-red-600 font-bold text-sm px-4 py-1.5 rounded-full mb-4">سيناريو حقيقي</span>
