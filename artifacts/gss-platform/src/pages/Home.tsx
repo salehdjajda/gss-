@@ -96,7 +96,21 @@ export default function Home() {
             }}
           ></div>
 
-          {/* Logo — desktop only (hidden on mobile, shown inline in content on mobile) */}
+          {/* Logo — top-left corner on all screen sizes */}
+          <div className="absolute top-4 left-4 md:top-8 md:left-8" style={{ height: "70px", width: "240px" }}>
+            <img
+              src={logoImg}
+              alt="GSS - General Support Services"
+              className="md:hidden"
+              style={{
+                height: "215px",
+                width: "auto",
+                marginTop: "-72px",
+                mixBlendMode: "screen",
+                filter: "invert(1) hue-rotate(180deg) brightness(1.15) contrast(1.1)",
+              }}
+            />
+          </div>
           <div className="absolute top-8 left-8 hidden md:block" style={{ height: "110px", width: "380px" }}>
             <img
               src={logoImg}
@@ -112,21 +126,8 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full pt-20 pb-16 lg:pt-28 lg:pb-28">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full pt-28 pb-16 md:pt-24 lg:pt-28 lg:pb-28">
           <div className="max-w-3xl">
-
-            {/* Mobile logo — shown only on small screens, inline in content flow */}
-            <div className="md:hidden mb-6 flex justify-center">
-              <div className="bg-white/10 backdrop-blur-md rounded-2xl px-5 py-3 border border-white/15">
-                <div className="overflow-hidden" style={{ height: "52px", width: "220px" }}>
-                  <img
-                    src={logoImg}
-                    alt="GSS"
-                    style={{ height: "160px", width: "auto", marginTop: "-54px" }}
-                  />
-                </div>
-              </div>
-            </div>
 
             <motion.div
                 initial={{ opacity: 0, y: 10 }}
