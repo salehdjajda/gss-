@@ -14,7 +14,53 @@ import { CheckCircle2, Building2, ArrowLeft, Layers, Users, ShieldCheck, Papercl
 import { motion } from "framer-motion";
 
 const ACTIVITY_TYPES = ["تجزئة", "مقاولات", "مكاتب إدارية", "صناعي", "طبي", "تعليمي", "لوجستي", "أخرى"];
-const SERVICES = ["الصيانة", "النظافة", "النقل", "العمالة", "المرافق والاتصالات", "التراخيص الحكومية", "تقنية المعلومات", "إعداد الفروع", "إدارة الأسطول", "إسكان الموظفين", "الفعاليات", "أخرى"];
+const SERVICES = [
+  // صيانة وتشغيل
+  "تكييف وتبريد",
+  "سباكة وصرف صحي",
+  "كهرباء وإنارة",
+  "نجارة وتركيبات",
+  "دهانات ولياسة",
+  "أعمال جبسية",
+  "أرضيات وتبليط",
+  "باركيه",
+  "غرف التبريد",
+  "أعمال معدنية وحدادة",
+  // خدمات خاصة
+  "عشب صناعي",
+  "حوض سباحة",
+  "مضلات ومواقف",
+  "ستالايت وأنظمة بث",
+  "كاميرات مراقبة وأمن",
+  "أنظمة إنذار حريق",
+  "طفايات حريق",
+  // نظافة ومكافحة
+  "تنظيف يومي ودوري",
+  "مكافحة حشرات",
+  "مكافحة قوارض",
+  "تعقيم وتطهير",
+  // نقل وموارد
+  "نقل وشحن",
+  "إدارة الأسطول والمركبات",
+  "إسكان الموظفين",
+  // تقنية
+  "صيانة أجهزة وجوالات",
+  "شبكات إنترنت وواي فاي",
+  "طابعات وناسخات",
+  // خدمات مهنية وإدارية
+  "التراخيص والتجديدات",
+  "الشؤون الحكومية",
+  "استقدام عمالة وتأشيرات",
+  "ترجمة وثائق",
+  "طباعة ومواد دعائية",
+  "فواتير الكهرباء والمياه",
+  // ضيافة وأخرى
+  "توريد مياه شرب",
+  "إدارة كانتين ومطعم",
+  "مصاعد وسلالم كهربائية",
+  "معدات مطابخ تجارية",
+  "الفعاليات والمناسبات",
+];
 const MONTHLY_REQUESTS = ["1–5", "5–10", "10–30", "30–100", "أكثر من 100"];
 const BRANCH_RANGES = ["فرع واحد", "2–5 فروع", "6–15 فرع", "أكثر من 15 فرع"];
 
@@ -31,6 +77,7 @@ const schema = z.object({
   phone: z.string().min(9, "رقم الجوال غير صالح"),
   email: z.string().email("بريد إلكتروني غير صالح"),
   requestedServices: z.array(z.string()).min(1, "يرجى تحديد خدمة واحدة على الأقل"),
+  otherServicesText: z.string().optional(),
   hasCurrentVendors: z.string().optional(),
   currentVendorName: z.string().optional(),
   currentVendorService: z.string().optional(),
@@ -60,7 +107,7 @@ export default function RegisterCompany() {
     defaultValues: {
       companyName: "", commercialRegister: "", city: "", address: "",
       branchCountRange: "", activityType: [], contactName: "", contactJobTitle: "",
-      contactDepartment: "", phone: "", email: "", requestedServices: [],
+      contactDepartment: "", phone: "", email: "", requestedServices: [], otherServicesText: "",
       hasCurrentVendors: "no", currentVendorName: "", currentVendorService: "",
       monthlyRequestsVolume: "", operationalBranches: "", collaborationModel: "",
       authorizationConfirmed: false, agreementConfirmed: false, feesConfirmed: false,
@@ -276,7 +323,7 @@ export default function RegisterCompany() {
 
               {/* STEP 3: Services */}
               {step === 3 && (
-                <div className="space-y-5">
+                <div className="space-y-6">
                   <h3 className="text-xl font-bold text-gray-800 border-b pb-3">الخدمات التشغيلية المطلوبة</h3>
                   <p className="text-gray-500 text-sm">ما الخدمات التشغيلية التي ترغبون بإدارتها عبر منصة GSS؟ (يمكن اختيار أكثر من خيار)</p>
                   <FormField control={form.control} name="requestedServices" render={() => (
@@ -285,6 +332,34 @@ export default function RegisterCompany() {
                       <FormMessage />
                     </FormItem>
                   )} />
+
+                  {/* Open field for other services */}
+                  <div className="bg-primary/5 border border-primary/20 rounded-2xl p-5">
+                    <FormField
+                      control={form.control}
+                      name="otherServicesText"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="font-bold text-gray-800 text-base">
+                            خدمات أخرى لم تجدوها في القائمة؟
+                          </FormLabel>
+                          <p className="text-gray-500 text-sm mb-2">
+                            اكتب أي خدمة تشغيلية تحتاجها منشأتكم وسيتواصل معكم فريق GSS بشأنها
+                          </p>
+                          <FormControl>
+                            <Textarea
+                              {...field}
+                              placeholder="مثال: إدارة مولدات الكهرباء الاحتياطية، صيانة أنظمة الري الآلي، خدمات تخزين المواد الغذائية..."
+                              className="min-h-[100px] resize-none text-sm"
+                              dir="rtl"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
                   <div className="pt-2 flex justify-end">
                     <Button type="button" onClick={() => goNext(["requestedServices"])}>التالي</Button>
                   </div>
