@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import logoImg from "@assets/image_1774909317242.png";
 
 const navLinks = [
   { href: "/", label: "الرئيسية" },
@@ -24,11 +25,12 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20 items-center">
           <div className="flex items-center">
-            <Link href="/" className="flex items-center gap-2" data-testid="link-logo">
-              <div className="w-10 h-10 bg-primary text-white font-bold text-xl flex items-center justify-center rounded-lg shadow-sm">
-                GSS
-              </div>
-              <span className="font-bold text-xl text-primary hidden sm:block">General Support Services</span>
+            <Link href="/" className="flex items-center h-20 overflow-hidden" data-testid="link-logo">
+              <img
+                src={logoImg}
+                alt="GSS - General Support Services"
+                style={{ height: "140px", width: "auto", marginTop: "-30px", marginBottom: "-30px" }}
+              />
             </Link>
           </div>
 
