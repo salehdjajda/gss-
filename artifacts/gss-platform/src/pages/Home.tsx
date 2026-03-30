@@ -185,7 +185,7 @@ export default function Home() {
               </motion.div>
             </div>
 
-            {/* Left column — GSS Logo (RTL: appears on left) */}
+            {/* Left column — GSS Logo blended with background (RTL: appears on left) */}
             <motion.div
               initial={{ opacity: 0, x: -40 }}
               animate={{ opacity: 1, x: 0 }}
@@ -193,24 +193,28 @@ export default function Home() {
               className="flex items-center justify-center"
             >
               <div className="relative">
-                {/* Glow ring */}
-                <div className="absolute inset-0 rounded-3xl bg-secondary/20 blur-3xl scale-110" />
-                {/* Logo card */}
-                <div className="relative bg-white rounded-3xl shadow-2xl p-8 flex items-center justify-center" style={{ minWidth: "320px" }}>
-                  <div className="overflow-hidden" style={{ height: "90px", width: "340px" }}>
-                    <img
-                      src={logoImg}
-                      alt="GSS - General Support Services"
-                      style={{ height: "280px", width: "auto", marginTop: "-95px" }}
-                    />
-                  </div>
+                {/* Soft glow behind logo */}
+                <div className="absolute inset-0 bg-white/10 blur-3xl rounded-full scale-150 pointer-events-none" />
+                {/* Logo — blended with background, no card */}
+                <div className="overflow-hidden relative" style={{ height: "120px", width: "420px" }}>
+                  <img
+                    src={logoImg}
+                    alt="GSS - General Support Services"
+                    style={{
+                      height: "370px",
+                      width: "auto",
+                      marginTop: "-125px",
+                      mixBlendMode: "screen",
+                      filter: "invert(1) saturate(0) contrast(999%) brightness(200%)",
+                    }}
+                  />
                 </div>
                 {/* Stats floating cards */}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 1, duration: 0.6 }}
-                  className="absolute -bottom-6 -right-6 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 text-center"
+                  className="absolute -bottom-8 -right-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 text-center"
                 >
                   <p className="text-2xl font-black text-secondary">+١٢</p>
                   <p className="text-xs text-slate-300 mt-0.5">نوع خدمة تشغيلية</p>
@@ -219,7 +223,7 @@ export default function Home() {
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 1.2, duration: 0.6 }}
-                  className="absolute -top-6 -left-6 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 text-center"
+                  className="absolute -top-8 -left-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 text-center"
                 >
                   <p className="text-2xl font-black text-secondary">٣</p>
                   <p className="text-xs text-slate-300 mt-0.5">نماذج تعاون مرنة</p>
