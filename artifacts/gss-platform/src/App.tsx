@@ -25,6 +25,7 @@ import Vendors from "@/pages/Vendors";
 import Partners from "@/pages/Partners";
 import Contact from "@/pages/Contact";
 import Register from "@/pages/Register";
+import Services from "@/pages/Services";
 
 // Register Forms
 import RegisterCompany from "@/pages/register/RegisterCompany";
@@ -52,6 +53,7 @@ function Router() {
           <Route path="/pricing" component={Pricing} />
           <Route path="/vendors" component={Vendors} />
           <Route path="/partners" component={Partners} />
+          <Route path="/services" component={Services} />
           <Route path="/contact" component={Contact} />
           <Route path="/register" component={Register} />
           

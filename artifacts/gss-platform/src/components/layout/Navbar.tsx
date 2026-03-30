@@ -7,8 +7,8 @@ import { motion, AnimatePresence } from "framer-motion";
 const navLinks = [
   { href: "/", label: "الرئيسية" },
   { href: "/companies", label: "للمنشآت" },
+  { href: "/services", label: "الخدمات" },
   { href: "/how-it-works", label: "آلية العمل" },
-  { href: "/reports", label: "التقارير" },
   { href: "/pricing", label: "نموذج الرسوم" },
   { href: "/vendors", label: "شبكة الموردين" },
   { href: "/partners", label: "شركاء النجاح" },
