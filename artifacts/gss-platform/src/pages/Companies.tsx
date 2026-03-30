@@ -9,67 +9,39 @@ import {
   Zap, Car, Home, ClipboardList, Send
 } from "lucide-react";
 
-const EMPLOYEE_TASKS = [
-  {
-    icon: Wrench,
-    category: "الصيانة والتشغيل",
-    tasks: [
-      "استقبال بلاغات الصيانة من الفروع",
-      "التنسيق مع الفني المناسب وتحديد موعد",
-      "متابعة التنفيذ وإغلاق البلاغ بعد التأكد",
-      "الصيانة الدورية والاستباقية للمعدات",
-    ],
-  },
-  {
-    icon: Zap,
-    category: "الكهرباء والمياه والاتصالات",
-    tasks: [
-      "استلام ومراجعة الفواتير الشهرية لكل فرع",
-      "التواصل مع شركات الكهرباء والمياه عند الانقطاع",
-      "إدارة خطوط الهاتف والإنترنت ومتابعة الأعطال",
-      "متابعة الدفع مع المالية وتسوية الفروقات",
-    ],
-  },
-  {
-    icon: FileText,
-    category: "التراخيص والشؤون الحكومية",
-    tasks: [
-      "متابعة تواريخ انتهاء جميع التراخيص",
-      "تجديد السجل التجاري والتراخيص البلدية",
-      "شهادات السلامة ومتطلبات الدفاع المدني",
-      "التعامل مع الجهات الحكومية نيابةً عن المنشأة",
-    ],
-  },
-  {
-    icon: Car,
-    category: "الأسطول والمركبات",
-    tasks: [
-      "تتبع المركبات المملوكة والمستأجرة وعقودها",
-      "الصيانة الدورية والمخالفات والتجديدات",
-      "إدارة تصاريح السائقين ومتابعة ورودياتهم",
-      "إعداد التقارير المالية الشهرية للأسطول",
-    ],
-  },
-  {
-    icon: Home,
-    category: "السكن والنقل",
-    tasks: [
-      "البحث عن وحدات سكن للموظفين وإتمام العقود",
-      "متابعة تصاريح السكن الجماعي والإيجارات",
-      "تنسيق النقل اليومي بين السكن ومواقع العمل",
-      "الإشراف على إخلاء المواقع عند انتهاء العقود",
-    ],
-  },
-  {
-    icon: ClipboardList,
-    category: "الخدمات الإدارية اليومية",
-    tasks: [
-      "الإشراف على موظفي الاستقبال والخدمات",
-      "إدارة المراسلين وورديات التوصيل والبريد",
-      "طلبات المواد الاستهلاكية (مطبخ، نظافة، مياه)",
-      "متابعة البريد السعودي وصناديق البريد",
-    ],
-  },
+// All services GSS follows up for companies
+const ALL_SERVICES = [
+  // صيانة وتشغيل
+  { emoji: "❄️",  name: "تكييف",             desc: "متابعة الصيانة الدورية والطارئة لأنظمة التكييف" },
+  { emoji: "🔧",  name: "سباكة",              desc: "متابعة أعمال السباكة وإصلاح التسربات والأعطال" },
+  { emoji: "⚡",  name: "كهرباء",             desc: "متابعة الأعمال الكهربائية وأعطال الطاقة لكل فرع" },
+  { emoji: "🛠️", name: "نجارة وتركيبات",     desc: "متابعة أعمال النجارة والأبواب والتركيبات الخشبية" },
+  { emoji: "🧊",  name: "غرف التبريد",        desc: "متابعة صيانة غرف التبريد والثلاجات الصناعية" },
+  { emoji: "📱",  name: "صيانة الأجهزة",      desc: "متابعة صيانة الجوالات والأجهزة الإلكترونية" },
+  // تشطيبات وديكور
+  { emoji: "🎨",  name: "دهانات",             desc: "متابعة أعمال الدهان الداخلي والخارجي حسب المواصفة" },
+  { emoji: "🏗️", name: "لياسة",              desc: "متابعة أعمال اللياسة والتشطيب الجداري" },
+  { emoji: "✨",  name: "أعمال جبسية",        desc: "متابعة أعمال الجبس والأسقف الزخرفية والتشطيبات" },
+  { emoji: "🪵",  name: "باركيه",             desc: "متابعة تركيب وصيانة أرضيات الباركيه والخشب" },
+  { emoji: "🧱",  name: "أرضيات وتبليط",      desc: "متابعة أعمال التبليط والأرضيات بكافة أنواعها" },
+  // خدمات خارجية متخصصة
+  { emoji: "🌿",  name: "عشب صناعي",          desc: "متابعة تركيب وصيانة العشب الصناعي في المنشآت" },
+  { emoji: "🏊",  name: "حوض سباحة",          desc: "متابعة صيانة وتنظيف أحواض السباحة وأنظمتها" },
+  { emoji: "🅿️", name: "مضلات المواقف",       desc: "متابعة تركيب وصيانة مظلات وسواتر مواقف السيارات" },
+  // تقنية وأمن
+  { emoji: "📡",  name: "ستالايت",            desc: "متابعة تركيب وصيانة أطباق الستالايت والقنوات" },
+  { emoji: "📹",  name: "كاميرات مراقبة",     desc: "متابعة تركيب وصيانة وبرمجة أنظمة كاميرات الأمن" },
+  // نظافة ومكافحة
+  { emoji: "🧹",  name: "تنظيف",              desc: "متابعة عقود النظافة اليومية والدورية مع الموردين" },
+  { emoji: "🐛",  name: "مكافحة الحشرات",     desc: "متابعة جدول الرش الدوري وعقود المكافحة" },
+  // نقل ولوجستيات
+  { emoji: "🚛",  name: "نقل وشحن",           desc: "متابعة طلبات النقل والشحن والتوصيل بين المواقع" },
+  // إدارية
+  { emoji: "📄",  name: "التراخيص",           desc: "متابعة تجديد التراخيص التجارية والبلدية والصحية" },
+  { emoji: "🏛️", name: "الشؤون الحكومية",    desc: "متابعة المتطلبات الحكومية ودفاع مدني وجهات رقابية" },
+  { emoji: "🏠",  name: "السكن والإيجارات",   desc: "متابعة عقود سكن الموظفين وتجديد الإيجارات" },
+  { emoji: "🚗",  name: "الأسطول والمركبات",  desc: "متابعة صيانة المركبات وتجديد التراخيص والمخالفات" },
+  { emoji: "💧",  name: "فواتير الخدمات",     desc: "متابعة ومراجعة فواتير الكهرباء والمياه والاتصالات" },
 ];
 
 const PAIN_POINTS = [
@@ -220,31 +192,47 @@ export default function Companies() {
             </div>
           </div>
 
-          {/* What we handle — the full task grid */}
-          <div className="mb-4">
-            <h3 className="text-2xl font-bold text-gray-900 text-center mb-3">
+          {/* What we handle — full services grid */}
+          <div className="text-center mb-10">
+            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
               ما الذي يتابعه فريق GSS نيابةً عنكم؟
             </h3>
-            <p className="text-gray-500 text-center mb-10">كل هذه المهام كان الموظفون يقومون بها — الآن يتولاها فريق GSS</p>
+            <p className="text-gray-500 text-base max-w-2xl mx-auto">
+              أرسل طلبك — نجلب لك أفضل سعر من الموردين المعتمدين ونتابع التنفيذ حتى الإنجاز الكامل
+            </p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {EMPLOYEE_TASKS.map((block, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
-                className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-                <div className="bg-primary px-5 py-4 flex items-center gap-3">
-                  <div className="w-9 h-9 bg-white/15 rounded-xl flex items-center justify-center">
-                    <block.icon size={18} className="text-secondary" />
-                  </div>
-                  <p className="text-white font-bold text-sm">{block.category}</p>
+
+          {/* How it works — 3 steps */}
+          <div className="grid grid-cols-3 gap-4 mb-10 max-w-2xl mx-auto">
+            {[
+              { step: "01", label: "أرسل طلبك", icon: "📲" },
+              { step: "02", label: "نجلب أفضل عرض", icon: "💰" },
+              { step: "03", label: "نتابع حتى الإنجاز", icon: "✅" },
+            ].map((s, i) => (
+              <div key={i} className="bg-primary/5 border border-primary/10 rounded-2xl p-4 text-center">
+                <p className="text-2xl mb-2">{s.icon}</p>
+                <p className="text-xs text-gray-400 font-bold mb-1">{s.step}</p>
+                <p className="text-sm font-bold text-gray-800">{s.label}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* All services grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+            {ALL_SERVICES.map((svc, i) => (
+              <motion.div key={i}
+                initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }} transition={{ delay: i * 0.03 }}
+                className="bg-white border border-gray-100 rounded-2xl p-4 hover:border-primary/30 hover:shadow-md transition-all group">
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="text-2xl">{svc.emoji}</span>
+                  <p className="font-bold text-gray-900 text-sm">{svc.name}</p>
                 </div>
-                <ul className="p-5 space-y-3">
-                  {block.tasks.map((task, j) => (
-                    <li key={j} className="flex items-start gap-2.5 text-sm text-gray-700">
-                      <Send size={12} className="text-primary mt-1 flex-shrink-0" />
-                      {task}
-                    </li>
-                  ))}
-                </ul>
+                <p className="text-xs text-gray-500 leading-relaxed">{svc.desc}</p>
+                <div className="mt-3 inline-flex items-center gap-1 text-primary text-xs font-semibold bg-primary/5 rounded-lg px-2 py-1">
+                  <CheckCircle2 size={11} />
+                  متابعة وإدارة
+                </div>
               </motion.div>
             ))}
           </div>
