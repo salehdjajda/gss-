@@ -97,12 +97,33 @@ export default function Home() {
           ></div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full py-20 lg:py-28">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        {/* Logo — top-left, dark glass background, inverted to white */}
+        <div
+          className="absolute top-8 left-8 rounded-2xl overflow-hidden"
+          style={{
+            zIndex: 15,
+            background: "rgba(5, 15, 35, 0.45)",
+            backdropFilter: "blur(12px)",
+            border: "1px solid rgba(255,255,255,0.1)",
+          }}
+        >
+          <div className="px-5 py-3" style={{ height: "80px", width: "310px" }}>
+            <img
+              src={logoImg}
+              alt="GSS - General Support Services"
+              style={{
+                height: "240px",
+                width: "auto",
+                marginTop: "-80px",
+                filter: "invert(1) brightness(1.1)",
+              }}
+            />
+          </div>
+        </div>
 
-            {/* Right column — text content (RTL: appears on right) */}
-            <div>
-              <motion.div
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full py-20 lg:py-28">
+          <div className="max-w-3xl">
+            <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
@@ -183,54 +204,6 @@ export default function Home() {
                   </div>
                 ))}
               </motion.div>
-            </div>
-
-            {/* Left column — GSS Logo blended with background (RTL: appears on left) */}
-            <motion.div
-              initial={{ opacity: 0, x: -40 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4, duration: 0.7 }}
-              className="flex items-center justify-center"
-            >
-              <div className="relative">
-                {/* Soft glow behind logo */}
-                <div className="absolute inset-0 bg-white/10 blur-3xl rounded-full scale-150 pointer-events-none" />
-                {/* Logo — blended with background, no card */}
-                <div className="overflow-hidden relative" style={{ height: "120px", width: "420px" }}>
-                  <img
-                    src={logoImg}
-                    alt="GSS - General Support Services"
-                    style={{
-                      height: "370px",
-                      width: "auto",
-                      marginTop: "-125px",
-                      mixBlendMode: "screen",
-                      filter: "invert(1) saturate(0) contrast(999%) brightness(200%)",
-                    }}
-                  />
-                </div>
-                {/* Stats floating cards */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1, duration: 0.6 }}
-                  className="absolute -bottom-8 -right-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 text-center"
-                >
-                  <p className="text-2xl font-black text-secondary">+١٢</p>
-                  <p className="text-xs text-slate-300 mt-0.5">نوع خدمة تشغيلية</p>
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1.2, duration: 0.6 }}
-                  className="absolute -top-8 -left-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 text-center"
-                >
-                  <p className="text-2xl font-black text-secondary">٣</p>
-                  <p className="text-xs text-slate-300 mt-0.5">نماذج تعاون مرنة</p>
-                </motion.div>
-              </div>
-            </motion.div>
-
           </div>
         </div>
       </section>
