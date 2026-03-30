@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import logoImg from "@assets/image_1774909317242.png";
 import {
   ArrowLeft,
   ShieldCheck,
@@ -120,6 +121,28 @@ export default function Home() {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full py-24 lg:py-32">
           <div className="max-w-3xl">
+            {/* GSS Logo — prominent in hero */}
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="mb-10 inline-block"
+            >
+              <div className="bg-white rounded-2xl shadow-2xl px-4 py-2 inline-flex items-center">
+                <div className="overflow-hidden" style={{ height: "64px", width: "280px" }}>
+                  <img
+                    src={logoImg}
+                    alt="GSS - General Support Services"
+                    style={{
+                      height: "200px",
+                      width: "auto",
+                      marginTop: "-68px",
+                    }}
+                  />
+                </div>
+              </div>
+            </motion.div>
+
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
