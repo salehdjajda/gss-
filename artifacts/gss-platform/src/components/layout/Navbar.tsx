@@ -25,12 +25,28 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20 items-center">
           <div className="flex items-center">
-            <Link href="/" className="flex items-center h-20 overflow-hidden" data-testid="link-logo">
-              <img
-                src={logoImg}
-                alt="GSS - General Support Services"
-                style={{ height: "140px", width: "auto", marginTop: "-30px", marginBottom: "-30px" }}
-              />
+            <Link href="/" className="flex items-center gap-2" data-testid="link-logo">
+              {/* Logo — cropped to remove whitespace */}
+              <div
+                className="overflow-hidden flex-shrink-0"
+                style={{ width: "130px", height: "52px" }}
+              >
+                <img
+                  src={logoImg}
+                  alt="GSS"
+                  style={{
+                    width: "300px",
+                    height: "auto",
+                    marginTop: "-38px",
+                    marginLeft: "-10px",
+                  }}
+                />
+              </div>
+              {/* Services label */}
+              <div className="hidden sm:flex flex-col leading-tight border-r border-gray-200 pr-3">
+                <span className="text-[10px] font-medium text-gray-400 uppercase tracking-widest">General Support</span>
+                <span className="text-base font-black text-primary leading-none">Services</span>
+              </div>
             </Link>
           </div>
 
