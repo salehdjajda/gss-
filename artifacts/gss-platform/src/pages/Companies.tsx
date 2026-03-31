@@ -31,10 +31,10 @@ const SECTORS = [
 ];
 
 const SAVINGS = [
-  { role: "مدير تشغيل",   salary: "15,000 – 25,000 ريال/شهر", icon: Users },
-  { role: "مشرف مرافق",   salary: "8,000 – 12,000 ريال/شهر",  icon: Building2 },
-  { role: "منسق موردين",  salary: "6,000 – 10,000 ريال/شهر",  icon: Network },
-  { role: "متابع تراخيص", salary: "5,000 – 8,000 ريال/شهر",   icon: FileText },
+  { role: "مدير تشغيل",   icon: Users },
+  { role: "مشرف مرافق",   icon: Building2 },
+  { role: "منسق موردين",  icon: Network },
+  { role: "متابع تراخيص", icon: FileText },
 ];
 
 export default function Companies() {
@@ -296,30 +296,30 @@ export default function Companies() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <span className="inline-block bg-green-50 text-green-700 font-bold text-sm px-4 py-1.5 rounded-full mb-3">التوفير الفعلي</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">كم ستوفر منشأتكم؟</h2>
-            <p className="text-gray-500 text-base max-w-xl mx-auto">هذا ما تدفعه المنشآت شهرياً لفريق عمليات داخلي — وهو ما يتولاه GSS بدلاً منهم</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">وفّروا تكاليف فريق العمليات بالكامل</h2>
+            <p className="text-gray-500 text-base max-w-xl mx-auto">المنشآت تدفع رواتب ثابتة لهؤلاء كل شهر — GSS تتولى مهامهم جميعاً بدون أي من هذه التكاليف</p>
           </div>
-          <div className="grid md:grid-cols-2 gap-4 mb-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
             {SAVINGS.map((item, i) => (
-              <motion.div key={i} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
-                className="flex items-center gap-4 bg-white border border-gray-200 rounded-2xl p-5">
-                <div className="w-10 h-10 bg-red-50 text-red-400 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <item.icon size={18} />
+              <motion.div key={i} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
+                className="bg-white border border-gray-200 rounded-2xl p-5 text-center relative">
+                <div className="w-11 h-11 bg-red-50 text-red-400 rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <item.icon size={20} />
                 </div>
-                <div className="flex-1">
-                  <p className="font-bold text-gray-900 text-sm">{item.role}</p>
-                  <p className="text-red-500 font-semibold text-xs">{item.salary}</p>
+                <p className="font-bold text-gray-800 text-sm">{item.role}</p>
+                <div className="absolute -top-2 -right-2 w-6 h-6 bg-red-400 rounded-full flex items-center justify-center">
+                  <X size={12} className="text-white" />
                 </div>
-                <X size={16} className="text-red-300 flex-shrink-0" />
               </motion.div>
             ))}
           </div>
-          <div className="bg-green-600 text-white rounded-3xl p-7 text-center">
-            <p className="text-3xl font-black mb-2">
-              توفير محتمل: <span className="text-yellow-300">+34,000 – 55,000 ريال/شهر</span>
+          <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+            className="bg-green-600 text-white rounded-3xl p-8 text-center">
+            <p className="text-2xl md:text-3xl font-black mb-3">
+              مع GSS — لا رواتب، لا مكاتب، لا تأمين، لا تدريب
             </p>
-            <p className="text-green-100 text-base">بدون GSS — هذه تكاليف التوظيف الثابتة كل شهر</p>
-          </div>
+            <p className="text-green-100 text-base">تحصلون على نفس الكفاءة التشغيلية بجزء بسيط من التكلفة</p>
+          </motion.div>
         </div>
       </section>
 
