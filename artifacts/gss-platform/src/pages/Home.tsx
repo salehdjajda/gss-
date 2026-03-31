@@ -149,35 +149,26 @@ export default function Home() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5, duration: 0.6 }}
-                className="flex flex-col sm:flex-row gap-4"
+                className="flex flex-col sm:flex-row gap-4 items-start"
               >
                 <Link href="/register/company">
                   <Button
                     size="lg"
-                    className="w-full sm:w-auto bg-secondary hover:bg-secondary/90 text-primary font-bold h-14 px-8 text-lg shadow-lg shadow-secondary/30"
+                    className="w-full sm:w-auto bg-secondary hover:bg-secondary/90 text-primary font-bold h-14 px-10 text-lg shadow-lg shadow-secondary/30 rounded-2xl"
                     data-testid="hero-btn-company"
                   >
-                    أنا منشأة — سجّل الآن
+                    سجّل منشأتك مجاناً
+                    <ArrowLeft className="mr-2" size={20} />
                   </Button>
                 </Link>
-                <Link href="/register/vendor">
+                <Link href="/companies">
                   <Button
                     size="lg"
                     variant="outline"
-                    className="w-full sm:w-auto h-14 px-8 text-lg text-white border-white/60 hover:bg-white/10 backdrop-blur-sm"
-                    data-testid="hero-btn-vendor"
+                    className="w-full sm:w-auto h-14 px-8 text-lg text-white border-white/40 hover:bg-white/10 rounded-2xl backdrop-blur-sm"
+                    data-testid="hero-btn-learn"
                   >
-                    أنا مورد / فني
-                  </Button>
-                </Link>
-                <Link href="/register/consultant">
-                  <Button
-                    size="lg"
-                    variant="ghost"
-                    className="w-full sm:w-auto h-14 px-8 text-lg text-slate-300 hover:text-white hover:bg-white/5"
-                    data-testid="hero-btn-consultant"
-                  >
-                    أنا مستشار / شريك نجاح
+                    اعرف أكثر
                   </Button>
                 </Link>
               </motion.div>
