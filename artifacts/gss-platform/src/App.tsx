@@ -22,6 +22,7 @@ import { AdminAuthProvider, useAdminAuth } from "@/contexts/AdminAuthContext";
 
 // Page Imports
 import Home from "@/pages/Home";
+import PartnershipProposal from "@/pages/PartnershipProposal";
 import Companies from "@/pages/Companies";
 import Individuals from "@/pages/Individuals";
 import HowItWorks from "@/pages/HowItWorks";
@@ -64,13 +65,12 @@ function AdminGuard() {
   return <AdminDashboard />;
 }
 
-function Router() {
+function MainLayout() {
   const [location] = useLocation();
   const isAdminRoute = location.startsWith("/admin");
 
   return (
     <div className={isAdminRoute ? "" : "flex flex-col min-h-[100dvh]"}>
-      <ScrollToTop />
       {!isAdminRoute && <Navbar />}
       <main className={isAdminRoute ? "" : "flex-1 bg-background text-foreground"}>
         <Switch>
@@ -121,6 +121,18 @@ function Router() {
         </a>
       )}
     </div>
+  );
+}
+
+function Router() {
+  return (
+    <>
+      <ScrollToTop />
+      <Switch>
+        <Route path="/partnership" component={PartnershipProposal} />
+        <Route component={MainLayout} />
+      </Switch>
+    </>
   );
 }
 
