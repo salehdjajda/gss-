@@ -15,12 +15,19 @@ const SERVICE_CATEGORIES = [
 ];
 
 const SECTORS = [
-  { name: "سلاسل المطاعم والمقاهي",     icon: "🍽️", desc: "فروع كثيرة + تراخيص صحية + صيانة مطابخ" },
-  { name: "محلات التجزئة والسوبرماركت", icon: "🛒", desc: "تبريد + كاميرات + تكييف + موردو نظافة" },
-  { name: "المستشفيات والعيادات",        icon: "🏥", desc: "معدات + ترخيص صحة + تنظيف متخصص" },
-  { name: "الشركات متعددة الفروع",       icon: "🏢", desc: "كهرباء + نظافة + إيجارات + اتصالات" },
-  { name: "شركات المقاولات",             icon: "🏗️", desc: "مواقع متعددة + موردو مواد + عقارات" },
-  { name: "المدارس والمراكز التعليمية",  icon: "🎓", desc: "ترخيص تعليم + مرافق + صيانة منتظمة" },
+  { name: "سلاسل المطاعم والمقاهي",              icon: "🍽️", desc: "فروع متعددة + تراخيص صحية + صيانة معدات + عقود نظافة" },
+  { name: "متاجر التجزئة والسوبرماركت",          icon: "🛒", desc: "تبريد + كاميرات + تكييف + تجهيز فروع + موردون متعددون" },
+  { name: "المستشفيات والعيادات والمراكز الطبية", icon: "🏥", desc: "تراخيص صحية + صيانة أجهزة + تنظيف متخصص + عقود تشغيل" },
+  { name: "الشركات متعددة الفروع والمكاتب",      icon: "🏢", desc: "كهرباء + اتصالات + نظافة + إيجارات + خدمات مكتبية" },
+  { name: "شركات المقاولات والتطوير العقاري",    icon: "🏗️", desc: "مواقع تشغيل متعددة + موردون + معدات + متابعة عقود" },
+  { name: "المدارس والمراكز التعليمية",           icon: "🎓", desc: "تراخيص تعليم + صيانة مرافق + نقل + تجهيزات تشغيلية" },
+  { name: "الفنادق والشقق المفروشة",              icon: "🏨", desc: "صيانة مستمرة + تجهيز غرف + خدمات تشغيل يومية" },
+  { name: "المولات والمراكز التجارية",            icon: "🏬", desc: "إدارة مرافق + عقود صيانة + أمن وسلامة + موردون متعددون" },
+  { name: "شركات النقل والخدمات اللوجستية",      icon: "🚚", desc: "إدارة أسطول + مستودعات + عقود تشغيل + مواقع متعددة" },
+  { name: "المصانع والمنشآت الصناعية",            icon: "🏭", desc: "مرافق تشغيل + عقود صيانة + خدمات فنية + متابعة موردين" },
+  { name: "شركات التوزيع والمستودعات",            icon: "🧴", desc: "مواقع متعددة + تجهيزات تشغيل + نقل + صيانة دورية" },
+  { name: "الجهات الحكومية وشبه الحكومية",        icon: "🏛️", desc: "تنسيق خدمات تشغيل + متابعة موردين + إدارة مرافق" },
+  { name: "الشركات الناشئة سريعة النمو",          icon: "🚀", desc: "توسع سريع + تجهيز مواقع + موردون متعددون + متابعة تشغيل" },
 ];
 
 const SAVINGS = [
@@ -318,21 +325,28 @@ export default function Companies() {
 
       {/* WHO IS THIS FOR */}
       <section className="py-16 bg-white">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">من يستفيد أكثر من GSS؟</h2>
-            <p className="text-gray-500 text-base">أي منشأة لديها فروع متعددة أو موردون كثر أو متابعة يومية مستنزِفة</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">من يستفيد أكثر من خدمات GSS؟</h2>
+            <p className="text-gray-500 text-base max-w-2xl mx-auto">أي منشأة لديها أكثر من موقع، أو تتعامل مع عدة موردين، أو تحتاج متابعة تشغيلية مستمرة للخدمات اليومية</p>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
             {SECTORS.map((sector, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06 }}
-                className="bg-primary/5 border border-primary/10 rounded-2xl p-5 hover:shadow-sm transition-shadow">
+              <motion.div key={i} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.04 }}
+                className="bg-primary/5 border border-primary/10 rounded-2xl p-5 hover:border-primary/30 hover:shadow-sm transition-all">
                 <p className="text-3xl mb-3">{sector.icon}</p>
                 <h3 className="font-bold text-gray-900 text-sm mb-1">{sector.name}</h3>
                 <p className="text-gray-500 text-xs leading-relaxed">{sector.desc}</p>
               </motion.div>
             ))}
           </div>
+          <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+            className="bg-primary/5 border border-primary/20 rounded-2xl px-7 py-5 text-center">
+            <p className="text-gray-700 text-base leading-relaxed">
+              إذا كانت منشأتكم تعتمد على موردين متعددين أو تحتاج متابعة تشغيلية مستمرة للفروع والخدمات اليومية —{" "}
+              <span className="font-bold text-primary">فغالباً ستستفيدون من نموذج التشغيل الذي تقدمه GSS.</span>
+            </p>
+          </motion.div>
         </div>
       </section>
 
