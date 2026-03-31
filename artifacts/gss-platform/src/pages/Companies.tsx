@@ -245,64 +245,84 @@ export default function Companies() {
       </section>
 
       {/* REAL SCENARIO */}
-      <section id="scenario" className="py-20 bg-gray-50">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <span className="inline-block bg-primary/10 text-primary font-bold text-sm px-4 py-1.5 rounded-full mb-4">لماذا GSS؟</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">الواقع التشغيلي لأغلب المنشآت</h2>
+      <section id="scenario" className="py-16 bg-gray-50">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+
+          <div className="text-center mb-10">
+            <span className="inline-block bg-primary/10 text-primary font-bold text-sm px-4 py-1.5 rounded-full mb-3">السيناريو الحقيقي</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">يوم عمل عادي — بفرق واحد</h2>
+            <p className="text-gray-500 mt-2 text-base">نفس اليوم، نفس المنشأة — قبل GSS وبعدها</p>
           </div>
 
-          <div className="space-y-6 text-gray-700 text-[1.05rem] leading-[2] text-right">
-            <motion.p initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4 }}>
-              تعتمد استمرارية العمل في أي منشأة على متابعة الخدمات الإدارية اليومية والعمليات التشغيلية بشكل منظم ومستمر.
-              هذه المهام لا تُدار بكفاءة عبر الأنظمة وحدها، بل تحتاج جهة تتولى المتابعة المباشرة والتنسيق حتى اكتمال تنفيذها بالشكل المطلوب.
-            </motion.p>
-
-            <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: 0.1 }}
-              className="bg-red-50 border-r-4 border-red-400 rounded-2xl px-7 py-6">
-              <p className="font-bold text-gray-900 mb-3">عند غياب هذه المتابعة تظهر تحديات متكررة:</p>
-              <ul className="space-y-2 text-gray-700 text-sm">
+          <div className="grid md:grid-cols-2 gap-5 mb-8">
+            {/* Before */}
+            <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
+              className="bg-white border-2 border-red-200 rounded-3xl p-7">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                  <X size={18} className="text-red-500" />
+                </div>
+                <h3 className="font-black text-gray-800 text-lg">بدون GSS</h3>
+              </div>
+              <ul className="space-y-4">
                 {[
-                  "تعدد جهات التواصل المرتبطة بالخدمات وتشتت القرار",
-                  "تأخر تنفيذ الإجراءات وتراكم الطلبات غير المغلقة",
-                  "استهلاك وقت الموظفين في متابعة يومية بدلاً من المهام الأساسية",
-                  "ضعف وضوح المصروفات التشغيلية وصعوبة ضبطها",
+                  { time: "8 ص", event: "تكييف فرع الرياض عطلان — تتصل بـ 3 موردين ولا أحد يرد" },
+                  { time: "10 ص", event: "فاتورة كهرباء غير مألوفة — لا أحد يعرف سببها" },
+                  { time: "12 م", event: "ترخيص صحي ينتهي بعد أسبوعين — اكتشفته بالصدفة" },
+                  { time: "3 م", event: "موظف قضى 4 ساعات في متابعة طلب صيانة لم يُغلق بعد" },
                 ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-2">
-                    <span className="text-red-400 mt-1 flex-shrink-0">●</span>
-                    <span>{item}</span>
+                  <li key={i} className="flex items-start gap-3">
+                    <span className="text-xs font-bold text-red-400 bg-red-50 px-2 py-1 rounded-lg mt-0.5 w-12 text-center flex-shrink-0">{item.time}</span>
+                    <p className="text-gray-600 text-sm leading-relaxed">{item.event}</p>
                   </li>
                 ))}
               </ul>
-              <p className="mt-4 text-gray-600 text-sm">
-                ومع الوقت يؤدي ذلك إلى ارتفاع التكاليف التشغيلية، وضعف التنسيق، وتراجع كفاءة الأداء العام داخل المنشأة.
-              </p>
+              <div className="mt-6 bg-red-50 rounded-2xl px-4 py-3 text-center">
+                <p className="text-red-600 font-bold text-sm">النتيجة: يوم ضائع، مشاكل متراكمة</p>
+              </div>
             </motion.div>
 
-            <motion.p initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: 0.2 }}>
-              هنا يأتي دور <span className="font-bold text-primary">GSS</span> كمدير عمليات خارجي يدعم المنشأة في تنظيم ومتابعة الخدمات الإدارية اليومية والعمليات التشغيلية بشكل مركزي ومنهجي،
-              من خلال توحيد قنوات التواصل، ومتابعة الطلبات حتى إغلاقها، وتحسين مستوى التنسيق بين الجهات المرتبطة بالخدمات،
-              وتعزيز كفاءة إدارة المصروفات التشغيلية، وتقديم تقارير دورية تدعم اتخاذ القرار.
-            </motion.p>
-
-            <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: 0.3 }}
-              className="bg-primary text-white rounded-2xl px-7 py-6">
-              <p className="font-bold text-lg mb-3">ما يحققه هذا النموذج التشغيلي:</p>
-              <ul className="space-y-2 text-primary-foreground/85 text-sm">
+            {/* After */}
+            <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
+              className="bg-white border-2 border-primary/30 rounded-3xl p-7">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                  <CheckCircle2 size={18} className="text-primary" />
+                </div>
+                <h3 className="font-black text-gray-800 text-lg">مع GSS</h3>
+              </div>
+              <ul className="space-y-4">
                 {[
-                  "رفع كفاءة إدارة العمليات اليومية وتقليل التكاليف غير المباشرة",
-                  "تحسين مستوى المتابعة والتنظيم وزيادة وضوح المصروفات التشغيلية",
-                  "تمكين فرق العمل من التركيز على الأنشطة الأساسية",
-                  "دون الحاجة إلى إنشاء هيكل تشغيل داخلي موسّع",
+                  { time: "8 ص", event: "GSS تستقبل بلاغ التكييف وتوجّه المورد المعتمد — الإغلاق في نفس اليوم" },
+                  { time: "10 ص", event: "GSS تراجع الفاتورة وترسل تقرير موضح بالأسباب" },
+                  { time: "12 م", event: "GSS نبّهتك قبل 60 يوماً — التجديد جارٍ بدون أي تدخل منك" },
+                  { time: "3 م", event: "موظفك يركّز على عمله — GSS تتابع الصيانة حتى الإغلاق" },
                 ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-2">
-                    <span className="text-secondary mt-1 flex-shrink-0">✓</span>
-                    <span>{item}</span>
+                  <li key={i} className="flex items-start gap-3">
+                    <span className="text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded-lg mt-0.5 w-12 text-center flex-shrink-0">{item.time}</span>
+                    <p className="text-gray-700 text-sm leading-relaxed font-medium">{item.event}</p>
                   </li>
                 ))}
               </ul>
+              <div className="mt-6 bg-primary/10 rounded-2xl px-4 py-3 text-center">
+                <p className="text-primary font-bold text-sm">النتيجة: كل شيء مُغلق، أنت تركّز على عملك</p>
+              </div>
             </motion.div>
           </div>
+
+          {/* Summary strip */}
+          <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+            className="bg-primary text-white rounded-2xl px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-white/90 font-medium text-center sm:text-right">
+              هذا ما يتولاه فريق GSS يومياً — نقطة اتصال واحدة، متابعة كاملة، تقرير شهري واضح
+            </p>
+            <Link href="/register/company" className="flex-shrink-0">
+              <Button className="bg-secondary hover:bg-secondary/90 text-primary font-bold px-6" data-testid="cta-scenario">
+                ابدأ الآن <ArrowLeft className="mr-1" size={16} />
+              </Button>
+            </Link>
+          </motion.div>
+
         </div>
       </section>
 
