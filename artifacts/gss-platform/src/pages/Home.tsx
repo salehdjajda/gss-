@@ -387,82 +387,66 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Pricing Model Preview */}
-      <section className="py-24 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-primary mb-4">نموذج رسوم واضح ومرن</h2>
-            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-              شفافية كاملة في التكاليف — لا عمولات مخفية، لا مفاجآت.
+      {/* Sectors Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-primary mb-3">
+              مهما كان قطاعكم، GSS تدعم عملياتكم التشغيلية
+            </h2>
+            <p className="text-gray-500 text-lg max-w-2xl mx-auto">
+              شبكتنا من الموردين والخبرة التشغيلية تغطي طيفاً واسعاً من القطاعات داخل المملكة.
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 mb-12">
             {[
-              {
-                title: "حسب الطلب",
-                highlight: false,
-                points: [
-                  "رسوم إدارة تشغيل فقط",
-                  "لا عمولات على أسعار الموردين",
-                  "لا التزام مستمر",
-                  "دفع مقابل الخدمة فقط",
-                ],
-              },
-              {
-                title: "اشتراك تشغيلي",
-                highlight: true,
-                badge: "الأكثر شيوعاً",
-                points: [
-                  "متابعة تشغيلية مستمرة",
-                  "تقارير دورية",
-                  "مدير حساب مخصص",
-                  "يتم تحديد الرسوم حسب حجم التشغيل",
-                ],
-              },
-              {
-                title: "مشاريع كبيرة",
-                highlight: false,
-                points: [
-                  "نسبة إدارة مشروع",
-                  "يتم تحديدها مسبقاً",
-                  "قبل بدء التنفيذ",
-                  "بكل شفافية ووضوح",
-                ],
-              },
-            ].map((plan, i) => (
-              <div
+              { icon: "🏢", label: "المكاتب والإدارة" },
+              { icon: "🏪", label: "التجزئة والمحلات" },
+              { icon: "🏨", label: "الفنادق والضيافة" },
+              { icon: "🏥", label: "الرعاية الصحية" },
+              { icon: "🏗️", label: "المقاولات والبناء" },
+              { icon: "🏭", label: "المصانع والإنتاج" },
+              { icon: "📦", label: "اللوجستيات والتخزين" },
+              { icon: "🎓", label: "التعليم والمدارس" },
+              { icon: "⚡", label: "الطاقة والمرافق" },
+              { icon: "🌿", label: "الزراعة والبيئة" },
+              { icon: "🚗", label: "قطاع المركبات" },
+              { icon: "💼", label: "الخدمات المهنية" },
+              { icon: "🛒", label: "التجارة الإلكترونية" },
+              { icon: "🏟️", label: "الترفيه والفعاليات" },
+              { icon: "🏠", label: "العقارات والإسكان" },
+            ].map((sector, i) => (
+              <motion.div
                 key={i}
-                className={`rounded-2xl p-8 border relative ${
-                  plan.highlight
-                    ? "bg-primary text-white border-primary shadow-xl scale-105"
-                    : "bg-white border-gray-200"
-                }`}
+                initial={{ opacity: 0, y: 8 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.04 }}
+                className="bg-white border border-gray-100 rounded-2xl p-4 text-center hover:border-primary/30 hover:shadow-sm transition-all"
               >
-                {plan.badge && (
-                  <span className="absolute -top-3 right-6 bg-secondary text-primary text-xs font-bold px-4 py-1 rounded-full">
-                    {plan.badge}
-                  </span>
-                )}
-                <h3 className={`text-xl font-bold mb-6 ${plan.highlight ? "text-white" : "text-gray-900"}`}>
-                  {plan.title}
-                </h3>
-                <ul className="space-y-3">
-                  {plan.points.map((point, j) => (
-                    <li key={j} className={`flex items-start gap-2 text-sm ${plan.highlight ? "text-slate-200" : "text-gray-600"}`}>
-                      <CheckCircle2 size={16} className={`mt-0.5 flex-shrink-0 ${plan.highlight ? "text-secondary" : "text-primary"}`} />
-                      {point}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                <p className="text-2xl mb-1.5">{sector.icon}</p>
+                <p className="text-gray-700 font-medium text-xs leading-tight">{sector.label}</p>
+              </motion.div>
             ))}
           </div>
-          <div className="text-center mt-12">
-            <Link href="/pricing">
-              <Button size="lg" variant="outline" className="h-12 px-8 font-semibold border-primary text-primary hover:bg-primary hover:text-white" data-testid="link-pricing">
-                عرض نموذج الرسوم الكامل
-              </Button>
-            </Link>
+          <div className="bg-primary/5 border border-primary/15 rounded-3xl px-8 py-7 flex flex-col sm:flex-row items-center justify-between gap-5">
+            <div>
+              <p className="font-bold text-gray-900 text-lg mb-1">لا يهم حجم منشأتك — صغيرة أو كبيرة، نبدأ معكم من اليوم الأول</p>
+              <p className="text-gray-500 text-sm">سجّل منشأتك وسيتواصل معك فريقنا لتقديم التسعيرة المناسبة لاحتياجاتكم.</p>
+            </div>
+            <div className="flex gap-3 shrink-0">
+              <Link href="/register/company">
+                <Button className="font-bold px-6 bg-primary hover:bg-primary/90">
+                  سجّل منشأتك الآن
+                  <ArrowLeft className="mr-2" size={16} />
+                </Button>
+              </Link>
+              <Link href="/pricing">
+                <Button variant="outline" className="font-bold px-5 border-primary text-primary hover:bg-primary hover:text-white">
+                  عرض الباقات
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
