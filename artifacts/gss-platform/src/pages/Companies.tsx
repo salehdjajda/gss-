@@ -4,77 +4,30 @@ import { Button } from "@/components/ui/button";
 import {
   ShieldCheck, TrendingDown, Users, RefreshCcw, Network,
   BarChart3, CheckCircle2, ArrowLeft, X, UserCheck,
-  FileText, Wrench, Calendar,
-  Building2, Star, Banknote, Clock, Layers,
-  Zap, Car, Home, ClipboardList, Send
+  FileText, Building2, Star, Layers,
 } from "lucide-react";
 
-// All services GSS follows up for companies
-const ALL_SERVICES = [
-  // صيانة وتشغيل
-  { emoji: "❄️",  name: "تكييف",             desc: "متابعة الصيانة الدورية والطارئة لأنظمة التكييف" },
-  { emoji: "🔧",  name: "سباكة",              desc: "متابعة أعمال السباكة وإصلاح التسربات والأعطال" },
-  { emoji: "⚡",  name: "كهرباء",             desc: "متابعة الأعمال الكهربائية وأعطال الطاقة لكل فرع" },
-  { emoji: "🛠️", name: "نجارة وتركيبات",     desc: "متابعة أعمال النجارة والأبواب والتركيبات الخشبية" },
-  { emoji: "🧊",  name: "غرف التبريد",        desc: "متابعة صيانة غرف التبريد والثلاجات الصناعية" },
-  { emoji: "📱",  name: "صيانة الأجهزة",      desc: "متابعة صيانة الجوالات والأجهزة الإلكترونية" },
-  // تشطيبات وديكور
-  { emoji: "🎨",  name: "دهانات",             desc: "متابعة أعمال الدهان الداخلي والخارجي حسب المواصفة" },
-  { emoji: "🏗️", name: "لياسة",              desc: "متابعة أعمال اللياسة والتشطيب الجداري" },
-  { emoji: "✨",  name: "أعمال جبسية",        desc: "متابعة أعمال الجبس والأسقف الزخرفية والتشطيبات" },
-  { emoji: "🪵",  name: "باركيه",             desc: "متابعة تركيب وصيانة أرضيات الباركيه والخشب" },
-  { emoji: "🧱",  name: "أرضيات وتبليط",      desc: "متابعة أعمال التبليط والأرضيات بكافة أنواعها" },
-  // خدمات خارجية متخصصة
-  { emoji: "🌿",  name: "عشب صناعي",          desc: "متابعة تركيب وصيانة العشب الصناعي في المنشآت" },
-  { emoji: "🏊",  name: "حوض سباحة",          desc: "متابعة صيانة وتنظيف أحواض السباحة وأنظمتها" },
-  { emoji: "🅿️", name: "مضلات المواقف",       desc: "متابعة تركيب وصيانة مظلات وسواتر مواقف السيارات" },
-  // تقنية وأمن
-  { emoji: "📡",  name: "ستالايت",            desc: "متابعة تركيب وصيانة أطباق الستالايت والقنوات" },
-  { emoji: "📹",  name: "كاميرات مراقبة",     desc: "متابعة تركيب وصيانة وبرمجة أنظمة كاميرات الأمن" },
-  // نظافة ومكافحة
-  { emoji: "🧹",  name: "تنظيف",              desc: "متابعة عقود النظافة اليومية والدورية مع الموردين" },
-  { emoji: "🐛",  name: "مكافحة الحشرات",     desc: "متابعة جدول الرش الدوري وعقود المكافحة" },
-  // نقل ولوجستيات
-  { emoji: "🚛",  name: "نقل وشحن",           desc: "متابعة طلبات النقل والشحن والتوصيل بين المواقع" },
-  // إدارية
-  { emoji: "📄",  name: "التراخيص",           desc: "متابعة تجديد التراخيص التجارية والبلدية والصحية" },
-  { emoji: "🏛️", name: "الشؤون الحكومية",    desc: "متابعة المتطلبات الحكومية ودفاع مدني وجهات رقابية" },
-  { emoji: "🏠",  name: "السكن والإيجارات",   desc: "متابعة عقود سكن الموظفين وتجديد الإيجارات" },
-  { emoji: "🚗",  name: "الأسطول والمركبات",  desc: "متابعة صيانة المركبات وتجديد التراخيص والمخالفات" },
-  { emoji: "💧",  name: "فواتير الخدمات",     desc: "متابعة ومراجعة فواتير الكهرباء والمياه والاتصالات" },
-  { emoji: "🌐",  name: "ترجمة وثائق",        desc: "متابعة ترجمة وتوثيق الوثائق الرسمية والتجارية المعتمدة" },
-];
-
-
-const ACCOUNT_MANAGER_TASKS = [
-  { period: "يومياً", tasks: ["استقبال بلاغات الصيانة من الفروع", "توجيه الطلبات للموردين المناسبين", "متابعة التنفيذ وتأكيد الإغلاق"] },
-  { period: "أسبوعياً", tasks: ["مراجعة حالة جميع الطلبات المفتوحة", "تقرير أداء المورد لكل خدمة", "تنسيق أي زيارات صيانة دورية مجدولة"] },
-  { period: "شهرياً", tasks: ["إعداد وإرسال فواتير الخدمة لكل فرع", "مراجعة فواتير الكهرباء والمياه والاتصالات", "تقرير تشغيلي شامل لكل المصروفات", "تنبيه التراخيص المقرر تجديدها"] },
-];
-
-const SAVINGS = [
-  { role: "مدير تشغيل", salary: "15,000 – 25,000 ريال/شهر", icon: Users },
-  { role: "مشرف مرافق", salary: "8,000 – 12,000 ريال/شهر", icon: Building2 },
-  { role: "منسق موردين", salary: "6,000 – 10,000 ريال/شهر", icon: Network },
-  { role: "متابع تراخيص", salary: "5,000 – 8,000 ريال/شهر", icon: FileText },
-];
-
-const BEFORE_AFTER = [
-  { before: "تواصل مع 10+ موردين بشكل مستقل", after: "نقطة اتصال واحدة مع GSS لكل شيء" },
-  { before: "بلاغات صيانة تُفتح وتُنسى", after: "متابعة كاملة حتى الإغلاق الفعلي" },
-  { before: "فواتير متفرقة من جهات كثيرة", after: "فاتورة موحدة شهرية منظمة بكل التفاصيل" },
-  { before: "ترخيص منتهٍ يُكتشف بالصدفة", after: "تنبيهات مسبقة قبل 60 يوماً من الانتهاء" },
-  { before: "موظف يقضي نصف يومه في متابعة الخدمات", after: "فريق GSS يتولى كل ذلك بشكل احترافي" },
-  { before: "لا يوجد تقرير واضح لما أُنفق وأين", after: "تقرير تشغيلي شهري يوضح كل ريال" },
+const SERVICE_CATEGORIES = [
+  { emoji: "🔧", name: "صيانة وتشغيل",     desc: "تكييف، كهرباء، سباكة، نجارة وأكثر" },
+  { emoji: "📄", name: "تراخيص وحكومي",    desc: "تجديد التراخيص، شؤون حكومية، دفاع مدني" },
+  { emoji: "🧹", name: "نظافة وخدمات",     desc: "نظافة، مكافحة حشرات، نقل وشحن" },
+  { emoji: "💧", name: "مالي وإداري",       desc: "فواتير، إيجارات، أسطول، وثائق" },
 ];
 
 const SECTORS = [
-  { name: "سلاسل المطاعم والمقاهي", icon: "🍽️", desc: "فروع كثيرة + تراخيص صحية + صيانة مطابخ + عقود نظافة" },
-  { name: "محلات التجزئة والسوبرماركت", icon: "🛒", desc: "أنظمة تبريد + كاميرات + تكييف + موردو نظافة بكل فرع" },
-  { name: "شركات المقاولات والتطوير", icon: "🏗️", desc: "مواقع متعددة + موردو مواد + عمالة + عقارات إدارية" },
-  { name: "المستشفيات والعيادات", icon: "🏥", desc: "صيانة معدات + ترخيص الصحة + تنظيف متخصص + عقود" },
-  { name: "الشركات ذات المكاتب المتعددة", icon: "🏢", desc: "IT + كهرباء + نظافة + إيجارات + هواتف لكل موقع" },
-  { name: "المدارس والمراكز التعليمية", icon: "🎓", desc: "ترخيص التعليم + مرافق + نقل طلاب + صيانة منتظمة" },
+  { name: "سلاسل المطاعم والمقاهي",     icon: "🍽️", desc: "فروع كثيرة + تراخيص صحية + صيانة مطابخ" },
+  { name: "محلات التجزئة والسوبرماركت", icon: "🛒", desc: "تبريد + كاميرات + تكييف + موردو نظافة" },
+  { name: "المستشفيات والعيادات",        icon: "🏥", desc: "معدات + ترخيص صحة + تنظيف متخصص" },
+  { name: "الشركات متعددة الفروع",       icon: "🏢", desc: "كهرباء + نظافة + إيجارات + اتصالات" },
+  { name: "شركات المقاولات",             icon: "🏗️", desc: "مواقع متعددة + موردو مواد + عقارات" },
+  { name: "المدارس والمراكز التعليمية",  icon: "🎓", desc: "ترخيص تعليم + مرافق + صيانة منتظمة" },
+];
+
+const SAVINGS = [
+  { role: "مدير تشغيل",   salary: "15,000 – 25,000 ريال/شهر", icon: Users },
+  { role: "مشرف مرافق",   salary: "8,000 – 12,000 ريال/شهر",  icon: Building2 },
+  { role: "منسق موردين",  salary: "6,000 – 10,000 ريال/شهر",  icon: Network },
+  { role: "متابع تراخيص", salary: "5,000 – 8,000 ريال/شهر",   icon: FileText },
 ];
 
 export default function Companies() {
@@ -95,7 +48,7 @@ export default function Companies() {
                 لا موظف إضافي
               </h1>
               <p className="text-white/80 text-lg leading-relaxed mb-10">
-                كل منشأة تعمل في السوق السعودي تتحمل يومياً عبء متابعة الفواتير والصيانة والتراخيص وعشرات الموردين — نحن نتولى هذا كله بدلاً منكم.
+                كل منشأة تتحمل يومياً عبء الفواتير والصيانة والتراخيص وعشرات الموردين — نحن نتولى هذا كله بدلاً منكم.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link href="/register/company">
@@ -110,13 +63,12 @@ export default function Companies() {
                 </Link>
               </div>
             </div>
-            {/* Stat cards */}
             <div className="grid grid-cols-2 gap-4">
               {[
-                { num: "صفر", label: "موظف إضافي تحتاجه", sub: "مدير حساب مخصص من GSS" },
-                { num: "100%", label: "متابعة شهرية مضمونة", sub: "فواتير، صيانة، تراخيص" },
-                { num: "نقطة", label: "اتصال واحدة فقط", sub: "لكل خدماتكم التشغيلية" },
-                { num: "وفر", label: "تكاليف توظيف الفريق", sub: "بدون راتب أو تأمين أو مكتب" },
+                { num: "صفر",   label: "موظف إضافي",           sub: "مدير حساب مخصص من GSS" },
+                { num: "100%",  label: "متابعة شهرية مضمونة",  sub: "فواتير، صيانة، تراخيص" },
+                { num: "نقطة", label: "اتصال واحدة فقط",       sub: "لكل خدماتكم التشغيلية" },
+                { num: "وفر",  label: "تكاليف التوظيف",         sub: "بدون راتب أو تأمين أو مكتب" },
               ].map((item, i) => (
                 <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 + i * 0.1 }}
                   className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-5 text-center">
@@ -130,114 +82,67 @@ export default function Companies() {
         </div>
       </section>
 
-      {/* WE ARE YOUR EMPLOYEES — CORE POSITIONING */}
-      <section className="py-24 bg-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* CORE POSITIONING — LEAN */}
+      <section className="py-20 bg-white">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 
-          {/* Main Positioning Statement */}
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-            className="bg-primary rounded-3xl p-10 md:p-14 text-white text-center mb-16 relative overflow-hidden">
-            <div className="absolute inset-0 opacity-5 bg-[url('https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1200&auto=format&fit=crop&q=80')] bg-cover bg-center" />
-            <div className="relative z-10">
-              <p className="text-secondary font-bold text-sm uppercase tracking-widest mb-6">الفكرة الأساسية</p>
-              <h2 className="text-3xl md:text-5xl font-black leading-tight mb-6">
-                نحن موظفوكم التشغيليون
-              </h2>
-              <p className="text-white/80 text-xl leading-relaxed max-w-3xl mx-auto mb-8">
-                معظم المنشآت لا تُضيف خدمات المساندة الإدارية التشغيلية لأنها تعتقد أن هذه المهام تحتاج موظفين فعليين. هذا صحيح — لكن هؤلاء الموظفين يمكن أن يكونوا فريق GSS.
-              </p>
-              <div className="inline-block bg-secondary text-primary font-black text-xl md:text-2xl px-8 py-4 rounded-2xl">
-                فقط أرسلوا طلبكم — ونحن نتابع حتى الإنجاز ✓
-              </div>
-            </div>
-          </motion.div>
-
-          {/* The Insight */}
-          <div className="grid lg:grid-cols-2 gap-10 items-center mb-16">
+          <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
             <div>
-              <span className="inline-block bg-amber-50 text-amber-700 font-bold text-sm px-4 py-1.5 rounded-full mb-5">لماذا لا تفعله كثير من الشركات؟</span>
-              <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-5 leading-tight">
-                هذه المهام لا يُنجزها نظام — تحتاج إنساناً يتابع
-              </h3>
-              <p className="text-gray-600 text-lg leading-relaxed mb-5">
-                الفاتورة المتأخرة، البلاغ المعلّق، الترخيص على وشك الانتهاء، الموظف الذي لم يُجدَّد له التأمين — هذه مشاكل لا تُحلّها برامج إدارة، بل تحتاج شخصاً يرفع الهاتف ويتابع.
+              <span className="inline-block bg-amber-50 text-amber-700 font-bold text-sm px-4 py-1.5 rounded-full mb-5">الفكرة الأساسية</span>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-5 leading-tight">
+                نحن موظفوكم<br />التشغيليون
+              </h2>
+              <p className="text-gray-600 text-lg leading-relaxed mb-6">
+                الفاتورة المتأخرة، البلاغ المعلّق، الترخيص على وشك الانتهاء — هذه مشاكل لا تُحلّها برامج إدارة، بل تحتاج شخصاً يرفع الهاتف ويتابع. نحن ذلك الشخص.
               </p>
-              <p className="text-gray-700 font-bold text-lg leading-relaxed">
-                لهذا السبب تحديداً كثير من الشركات تعاني: إما تُوظّف ناساً لهذا الغرض وتتحمل التكاليف، أو تتجاهل هذه المهام وتتحمل العواقب.
-              </p>
+              <Link href="/register/company">
+                <Button size="lg" className="font-bold" data-testid="cta-positioning">
+                  ابدأ الآن <ArrowLeft className="mr-2" size={18} />
+                </Button>
+              </Link>
             </div>
-            <div className="bg-amber-50 border border-amber-100 rounded-3xl p-8">
-              <p className="font-black text-gray-900 text-xl mb-5">GSS هو الخيار الثالث:</p>
-              <ul className="space-y-4">
-                {[
-                  { icon: CheckCircle2, text: "فريق بشري حقيقي يعرف منشأتكم ويتابع كل شيء", color: "text-green-600" },
-                  { icon: CheckCircle2, text: "بدون رواتب، مكاتب، تأمين، أو تدريب", color: "text-green-600" },
-                  { icon: CheckCircle2, text: "متاح يومياً — للطلبات العادية والحالات الطارئة", color: "text-green-600" },
-                  { icon: CheckCircle2, text: "يُصدر تقارير شهرية واضحة لكل الإدارات", color: "text-green-600" },
-                  { icon: CheckCircle2, text: "يُنبّه مسبقاً قبل انتهاء أي ترخيص أو عقد", color: "text-green-600" },
-                ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <item.icon size={20} className={`${item.color} mt-0.5 flex-shrink-0`} />
-                    <span className="text-gray-800 font-medium">{item.text}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          {/* What we handle — full services grid */}
-          <div className="text-center mb-10">
-            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
-              ما الذي يتابعه فريق GSS نيابةً عنكم؟
-            </h3>
-            <p className="text-gray-500 text-base max-w-2xl mx-auto">
-              أرسل طلبك — نجلب لك أفضل سعر من الموردين المعتمدين ونتابع التنفيذ حتى الإنجاز الكامل
-            </p>
-          </div>
-
-          {/* How it works — 3 steps */}
-          <div className="grid grid-cols-3 gap-4 mb-10 max-w-2xl mx-auto">
-            {[
-              { step: "01", label: "أرسل طلبك", icon: "📲" },
-              { step: "02", label: "نجلب أفضل عرض", icon: "💰" },
-              { step: "03", label: "نتابع حتى الإنجاز", icon: "✅" },
-            ].map((s, i) => (
-              <div key={i} className="bg-primary/5 border border-primary/10 rounded-2xl p-4 text-center">
-                <p className="text-2xl mb-2">{s.icon}</p>
-                <p className="text-xs text-gray-400 font-bold mb-1">{s.step}</p>
-                <p className="text-sm font-bold text-gray-800">{s.label}</p>
+            <div className="bg-primary rounded-3xl p-8 text-white">
+              <p className="font-black text-xl mb-6">GSS هو الخيار الثالث — بدلاً من:</p>
+              <div className="space-y-4">
+                <div className="flex items-center gap-3 bg-white/10 rounded-2xl px-5 py-4">
+                  <X size={18} className="text-red-400 flex-shrink-0" />
+                  <span className="text-white/85">توظيف فريق داخلي وتحمّل رواتبه</span>
+                </div>
+                <div className="flex items-center gap-3 bg-white/10 rounded-2xl px-5 py-4">
+                  <X size={18} className="text-red-400 flex-shrink-0" />
+                  <span className="text-white/85">تجاهل المهام وتراكم المشاكل</span>
+                </div>
+                <div className="flex items-center gap-3 bg-secondary/20 border border-secondary/30 rounded-2xl px-5 py-4">
+                  <CheckCircle2 size={18} className="text-secondary flex-shrink-0" />
+                  <span className="font-bold text-white">فريق GSS يتولى كل شيء — بدون تكاليف التوظيف</span>
+                </div>
               </div>
-            ))}
+            </div>
           </div>
 
-          {/* All services grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-            {ALL_SERVICES.map((svc, i) => (
-              <motion.div key={i}
-                initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }} transition={{ delay: i * 0.03 }}
-                className="bg-white border border-gray-100 rounded-2xl p-4 hover:border-primary/30 hover:shadow-md transition-all group">
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="text-2xl">{svc.emoji}</span>
-                  <p className="font-bold text-gray-900 text-sm">{svc.name}</p>
-                </div>
-                <p className="text-xs text-gray-500 leading-relaxed">{svc.desc}</p>
-                <div className="mt-3 inline-flex items-center gap-1 text-primary text-xs font-semibold bg-primary/5 rounded-lg px-2 py-1">
-                  <CheckCircle2 size={11} />
-                  متابعة وإدارة
-                </div>
+          {/* Service Categories — compact */}
+          <div className="text-center mb-8">
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">ما الذي نتابعه نيابةً عنكم؟</h3>
+            <p className="text-gray-500">أكثر من 25 خدمة تشغيلية — موزّعة على 4 محاور رئيسية</p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+            {SERVICE_CATEGORIES.map((cat, i) => (
+              <motion.div key={i} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.07 }}
+                className="bg-primary/5 border border-primary/10 rounded-2xl p-5 text-center hover:border-primary/30 hover:shadow-sm transition-all">
+                <p className="text-3xl mb-3">{cat.emoji}</p>
+                <p className="font-bold text-gray-900 text-sm mb-1">{cat.name}</p>
+                <p className="text-gray-500 text-xs leading-relaxed">{cat.desc}</p>
               </motion.div>
             ))}
           </div>
 
-          {/* CTA inside the section */}
-          <div className="text-center mt-12">
-            <p className="text-gray-500 text-lg mb-6">
-              كل هذه المهام أصبحت الآن مهمة GSS — لا مهمة موظفيكم
+          <div className="bg-gray-50 rounded-2xl px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <p className="text-gray-600 text-sm text-center sm:text-right">
+              📲 أرسل طلبك → نجلب أفضل عرض من موردين معتمدين → نتابع حتى الإنجاز ✅
             </p>
-            <Link href="/register/company">
-              <Button size="lg" className="h-14 px-12 text-lg font-bold" data-testid="cta-employees-section">
-                سجّل منشأتك وابدأ الآن <ArrowLeft className="mr-2" size={20} />
+            <Link href="/register/company" className="flex-shrink-0">
+              <Button variant="outline" size="sm" className="font-bold border-primary text-primary" data-testid="cta-how-it-works">
+                سجّل وجرّب
               </Button>
             </Link>
           </div>
@@ -255,7 +160,6 @@ export default function Companies() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-5 mb-8">
-            {/* Before */}
             <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
               className="bg-white border-2 border-red-200 rounded-3xl p-7">
               <div className="flex items-center gap-3 mb-6">
@@ -266,10 +170,10 @@ export default function Companies() {
               </div>
               <ul className="space-y-4">
                 {[
-                  { time: "8 ص", event: "تكييف فرع الرياض عطلان — تتصل بـ 3 موردين ولا أحد يرد" },
+                  { time: "8 ص",  event: "تكييف فرع الرياض عطلان — تتصل بـ 3 موردين ولا أحد يرد" },
                   { time: "10 ص", event: "فاتورة كهرباء غير مألوفة — لا أحد يعرف سببها" },
                   { time: "12 م", event: "ترخيص صحي ينتهي بعد أسبوعين — اكتشفته بالصدفة" },
-                  { time: "3 م", event: "موظف قضى 4 ساعات في متابعة طلب صيانة لم يُغلق بعد" },
+                  { time: "3 م",  event: "موظف قضى 4 ساعات في متابعة طلب صيانة لم يُغلق بعد" },
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
                     <span className="text-xs font-bold text-red-400 bg-red-50 px-2 py-1 rounded-lg mt-0.5 w-12 text-center flex-shrink-0">{item.time}</span>
@@ -282,7 +186,6 @@ export default function Companies() {
               </div>
             </motion.div>
 
-            {/* After */}
             <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
               className="bg-white border-2 border-primary/30 rounded-3xl p-7">
               <div className="flex items-center gap-3 mb-6">
@@ -293,10 +196,10 @@ export default function Companies() {
               </div>
               <ul className="space-y-4">
                 {[
-                  { time: "8 ص", event: "GSS تستقبل بلاغ التكييف وتوجّه المورد المعتمد — الإغلاق في نفس اليوم" },
-                  { time: "10 ص", event: "GSS تراجع الفاتورة وترسل تقرير موضح بالأسباب" },
+                  { time: "8 ص",  event: "GSS توجّه المورد المعتمد فوراً — الإغلاق في نفس اليوم" },
+                  { time: "10 ص", event: "GSS تراجع الفاتورة وترسل تقريراً موضّحاً بالأسباب" },
                   { time: "12 م", event: "GSS نبّهتك قبل 60 يوماً — التجديد جارٍ بدون أي تدخل منك" },
-                  { time: "3 م", event: "موظفك يركّز على عمله — GSS تتابع الصيانة حتى الإغلاق" },
+                  { time: "3 م",  event: "موظفك يركّز على عمله — GSS تتابع حتى الإغلاق" },
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
                     <span className="text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded-lg mt-0.5 w-12 text-center flex-shrink-0">{item.time}</span>
@@ -310,11 +213,10 @@ export default function Companies() {
             </motion.div>
           </div>
 
-          {/* Summary strip */}
           <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             className="bg-primary text-white rounded-2xl px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-white/90 font-medium text-center sm:text-right">
-              هذا ما يتولاه فريق GSS يومياً — نقطة اتصال واحدة، متابعة كاملة، تقرير شهري واضح
+              نقطة اتصال واحدة — متابعة كاملة — تقرير شهري واضح
             </p>
             <Link href="/register/company" className="flex-shrink-0">
               <Button className="bg-secondary hover:bg-secondary/90 text-primary font-bold px-6" data-testid="cta-scenario">
@@ -322,39 +224,33 @@ export default function Companies() {
               </Button>
             </Link>
           </motion.div>
-
         </div>
       </section>
 
-      {/* ACCOUNT MANAGER CONCEPT */}
-      <section className="py-20 bg-gradient-to-b from-primary/5 to-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-14">
+      {/* ACCOUNT MANAGER — SLIM */}
+      <section className="py-20 bg-white">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
             <span className="inline-block bg-primary/10 text-primary font-bold text-sm px-4 py-1.5 rounded-full mb-4">الحل</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">مدير حساب مخصص لمنشأتكم</h2>
-            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-              مع منصة GSS، تحصل منشأتكم على مدير حساب متخصص يتابع جميع العمليات التشغيلية نيابةً عنكم — يومياً وأسبوعياً وشهرياً.
-            </p>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">مدير حساب مخصص لمنشأتكم</h2>
+            <p className="text-gray-500 text-lg max-w-xl mx-auto">يتابع جميع عملياتكم التشغيلية — يومياً وأسبوعياً وشهرياً</p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6 mb-12">
-            {ACCOUNT_MANAGER_TASKS.map((block, i) => (
+          <div className="grid md:grid-cols-3 gap-5 mb-10">
+            {[
+              { icon: "📅", period: "يومياً",   items: ["استقبال البلاغات وتوجيهها للموردين", "متابعة التنفيذ وتأكيد الإغلاق"] },
+              { icon: "📋", period: "أسبوعياً", items: ["مراجعة الطلبات المفتوحة", "تقرير أداء الموردين"] },
+              { icon: "📊", period: "شهرياً",   items: ["فاتورة موحدة لكل فرع", "تقرير تشغيلي شامل + تنبيه التراخيص"] },
+            ].map((block, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
-                className="bg-white rounded-3xl border border-gray-100 shadow-sm p-7">
-                <div className="flex items-center gap-3 mb-5">
-                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-black text-lg text-white ${i === 0 ? "bg-blue-500" : i === 1 ? "bg-primary" : "bg-secondary text-primary"}`}>
-                    {i === 0 ? "📅" : i === 1 ? "📋" : "📊"}
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-400 font-medium">يتم تنفيذه</p>
-                    <p className="font-black text-gray-900 text-xl">{block.period}</p>
-                  </div>
-                </div>
-                <ul className="space-y-3">
-                  {block.tasks.map((task, j) => (
+                className="bg-primary/5 border border-primary/10 rounded-3xl p-6">
+                <p className="text-3xl mb-3">{block.icon}</p>
+                <p className="font-black text-gray-900 text-xl mb-4">{block.period}</p>
+                <ul className="space-y-2">
+                  {block.items.map((item, j) => (
                     <li key={j} className="flex items-start gap-2 text-sm text-gray-700">
-                      <CheckCircle2 size={15} className="text-primary mt-0.5 flex-shrink-0" />
-                      {task}
+                      <CheckCircle2 size={14} className="text-primary mt-0.5 flex-shrink-0" />
+                      {item}
                     </li>
                   ))}
                 </ul>
@@ -362,27 +258,24 @@ export default function Companies() {
             ))}
           </div>
 
-          <div className="bg-primary text-white rounded-3xl p-8 md:p-10 grid md:grid-cols-2 gap-8 items-center">
+          {/* No vs Yes — compact */}
+          <div className="bg-primary text-white rounded-3xl p-8 grid md:grid-cols-2 gap-8 items-start">
             <div>
-              <h3 className="text-2xl font-bold mb-4">هذا المدير لا يحتاج:</h3>
-              <ul className="space-y-3">
-                {["راتباً شهرياً + مزايا وظيفية", "مكتباً أو جهاز حاسوب", "تدريباً أو فترة تأهيل", "إجازات أو بدلات تنقل", "تأميناً صحياً أو تأمين وظيفي"].map((item, i) => (
-                  <li key={i} className="flex items-center gap-3">
-                    <div className="w-5 h-5 bg-red-400/30 rounded-full flex items-center justify-center flex-shrink-0">
-                      <X size={12} className="text-red-300" />
-                    </div>
-                    <span className="text-white/80">{item}</span>
+              <h3 className="font-bold text-lg mb-4 text-white/70">لا يحتاج:</h3>
+              <ul className="space-y-2">
+                {["راتب شهري + مزايا وظيفية", "مكتب أو جهاز", "تدريب أو تأهيل", "إجازات أو تأمين صحي"].map((item, i) => (
+                  <li key={i} className="flex items-center gap-3 text-white/75 text-sm">
+                    <X size={14} className="text-red-400 flex-shrink-0" /> {item}
                   </li>
                 ))}
               </ul>
             </div>
             <div>
-              <h3 className="text-2xl font-bold mb-4">لكنه يُقدّم:</h3>
-              <ul className="space-y-3">
-                {["متابعة تشغيلية كاملة طوال الشهر", "تقارير شهرية واضحة لكل الإنفاق", "تنبيهات مسبقة للتراخيص والعقود", "استجابة سريعة لبلاغات الصيانة", "توصيات توفير مبنية على بيانات"].map((item, i) => (
-                  <li key={i} className="flex items-center gap-3">
-                    <CheckCircle2 size={18} className="text-secondary flex-shrink-0" />
-                    <span className="text-white/90">{item}</span>
+              <h3 className="font-bold text-lg mb-4">لكنه يُقدّم:</h3>
+              <ul className="space-y-2">
+                {["متابعة تشغيلية كاملة طوال الشهر", "تقارير شهرية بكل الإنفاق", "تنبيهات مبكرة للتراخيص والعقود", "استجابة سريعة لبلاغات الصيانة"].map((item, i) => (
+                  <li key={i} className="flex items-center gap-3 text-white/90 text-sm">
+                    <CheckCircle2 size={14} className="text-secondary flex-shrink-0" /> {item}
                   </li>
                 ))}
               </ul>
@@ -392,116 +285,80 @@ export default function Companies() {
       </section>
 
       {/* COST SAVINGS */}
-      <section className="py-20 bg-white">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <span className="inline-block bg-green-50 text-green-700 font-bold text-sm px-4 py-1.5 rounded-full mb-4">التوفير الفعلي</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">كم ستوفر منشأتكم؟</h2>
-            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-              المنشآت متعددة الفروع تحتاج فريقاً كاملاً لإدارة العمليات. هذا ما يكلفها كل شهر — وهو ما تتولاه GSS بدلاً منهم.
-            </p>
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <span className="inline-block bg-green-50 text-green-700 font-bold text-sm px-4 py-1.5 rounded-full mb-3">التوفير الفعلي</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">كم ستوفر منشأتكم؟</h2>
+            <p className="text-gray-500 text-base max-w-xl mx-auto">هذا ما تدفعه المنشآت شهرياً لفريق عمليات داخلي — وهو ما يتولاه GSS بدلاً منهم</p>
           </div>
-          <div className="grid md:grid-cols-2 gap-5 mb-8">
+          <div className="grid md:grid-cols-2 gap-4 mb-6">
             {SAVINGS.map((item, i) => (
-              <motion.div key={i} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
-                className="flex items-center gap-4 bg-gray-50 border border-gray-200 rounded-2xl p-5">
-                <div className="w-12 h-12 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center flex-shrink-0">
-                  <item.icon size={22} />
+              <motion.div key={i} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
+                className="flex items-center gap-4 bg-white border border-gray-200 rounded-2xl p-5">
+                <div className="w-10 h-10 bg-red-50 text-red-400 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <item.icon size={18} />
                 </div>
                 <div className="flex-1">
-                  <p className="font-bold text-gray-900">{item.role}</p>
-                  <p className="text-red-500 font-semibold text-sm">{item.salary}</p>
+                  <p className="font-bold text-gray-900 text-sm">{item.role}</p>
+                  <p className="text-red-500 font-semibold text-xs">{item.salary}</p>
                 </div>
-                <div className="text-red-400">
-                  <X size={20} />
-                </div>
+                <X size={16} className="text-red-300 flex-shrink-0" />
               </motion.div>
             ))}
           </div>
-          <div className="bg-green-600 text-white rounded-3xl p-8 text-center">
-            <p className="text-4xl font-black mb-3 text-secondary-foreground">
+          <div className="bg-green-600 text-white rounded-3xl p-7 text-center">
+            <p className="text-3xl font-black mb-2">
               توفير محتمل: <span className="text-yellow-300">+34,000 – 55,000 ريال/شهر</span>
             </p>
-            <p className="text-green-100 text-lg">
-              هذا ما تدفعه المنشآت كرواتب لفريق العمليات الداخلي — بدون GSS.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* BEFORE / AFTER */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">قبل GSS وبعدها</h2>
-            <p className="text-gray-500 text-lg">مقارنة واقعية لكيف تتغير العمليات التشغيلية</p>
-          </div>
-          <div className="overflow-hidden rounded-3xl border border-gray-200 shadow-sm">
-            <div className="grid grid-cols-2 bg-gray-100">
-              <div className="px-6 py-4 font-bold text-gray-500 text-center text-sm border-l border-gray-200">قبل GSS ❌</div>
-              <div className="px-6 py-4 font-bold text-primary text-center text-sm">مع GSS ✅</div>
-            </div>
-            {BEFORE_AFTER.map((row, i) => (
-              <div key={i} className={`grid grid-cols-2 ${i % 2 === 0 ? "bg-white" : "bg-gray-50"}`}>
-                <div className="px-6 py-5 border-l border-gray-200 flex items-start gap-3">
-                  <X size={16} className="text-red-400 mt-0.5 flex-shrink-0" />
-                  <p className="text-gray-600 text-sm leading-relaxed">{row.before}</p>
-                </div>
-                <div className="px-6 py-5 flex items-start gap-3">
-                  <CheckCircle2 size={16} className="text-green-500 mt-0.5 flex-shrink-0" />
-                  <p className="text-gray-800 text-sm font-medium leading-relaxed">{row.after}</p>
-                </div>
-              </div>
-            ))}
+            <p className="text-green-100 text-base">بدون GSS — هذه تكاليف التوظيف الثابتة كل شهر</p>
           </div>
         </div>
       </section>
 
       {/* WHO IS THIS FOR */}
-      <section className="py-20 bg-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">من يستفيد أكثر من GSS؟</h2>
-            <p className="text-gray-500 text-lg max-w-2xl mx-auto">
-              أي منشأة لديها أكثر من فرع واحد، أو تتعامل مع موردين متعددين، أو تقضي وقتاً في متابعة العمليات اليومية
-            </p>
+      <section className="py-16 bg-white">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">من يستفيد أكثر من GSS؟</h2>
+            <p className="text-gray-500 text-base">أي منشأة لديها فروع متعددة أو موردون كثر أو متابعة يومية مستنزِفة</p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {SECTORS.map((sector, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.07 }}
-                className="bg-gradient-to-br from-primary/5 to-white border border-primary/10 rounded-2xl p-6 hover:shadow-md transition-shadow">
-                <p className="text-4xl mb-4">{sector.icon}</p>
-                <h3 className="font-bold text-gray-900 text-lg mb-2">{sector.name}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">{sector.desc}</p>
+              <motion.div key={i} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06 }}
+                className="bg-primary/5 border border-primary/10 rounded-2xl p-5 hover:shadow-sm transition-shadow">
+                <p className="text-3xl mb-3">{sector.icon}</p>
+                <h3 className="font-bold text-gray-900 text-sm mb-1">{sector.name}</h3>
+                <p className="text-gray-500 text-xs leading-relaxed">{sector.desc}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* BENEFITS — detailed */}
-      <section className="py-20 bg-slate-900 text-white">
+      {/* BENEFITS */}
+      <section className="py-16 bg-slate-900 text-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-14">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">لماذا تختار GSS تحديداً؟</h2>
-            <p className="text-slate-400 text-lg">6 مزايا مباشرة تجعل قرار التسجيل سهلاً</p>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-3">لماذا GSS تحديداً؟</h2>
+            <p className="text-slate-400 text-base">6 مزايا مباشرة تجعل قرار التسجيل سهلاً</p>
           </div>
-          <div className="grid md:grid-cols-2 gap-5">
+          <div className="grid md:grid-cols-2 gap-4">
             {[
-              { icon: UserCheck,   title: "مدير حساب مخصص لمنشأتكم", desc: "ليس نظاماً إلكترونياً فقط — شخص حقيقي يعرف احتياجاتكم ويتابع كل شيء بشكل شخصي" },
-              { icon: TrendingDown, title: "توفير فعلي في تكاليف التشغيل", desc: "بدائل موردين بأسعار أفضل، اكتشاف تكاليف مخفية، تقليل إعادة التنفيذ" },
-              { icon: Layers,       title: "نقطة اتصال واحدة لكل الخدمات", desc: "الصيانة، التراخيص، الفواتير، الاتصالات، النظافة — كل شيء عبر GSS فقط" },
-              { icon: BarChart3,    title: "تقارير شهرية وشفافية كاملة", desc: "تعرفون أين يذهب كل ريال وما هي أبرز فرص التوفير في الشهر القادم" },
-              { icon: RefreshCcw,   title: "الاستمرار مع موردييكم الحاليين", desc: "لا حاجة لتغيير علاقاتكم — نُنظّم الإدارة فوق ما هو موجود بدون تعطيل" },
-              { icon: ShieldCheck,  title: "تنبيهات التراخيص والعقود", desc: "لا مفاجآت — تنبيهات مبكرة قبل انتهاء أي ترخيص أو عقد أو التزام حكومي" },
+              { icon: UserCheck,   title: "مدير حساب مخصص",              desc: "شخص حقيقي يعرف منشأتكم ويتابع كل شيء — ليس نظاماً إلكترونياً فقط" },
+              { icon: TrendingDown, title: "توفير فعلي في التكاليف",      desc: "بدائل بأسعار أفضل، اكتشاف تكاليف مخفية، تقليل إعادة التنفيذ" },
+              { icon: Layers,       title: "نقطة اتصال واحدة",             desc: "الصيانة، التراخيص، الفواتير — كل شيء عبر GSS فقط" },
+              { icon: BarChart3,    title: "تقارير شهرية وشفافية كاملة",  desc: "تعرفون أين يذهب كل ريال وما هي فرص التوفير" },
+              { icon: RefreshCcw,   title: "لا حاجة لتغيير موردييكم",     desc: "نُنظّم الإدارة فوق ما هو موجود — بدون أي تعطيل" },
+              { icon: ShieldCheck,  title: "تنبيهات مبكرة للتراخيص",      desc: "لا مفاجآت — تنبيه قبل 60 يوماً من انتهاء أي ترخيص أو عقد" },
             ].map((item, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
-                className="flex items-start gap-5 bg-slate-800 rounded-2xl p-6 border border-slate-700">
-                <div className="w-12 h-12 bg-primary/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <item.icon size={22} className="text-secondary" />
+              <motion.div key={i} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.07 }}
+                className="flex items-start gap-4 bg-slate-800 rounded-2xl p-5 border border-slate-700">
+                <div className="w-10 h-10 bg-primary/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <item.icon size={18} className="text-secondary" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-white text-lg mb-2">{item.title}</h4>
+                  <h4 className="font-bold text-white text-base mb-1">{item.title}</h4>
                   <p className="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
                 </div>
               </motion.div>
@@ -510,27 +367,14 @@ export default function Companies() {
         </div>
       </section>
 
-      {/* TESTIMONIAL / TRUST */}
-      <section className="py-16 bg-secondary/5 border-y border-secondary/20">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <p className="text-2xl md:text-3xl font-bold text-primary leading-relaxed mb-6">
-            "نحن لا نُدير الطلبات فقط — نُدير العمليات التشغيلية الكاملة لمنشأتكم حتى تتفرغوا لما تجيدونه"
-          </p>
-          <div className="flex items-center justify-center gap-2">
-            {Array.from({ length: 5 }).map((_, i) => <Star key={i} size={20} fill="currentColor" className="text-secondary" />)}
-          </div>
-          <p className="text-gray-500 mt-3 font-medium">فريق GSS — خدمات المساندة العامة</p>
-        </div>
-      </section>
-
       {/* FINAL CTA */}
       <section className="py-24 bg-primary text-white text-center">
-        <div className="max-w-3xl mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            هل منشأتكم تستحق فريق تشغيل احترافي<br />بدون تكاليف التوظيف؟
+        <div className="max-w-2xl mx-auto px-4">
+          <h2 className="text-3xl md:text-4xl font-bold mb-5">
+            فريق تشغيل احترافي لمنشأتكم<br />بدون تكاليف التوظيف
           </h2>
-          <p className="text-white/80 text-lg mb-10 leading-relaxed">
-            سجّلوا الآن وسيتواصل مدير الحساب المخصص لدراسة احتياجاتكم التشغيلية وتقديم نموذج الخدمة الأنسب لكم.
+          <p className="text-white/75 text-lg mb-10">
+            سجّلوا الآن وسيتواصل مدير الحساب المخصص لدراسة احتياجاتكم.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/register/company">
@@ -544,7 +388,7 @@ export default function Companies() {
               </Button>
             </Link>
           </div>
-          <p className="text-white/50 text-sm mt-6">لا يوجد التزام مسبق — فريق GSS سيتواصل معكم لشرح التفاصيل كاملاً</p>
+          <p className="text-white/40 text-sm mt-6">لا يوجد التزام مسبق — فريق GSS سيتواصل معكم لشرح التفاصيل</p>
         </div>
       </section>
 
