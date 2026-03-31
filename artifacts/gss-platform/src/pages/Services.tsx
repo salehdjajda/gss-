@@ -357,10 +357,64 @@ const colorMap: Record<string, { bg: string; text: string; border: string; badge
   amber:  { bg: "bg-amber-50",  text: "text-amber-700",  border: "border-amber-200",  badge: "bg-amber-100 text-amber-800" },
 };
 
-// Flat list of all searchable services from categories
-const SEARCHABLE_SERVICES = CATEGORIES.flatMap(cat =>
-  cat.services.map(s => ({ service: s, category: cat.label }))
-);
+// All specialized items as searchable services
+const SPECIALIZED_SEARCHABLE = SPECIALIZED.flatMap(item => [
+  { service: item.label, category: "أعمال متخصصة" },
+  { service: item.desc, category: "أعمال متخصصة" },
+]);
+
+// Additional services that appear in registration form
+const EXTRA_SERVICES = [
+  { service: "تكييف وتبريد", category: "الصيانة والتشغيل" },
+  { service: "سباكة وصرف صحي", category: "الصيانة والتشغيل" },
+  { service: "كهرباء وإنارة", category: "الصيانة والتشغيل" },
+  { service: "نجارة وتركيبات", category: "الصيانة والتشغيل" },
+  { service: "دهانات ولياسة", category: "الصيانة والتشغيل" },
+  { service: "أرضيات وتبليط", category: "الصيانة والتشغيل" },
+  { service: "أعمال معدنية وحدادة", category: "الصيانة والتشغيل" },
+  { service: "ستالايت وأنظمة بث", category: "الأمن والسلامة" },
+  { service: "طفايات حريق", category: "الأمن والسلامة" },
+  { service: "تنظيف يومي ودوري", category: "الصيانة والتشغيل" },
+  { service: "مكافحة قوارض", category: "الصيانة والتشغيل" },
+  { service: "تعقيم وتطهير", category: "الصيانة والتشغيل" },
+  { service: "نقل وشحن", category: "النقل والخدمات اللوجستية" },
+  { service: "صيانة أجهزة وجوالات", category: "خدمات الاتصالات" },
+  { service: "شبكات إنترنت وواي فاي", category: "خدمات الاتصالات" },
+  { service: "طابعات وناسخات", category: "خدمات الاتصالات" },
+  { service: "التراخيص والتجديدات", category: "الخدمات الإدارية" },
+  { service: "الشؤون الحكومية", category: "الخدمات الإدارية" },
+  { service: "استقدام عمالة وتأشيرات", category: "الخدمات الإدارية" },
+  { service: "ترجمة وثائق", category: "الخدمات الإدارية" },
+  { service: "طباعة ومواد دعائية", category: "الخدمات الإدارية" },
+  { service: "توريد مياه شرب", category: "الخدمات الإدارية" },
+  { service: "إدارة كانتين ومطعم", category: "الخدمات الإدارية" },
+  { service: "مصاعد وسلالم كهربائية", category: "الصيانة والتشغيل" },
+  { service: "معدات مطابخ تجارية", category: "الصيانة والتشغيل" },
+  { service: "تركيب اللوحات التجارية والإعلانية", category: "تجهيز الفروع والمشاريع" },
+  { service: "أعمال الديكور والتجهيز الداخلي", category: "تجهيز الفروع والمشاريع" },
+  { service: "تجهيز المطابخ التجارية", category: "تجهيز الفروع والمشاريع" },
+  { service: "تجهيز غرف الخوادم والبنية التحتية", category: "خدمات الاتصالات" },
+  { service: "نظام حضور وانصراف", category: "الخدمات الإدارية" },
+  { service: "التوصيل السريع والبريد", category: "النقل والخدمات اللوجستية" },
+  { service: "توفير سائقين خاصين", category: "النقل والخدمات اللوجستية" },
+  { service: "خدمة استقبال VIP", category: "الخدمات الإدارية" },
+  { service: "إدارة مواقف السيارات", category: "إدارة الأسطول والمركبات" },
+  { service: "إدارة المخازن والمستودعات", category: "الخدمات الإدارية" },
+  { service: "صيانة المصاعد الكهربائية", category: "الصيانة والتشغيل" },
+  { service: "أعمال العزل الحراري", category: "الصيانة والتشغيل" },
+  { service: "أعمال العزل المائي للأسطح", category: "الصيانة والتشغيل" },
+  { service: "تنسيق المناظر الطبيعية والزراعة", category: "الصيانة والتشغيل" },
+  { service: "إدارة تجديد عقود الإيجار", category: "مشاريع الإدارة الرئيسية" },
+  { service: "خدمات التصوير والإنتاج", category: "الفعاليات والمناسبات" },
+  { service: "صيانة أجهزة العرض والشاشات", category: "خدمات الاتصالات" },
+];
+
+// Flat list of all searchable services — CATEGORIES + SPECIALIZED + EXTRA
+const SEARCHABLE_SERVICES = [
+  ...CATEGORIES.flatMap(cat => cat.services.map(s => ({ service: s, category: cat.label }))),
+  ...SPECIALIZED_SEARCHABLE,
+  ...EXTRA_SERVICES,
+];
 
 export default function Services() {
   const { toast } = useToast();
@@ -370,11 +424,17 @@ export default function Services() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
 
-  const filteredServices = searchQuery.trim().length > 0
-    ? SEARCHABLE_SERVICES.filter(item =>
-        item.service.includes(searchQuery) || item.category.includes(searchQuery)
-      )
-    : SEARCHABLE_SERVICES;
+  const filteredServices = (() => {
+    const q = searchQuery.trim();
+    if (!q) return [];
+    const seen = new Set<string>();
+    return SEARCHABLE_SERVICES.filter(item => {
+      const matches = item.service.includes(q) || item.category.includes(q);
+      if (!matches || seen.has(item.service)) return false;
+      seen.add(item.service);
+      return true;
+    });
+  })();
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -443,37 +503,43 @@ export default function Services() {
             {isSearchOpen && (
               <div className="absolute top-full mt-2 w-full bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50 text-right">
                 <div className="max-h-80 overflow-y-auto">
-                  {filteredServices.length > 0 ? (
-                    filteredServices.slice(0, 30).map((item, i) => (
-                      <div
-                        key={i}
-                        className="px-5 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-50 last:border-0"
-                        onClick={() => {
-                          // Scroll to the category section
-                          const cat = CATEGORIES.find(c => c.label === item.category);
-                          if (cat) { scrollTo(cat.id); setIsSearchOpen(false); setSearchQuery(""); }
-                        }}
-                      >
-                        <p className="text-gray-800 text-sm font-medium">{item.service}</p>
-                        <p className="text-gray-400 text-xs mt-0.5">{item.category}</p>
-                      </div>
-                    ))
+                  {searchQuery.trim().length === 0 ? (
+                    <div className="px-5 py-4 text-gray-400 text-sm text-center">
+                      ابدأ الكتابة للبحث من بين أكثر من 130 خدمة تشغيلية
+                    </div>
+                  ) : filteredServices.length > 0 ? (
+                    filteredServices.slice(0, 40).map((item, i) => {
+                      const cat = CATEGORIES.find(c => c.label === item.category);
+                      return (
+                        <div
+                          key={i}
+                          className="px-5 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-50 last:border-0"
+                          onClick={() => {
+                            if (cat) { scrollTo(cat.id); }
+                            setIsSearchOpen(false);
+                            setSearchQuery("");
+                          }}
+                        >
+                          <p className="text-gray-800 text-sm font-medium">{item.service}</p>
+                          <p className="text-gray-400 text-xs mt-0.5">{item.category}</p>
+                        </div>
+                      );
+                    })
                   ) : (
-                    <div className="px-5 py-4 text-gray-500 text-sm">لا توجد نتائج لـ "{searchQuery}"</div>
+                    <div className="px-5 py-4 text-gray-500 text-sm">لا توجد نتائج لـ "{searchQuery}" — جرّب كلمات مختلفة</div>
                   )}
                 </div>
                 {/* Not found option */}
-                <Link
-                  href="/contact"
-                  onClick={() => setIsSearchOpen(false)}
-                  className="flex items-center gap-3 px-5 py-4 bg-primary/5 hover:bg-primary/10 border-t border-gray-100 transition-colors"
+                <button
+                  onClick={() => { setIsSearchOpen(false); setSearchQuery(""); scrollTo("custom-request"); }}
+                  className="w-full flex items-center gap-3 px-5 py-4 bg-primary/5 hover:bg-primary/10 border-t border-gray-100 transition-colors text-right"
                 >
                   <span className="text-lg">🔎</span>
                   <div>
                     <p className="text-primary font-semibold text-sm">خدمة غير موجودة؟</p>
                     <p className="text-gray-500 text-xs">أرسل طلبك وسنتابع احتياجك مباشرة</p>
                   </div>
-                </Link>
+                </button>
               </div>
             )}
           </div>
@@ -625,7 +691,7 @@ export default function Services() {
       </section>
 
       {/* Custom Request */}
-      <section className="py-20 bg-gradient-to-b from-primary/5 to-white">
+      <section id="custom-request" className="py-20 bg-gradient-to-b from-primary/5 to-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <div className="w-16 h-16 bg-secondary/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
