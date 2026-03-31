@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import {
   ShieldCheck, TrendingDown, Users, RefreshCcw, Network,
   BarChart3, CheckCircle2, ArrowLeft, X, UserCheck,
-  PhoneCall, FileText, Wrench, Calendar, AlertCircle,
+  FileText, Wrench, Calendar,
   Building2, Star, Banknote, Clock, Layers,
   Zap, Car, Home, ClipboardList, Send
 } from "lucide-react";
@@ -45,14 +45,6 @@ const ALL_SERVICES = [
   { emoji: "🌐",  name: "ترجمة وثائق",        desc: "متابعة ترجمة وتوثيق الوثائق الرسمية والتجارية المعتمدة" },
 ];
 
-const PAIN_POINTS = [
-  { icon: PhoneCall,   text: "عشرات أرقام الهواتف لكل مورد وجهة حكومية في كل فرع" },
-  { icon: FileText,    text: "فواتير شهرية من جميع مزودي الخدمة تحتاج مراجعة ومتابعة يدوية" },
-  { icon: Wrench,      text: "بلاغات الصيانة تُفتح وتُغلق دون متابعة فعلية لجودة التنفيذ" },
-  { icon: Calendar,    text: "تراخيص تنتهي وتحتاج تجديد — وإغفالها يُوقف العمل" },
-  { icon: AlertCircle, text: "الانقطاعات الطارئة لا أحد يتابعها حتى تؤثر على العمليات" },
-  { icon: Users,       text: "موظف أو أكثر يُعيَّن لمتابعة هذه المهام بدلاً من التركيز على العمل الأساسي" },
-];
 
 const ACCOUNT_MANAGER_TASKS = [
   { period: "يومياً", tasks: ["استقبال بلاغات الصيانة من الفروع", "توجيه الطلبات للموردين المناسبين", "متابعة التنفيذ وتأكيد الإغلاق"] },
@@ -254,28 +246,62 @@ export default function Companies() {
 
       {/* REAL SCENARIO */}
       <section id="scenario" className="py-20 bg-gray-50">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <span className="inline-block bg-red-50 text-red-600 font-bold text-sm px-4 py-1.5 rounded-full mb-4">سيناريو حقيقي</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">تخيّل: منشأة لها 5 فروع في الرياض</h2>
-            <p className="text-gray-600 text-lg max-w-2xl mx-auto">هذه المنشأة تتعامل يومياً مع:</p>
+            <span className="inline-block bg-primary/10 text-primary font-bold text-sm px-4 py-1.5 rounded-full mb-4">لماذا GSS؟</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">الواقع التشغيلي لأغلب المنشآت</h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
-            {PAIN_POINTS.map((pt, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.07 }}
-                className="flex items-start gap-3 bg-red-50 border border-red-100 rounded-2xl p-5">
-                <div className="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <pt.icon size={20} className="text-red-500" />
-                </div>
-                <p className="text-gray-800 text-sm leading-relaxed">{pt.text}</p>
-              </motion.div>
-            ))}
-          </div>
-          <div className="bg-red-600 text-white rounded-3xl p-8 text-center">
-            <p className="text-2xl font-bold mb-3">النتيجة؟</p>
-            <p className="text-red-100 text-lg leading-relaxed max-w-2xl mx-auto">
-              موظف أو أكثر يقضون وقتهم في متابعة هذه المهام، والأخطاء تتراكم، والتكاليف ترتفع، والإدارة لا تعرف أين يذهب كل ريال.
-            </p>
+
+          <div className="space-y-6 text-gray-700 text-[1.05rem] leading-[2] text-right">
+            <motion.p initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4 }}>
+              تعتمد استمرارية العمل في أي منشأة على متابعة الخدمات الإدارية اليومية والعمليات التشغيلية بشكل منظم ومستمر.
+              هذه المهام لا تُدار بكفاءة عبر الأنظمة وحدها، بل تحتاج جهة تتولى المتابعة المباشرة والتنسيق حتى اكتمال تنفيذها بالشكل المطلوب.
+            </motion.p>
+
+            <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: 0.1 }}
+              className="bg-red-50 border-r-4 border-red-400 rounded-2xl px-7 py-6">
+              <p className="font-bold text-gray-900 mb-3">عند غياب هذه المتابعة تظهر تحديات متكررة:</p>
+              <ul className="space-y-2 text-gray-700 text-sm">
+                {[
+                  "تعدد جهات التواصل المرتبطة بالخدمات وتشتت القرار",
+                  "تأخر تنفيذ الإجراءات وتراكم الطلبات غير المغلقة",
+                  "استهلاك وقت الموظفين في متابعة يومية بدلاً من المهام الأساسية",
+                  "ضعف وضوح المصروفات التشغيلية وصعوبة ضبطها",
+                ].map((item, i) => (
+                  <li key={i} className="flex items-start gap-2">
+                    <span className="text-red-400 mt-1 flex-shrink-0">●</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-4 text-gray-600 text-sm">
+                ومع الوقت يؤدي ذلك إلى ارتفاع التكاليف التشغيلية، وضعف التنسيق، وتراجع كفاءة الأداء العام داخل المنشأة.
+              </p>
+            </motion.div>
+
+            <motion.p initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: 0.2 }}>
+              هنا يأتي دور <span className="font-bold text-primary">GSS</span> كمدير عمليات خارجي يدعم المنشأة في تنظيم ومتابعة الخدمات الإدارية اليومية والعمليات التشغيلية بشكل مركزي ومنهجي،
+              من خلال توحيد قنوات التواصل، ومتابعة الطلبات حتى إغلاقها، وتحسين مستوى التنسيق بين الجهات المرتبطة بالخدمات،
+              وتعزيز كفاءة إدارة المصروفات التشغيلية، وتقديم تقارير دورية تدعم اتخاذ القرار.
+            </motion.p>
+
+            <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: 0.3 }}
+              className="bg-primary text-white rounded-2xl px-7 py-6">
+              <p className="font-bold text-lg mb-3">ما يحققه هذا النموذج التشغيلي:</p>
+              <ul className="space-y-2 text-primary-foreground/85 text-sm">
+                {[
+                  "رفع كفاءة إدارة العمليات اليومية وتقليل التكاليف غير المباشرة",
+                  "تحسين مستوى المتابعة والتنظيم وزيادة وضوح المصروفات التشغيلية",
+                  "تمكين فرق العمل من التركيز على الأنشطة الأساسية",
+                  "دون الحاجة إلى إنشاء هيكل تشغيل داخلي موسّع",
+                ].map((item, i) => (
+                  <li key={i} className="flex items-start gap-2">
+                    <span className="text-secondary mt-1 flex-shrink-0">✓</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
           </div>
         </div>
       </section>
