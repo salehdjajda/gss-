@@ -649,6 +649,27 @@ export default function Services() {
                 </div>
               </motion.div>
             ))}
+
+            {/* Custom / unlisted service card */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4 }}
+              onClick={() => scrollTo("custom-request")}
+              className="group rounded-2xl overflow-hidden border-2 border-dashed border-primary/30 hover:border-primary/60 cursor-pointer transition-all hover:shadow-lg"
+            >
+              <div className="h-40 bg-primary/5 group-hover:bg-primary/10 transition-colors flex flex-col items-center justify-center gap-2 relative">
+                <div className="w-12 h-12 rounded-full bg-primary/10 group-hover:bg-primary/20 flex items-center justify-center transition-colors">
+                  <span className="text-2xl text-primary font-bold leading-none">+</span>
+                </div>
+                <p className="text-primary/60 text-xs text-center px-2">ارفع طلبك</p>
+              </div>
+              <div className="p-3 bg-white border border-dashed border-primary/20 border-t-0">
+                <p className="font-bold text-primary text-sm text-center">خدمة غير مذكورة؟</p>
+                <p className="text-gray-400 text-xs text-center mt-1">أرسل طلبك وسنتابعه</p>
+              </div>
+            </motion.div>
           </div>
           <div className="text-center mt-10">
             <Link href="/register/company">
