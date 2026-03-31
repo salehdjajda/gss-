@@ -445,7 +445,7 @@ const SEARCHABLE_SERVICES = [
 
 export default function Services() {
   const { toast } = useToast();
-  const [customForm, setCustomForm] = useState({ name: "", phone: "", email: "", description: "" });
+  const [customForm, setCustomForm] = useState({ companyName: "", accountNumber: "", employeeName: "", phone: "", email: "", description: "" });
   const [submitting, setSubmitting] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -480,7 +480,7 @@ export default function Services() {
     setSubmitting(true);
     await new Promise(r => setTimeout(r, 1000));
     setSubmitting(false);
-    setCustomForm({ name: "", phone: "", email: "", description: "" });
+    setCustomForm({ companyName: "", accountNumber: "", employeeName: "", phone: "", email: "", description: "" });
     toast({ title: "تم استلام طلبك بنجاح", description: "سيتواصل معك فريق GSS لدراسة طلبك قريباً." });
   };
 
@@ -756,14 +756,26 @@ export default function Services() {
             </p>
           </div>
           <form onSubmit={handleCustomSubmit} className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 space-y-5">
+            {/* Row 1: اسم المنشأة + رقم الحساب */}
             <div className="grid md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">الاسم الكامل</label>
-                <Input value={customForm.name} onChange={e => setCustomForm(p => ({ ...p, name: e.target.value }))} placeholder="اسمك أو اسم المنشأة" />
+                <label className="block text-sm font-medium text-gray-700 mb-1">اسم المنشأة <span className="text-red-500">*</span></label>
+                <Input value={customForm.companyName} onChange={e => setCustomForm(p => ({ ...p, companyName: e.target.value }))} placeholder="اسم الشركة أو المنشأة" required />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">رقم الجوال</label>
-                <Input dir="ltr" value={customForm.phone} onChange={e => setCustomForm(p => ({ ...p, phone: e.target.value }))} placeholder="05xxxxxxxx" />
+                <label className="block text-sm font-medium text-gray-700 mb-1">رقم حساب المنشأة</label>
+                <Input dir="ltr" value={customForm.accountNumber} onChange={e => setCustomForm(p => ({ ...p, accountNumber: e.target.value }))} placeholder="GSS-YYYY-XXXXX" />
+              </div>
+            </div>
+            {/* Row 2: اسم الموظف + رقم الجوال */}
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">اسم الموظف المخوّل بالتواصل <span className="text-red-500">*</span></label>
+                <Input value={customForm.employeeName} onChange={e => setCustomForm(p => ({ ...p, employeeName: e.target.value }))} placeholder="الاسم حسب العقد" required />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">رقم الجوال <span className="text-red-500">*</span></label>
+                <Input dir="ltr" value={customForm.phone} onChange={e => setCustomForm(p => ({ ...p, phone: e.target.value }))} placeholder="05xxxxxxxx" required />
               </div>
             </div>
             <div>
