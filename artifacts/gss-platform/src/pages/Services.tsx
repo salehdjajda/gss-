@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
 import {
   Wrench, Sparkles, Truck, Users, Monitor, FileText, Building2,
   ShieldCheck, Car, Home, Calendar, Brain, ArrowLeft,
@@ -384,6 +385,43 @@ const colorMap: Record<string, { bg: string; text: string; border: string; badge
   violet: { bg: "bg-violet-50", text: "text-violet-700", border: "border-violet-200", badge: "bg-violet-100 text-violet-700" },
 };
 
+const CATEGORIES_EN: Record<string, { label: string; description: string; services: string[] }> = {
+  maintenance:      { label: "Maintenance & Operations",        description: "GSS organizes operational maintenance requests for facilities and branches, coordinating with certified vendors until closure.", services: ["Organize daily & periodic maintenance requests", "Follow up on preventive maintenance", "Coordinate facility operational repairs", "Monitor operational asset readiness", "Coordinate site technical improvements"] },
+  utilities:        { label: "Electricity & Water",             description: "GSS manages electricity and water services, coordinating with service providers to ensure operational continuity.", services: ["Follow up on electricity & water service requests", "Monitor operational bills and organize payments", "Coordinate with providers during outages", "Follow up on new site service connections", "Monitor consumption patterns and alert on unusual spikes"] },
+  projects:         { label: "Branch & Site Setup",             description: "GSS manages the coordination of setting up new and existing branches and sites until they are ready for operation.", services: ["Follow up on new site setup", "Coordinate regulatory requirements", "Monitor facility operational infrastructure setup", "Coordinate handover and delivery procedures"] },
+  "work-environment":{ label: "Work Environment & Admin Services", description: "GSS organizes daily operational services for offices and branches to ensure smooth operations.", services: ["Organize daily operational service requests", "Follow up on essential operational supply provisions", "Coordinate internal courier and shipping services", "Monitor inter-site delivery operations", "Organize internal correspondence services"] },
+  housing:          { label: "Employee Housing",                description: "GSS organizes and follows up on employee housing services in coordination with relevant parties.", services: ["Coordinate housing site setup", "Follow up on regulatory housing requirements", "Coordinate with landlords and service providers", "Monitor housing facility operational services", "Organize site evacuation and handover procedures"] },
+  telecom:          { label: "Telecom Services",                description: "GSS organizes telecom, internet, and operational technical services for sites and branches.", services: ["Organize telecom service requests", "Monitor telecom and internet bills", "Coordinate with providers for fault resolution", "Study appropriate operational alternatives", "Monitor internal phone systems"] },
+  fleet:            { label: "Fleet & Vehicles",                description: "GSS organizes operational services related to the vehicle fleet.", services: ["Follow up on vehicle service requests", "Monitor vehicle contracts and bills", "Coordinate with regulatory authorities", "Follow up on vehicle operational maintenance", "Prepare fleet usage reports"] },
+  transport:        { label: "Transport & Logistics",           description: "GSS organizes transport and logistics services related to facilities, employees, and equipment.", services: ["Organize inter-site transport services", "Follow up on equipment transport", "Coordinate shipping and delivery services", "Organize logistics for operational projects"] },
+  security:         { label: "Security & Safety",               description: "GSS follows up on security and safety service implementation in coordination with relevant authorities.", services: ["Organize guard services", "Monitor safety and alarm systems", "Monitor fire suppression systems", "Coordinate with regulatory authorities", "Coordinate emergency and evacuation procedures"] },
+  events:           { label: "Events & Occasions",              description: "GSS organizes operational services related to events and occasions.", services: ["Coordinate meeting venue setup", "Follow up on event logistics", "Organize branch opening setups", "Follow up on workshop and conference setups", "Coordinate hospitality and documentation services"] },
+  consulting:       { label: "Operational Consulting",          description: "GSS provides advisory support to improve operational efficiency and reduce operational expenses.", services: ["Analyze operational expenses", "Review vendor contracts", "Improve operational procedures", "Support appropriate vendor selection", "Analyze site and branch performance", "Develop unified operational procedures", "Support regulatory compliance", "Contribute to branch expansion studies"] },
+  "vendor-contracts": { label: "Vendor Contracts",             description: "GSS organizes operational vendor contracts and follows up on their execution.", services: ["Follow up on vendor contracts", "Coordinate contract renewals", "Analyze contract compliance levels", "Suggest operational alternatives when needed"] },
+  budget:           { label: "Operational Budget",              description: "GSS helps facilities control operational expenses related to services.", services: ["Monitor operational service budgets", "Analyze expense variances", "Compare costs across sites", "Suggest lower-cost operational solutions", "Prepare decision-support reports"] },
+  emergency:        { label: "Emergency Response",              description: "GSS organizes rapid response to sudden operational failures.", services: ["Coordinate emergency fault response", "Follow up on sudden outage cases", "Coordinate with vendors for urgent intervention", "Follow up on critical report closure"] },
+  compliance:       { label: "Operational Compliance",          description: "GSS supports facilities in following up on operational regulatory requirements.", services: ["Follow up on civil defense requirements", "Follow up on municipality requirements", "Follow up on occupational safety requirements", "Follow up on operational licenses"] },
+  assets:           { label: "Operational Assets",              description: "GSS organizes monitoring of operational assets for facilities and branches.", services: ["Organize operational asset records", "Monitor technical asset status", "Coordinate asset replacement when needed", "Prepare asset status reports"] },
+};
+
+const SPECIALIZED_EN: Record<string, { label: string; desc: string }> = {
+  "تكييف":           { label: "Air Conditioning", desc: "Installation and maintenance of all types of AC and cooling systems" },
+  "سباكة":           { label: "Plumbing",          desc: "Plumbing, waterproofing, and water network maintenance" },
+  "كهرباء":          { label: "Electrical",        desc: "Electrical works, wiring, and lighting maintenance" },
+  "دهانات":          { label: "Painting",          desc: "Interior and exterior painting with professional finishing standards" },
+  "نجارة وتركيبات": { label: "Carpentry",          desc: "Carpentry, wood installations, and office setup" },
+  "عشب صناعي":       { label: "Artificial Grass",  desc: "Installation and maintenance of artificial grass for outdoor areas" },
+  "لياسة":           { label: "Plastering",         desc: "Plastering and wall finishing works of all types" },
+  "غرف التبريد":     { label: "Cold Rooms",         desc: "Installation, maintenance, and operation of cold storage rooms" },
+  "مكافحة الحشرات":  { label: "Pest Control",       desc: "Periodic pest and rodent control" },
+  "تنظيف":           { label: "Cleaning",           desc: "Daily and deep cleaning of facilities and branches" },
+  "أرضيات":          { label: "Flooring",           desc: "Installation and maintenance of all types of flooring and tiles" },
+  "حوض سباحة":       { label: "Swimming Pools",     desc: "Cleaning, maintenance, and operation of swimming pools" },
+  "أعمال جبسية":     { label: "Gypsum Works",       desc: "Gypsum installation and shaping for various decorations" },
+  "باركيه":          { label: "Parquet",             desc: "Installation, maintenance, and polishing of wooden parquet" },
+  "مضلات المواقف":   { label: "Parking Shades",     desc: "Manufacturing, installation, and maintenance of car park shades" },
+};
+
 // All specialized items as searchable services
 const SPECIALIZED_SEARCHABLE = SPECIALIZED.flatMap(item => [
   { service: item.label, category: "أعمال متخصصة" },
@@ -444,6 +482,8 @@ const SEARCHABLE_SERVICES = [
 ];
 
 export default function Services() {
+  const { lang } = useLanguage();
+  const ar = lang === "ar";
   const { toast } = useToast();
   const [customForm, setCustomForm] = useState({ companyName: "", accountNumber: "", employeeName: "", phone: "", email: "", description: "" });
   const [submitting, setSubmitting] = useState(false);
@@ -481,7 +521,10 @@ export default function Services() {
     await new Promise(r => setTimeout(r, 1000));
     setSubmitting(false);
     setCustomForm({ companyName: "", accountNumber: "", employeeName: "", phone: "", email: "", description: "" });
-    toast({ title: "تم استلام طلبك بنجاح", description: "سيتواصل معك فريق GSS لدراسة طلبك قريباً." });
+    toast({
+      title: ar ? "تم استلام طلبك بنجاح" : "Request Received Successfully",
+      description: ar ? "سيتواصل معك فريق GSS لدراسة طلبك قريباً." : "The GSS team will contact you shortly to study your request.",
+    });
   };
 
   const scrollTo = (id: string) => {
@@ -495,14 +538,20 @@ export default function Services() {
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=1600&auto=format&fit=crop&q=80')] bg-cover bg-center opacity-10" />
         <div className="absolute inset-0 bg-gradient-to-b from-primary/95 to-primary/90" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">الخدمات التشغيلية الشاملة</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">
+            {ar ? "الخدمات التشغيلية الشاملة" : "Comprehensive Operational Services"}
+          </h1>
           <p className="text-xl text-white/80 max-w-3xl mx-auto leading-relaxed mb-10">
-            تعمل منصة GSS كمدير عمليات خارجي يتولى تنظيم ومتابعة الخدمات التشغيلية للمنشآت عبر نقطة اتصال واحدة، والتنسيق مع الموردين المعتمدين حتى إغلاق الطلب وفق متطلبات المنشأة.
+            {ar
+              ? "تعمل منصة GSS كمدير عمليات خارجي يتولى تنظيم ومتابعة الخدمات التشغيلية للمنشآت عبر نقطة اتصال واحدة، والتنسيق مع الموردين المعتمدين حتى إغلاق الطلب وفق متطلبات المنشأة."
+              : "GSS acts as an external operations manager organizing and monitoring operational services for facilities through a single point of contact, coordinating with certified vendors until the request is closed."}
           </p>
 
           {/* Intro above search */}
           <p className="text-white/70 text-sm max-w-2xl mx-auto mb-4 leading-relaxed">
-            يمكنكم طلب أي خدمة تشغيلية أو فنية عبر منصة GSS، حيث يتولى فريق التشغيل تنظيم الطلب والتنسيق مع الموردين المعتمدين ومتابعة التنفيذ حتى إغلاق الخدمة وفق متطلبات منشأتكم.
+            {ar
+              ? "يمكنكم طلب أي خدمة تشغيلية أو فنية عبر منصة GSS، حيث يتولى فريق التشغيل تنظيم الطلب والتنسيق مع الموردين المعتمدين ومتابعة التنفيذ حتى إغلاق الخدمة وفق متطلبات منشأتكم."
+              : "You can request any operational or technical service through GSS. Our operations team organizes the request, coordinates with certified vendors, and follows up until the service is closed as per your facility's requirements."}
           </p>
 
           {/* Service Search */}
@@ -519,7 +568,7 @@ export default function Services() {
                 value={searchQuery}
                 onChange={e => { setSearchQuery(e.target.value); setIsSearchOpen(true); }}
                 onFocus={() => setIsSearchOpen(true)}
-                placeholder="ابحث عن الخدمة التي تحتاجها..."
+                placeholder={ar ? "ابحث عن الخدمة التي تحتاجها..." : "Search for the service you need..."}
                 className="flex-1 bg-transparent text-gray-800 placeholder-gray-400 text-base outline-none font-medium"
               />
               {searchQuery && (
@@ -537,7 +586,7 @@ export default function Services() {
                 <div className="max-h-80 overflow-y-auto">
                   {searchQuery.trim().length === 0 ? (
                     <div className="px-5 py-4 text-gray-400 text-sm text-center">
-                      ابدأ الكتابة للبحث من بين 16 تصنيفاً وأكثر من 70 مهمة تشغيلية
+                      {ar ? "ابدأ الكتابة للبحث من بين 16 تصنيفاً وأكثر من 70 مهمة تشغيلية" : "Start typing to search among 16 categories and 70+ operational tasks"}
                     </div>
                   ) : filteredServices.length > 0 ? (
                     filteredServices.slice(0, 40).map((item, i) => {
@@ -558,7 +607,7 @@ export default function Services() {
                       );
                     })
                   ) : (
-                    <div className="px-5 py-4 text-gray-500 text-sm">لا توجد نتائج لـ "{searchQuery}" — جرّب كلمات مختلفة</div>
+                    <div className="px-5 py-4 text-gray-500 text-sm">{ar ? `لا توجد نتائج لـ "${searchQuery}" — جرّب كلمات مختلفة` : `No results for "${searchQuery}" — try different keywords`}</div>
                   )}
                 </div>
                 {/* Not found option */}
@@ -568,8 +617,8 @@ export default function Services() {
                 >
                   <span className="text-lg">🔎</span>
                   <div>
-                    <p className="text-primary font-semibold text-sm">خدمة غير موجودة؟</p>
-                    <p className="text-gray-500 text-xs">أرسل طلبك وسنتابع احتياجك مباشرة</p>
+                    <p className="text-primary font-semibold text-sm">{ar ? "خدمة غير موجودة؟" : "Service not found?"}</p>
+                    <p className="text-gray-500 text-xs">{ar ? "أرسل طلبك وسنتابع احتياجك مباشرة" : "Send your request and we'll follow up directly"}</p>
                   </div>
                 </button>
               </div>
@@ -583,7 +632,7 @@ export default function Services() {
                 onClick={() => scrollTo(cat.id)}
                 className={`px-4 py-2 rounded-full text-sm font-medium border transition-all ${cat.highlight ? "bg-secondary text-primary border-secondary" : "bg-white/10 border-white/30 text-white hover:bg-white/20"}`}
               >
-                {cat.label}
+                {ar ? cat.label : (CATEGORIES_EN[cat.id]?.label ?? cat.label)}
               </button>
             ))}
           </div>
@@ -594,12 +643,17 @@ export default function Services() {
       <section className="bg-slate-900 text-white py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            {[
-              { num: "16", label: "تصنيفاً خدمياً تشغيلياً" },
-              { num: "+70", label: "مهمة تشغيلية مغطاة" },
-              { num: "واحدة", label: "نقطة تنسيق لكل الطلبات" },
-              { num: "شفاف", label: "نموذج تسعير واضح مسبقاً" },
-            ].map((item, i) => (
+            {(ar ? [
+              { num: "16",      label: "تصنيفاً خدمياً تشغيلياً" },
+              { num: "+70",     label: "مهمة تشغيلية مغطاة" },
+              { num: "واحدة",   label: "نقطة تنسيق لكل الطلبات" },
+              { num: "شفاف",    label: "نموذج تسعير واضح مسبقاً" },
+            ] : [
+              { num: "16",       label: "Operational Service Categories" },
+              { num: "70+",      label: "Operational Tasks Covered" },
+              { num: "One",      label: "Single Coordination Point" },
+              { num: "Transparent", label: "Clear Pre-agreed Pricing" },
+            ]).map((item, i) => (
               <div key={i}>
                 <p className="text-3xl font-black text-secondary">{item.num}</p>
                 <p className="text-slate-400 text-sm mt-1">{item.label}</p>
@@ -613,10 +667,16 @@ export default function Services() {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
-            <span className="inline-block bg-secondary/10 text-primary text-sm font-bold px-4 py-1.5 rounded-full mb-4">الخدمات التخصصية</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">أعمال الصيانة والتجهيز المتخصصة</h2>
+            <span className="inline-block bg-secondary/10 text-primary text-sm font-bold px-4 py-1.5 rounded-full mb-4">
+              {ar ? "الخدمات التخصصية" : "Specialized Services"}
+            </span>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              {ar ? "أعمال الصيانة والتجهيز المتخصصة" : "Specialized Maintenance & Setup Works"}
+            </h2>
             <p className="text-gray-500 text-lg max-w-2xl mx-auto">
-              نغطي جميع أعمال الصيانة والتجهيز المتخصصة من خلال شبكة موردين معتمدين — سواء طلب واحد أو مشروع كامل.
+              {ar
+                ? "نغطي جميع أعمال الصيانة والتجهيز المتخصصة من خلال شبكة موردين معتمدين — سواء طلب واحد أو مشروع كامل."
+                : "We cover all specialized maintenance and setup works through a network of certified vendors — whether a single request or a full project."}
             </p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
@@ -644,8 +704,8 @@ export default function Services() {
                 </div>
                 {/* Label */}
                 <div className="p-3 bg-white border border-gray-100 border-t-0">
-                  <p className="font-bold text-gray-900 text-sm text-center">{item.label}</p>
-                  <p className="text-gray-500 text-xs text-center mt-1 leading-relaxed hidden group-hover:block">{item.desc}</p>
+                  <p className="font-bold text-gray-900 text-sm text-center">{ar ? item.label : (SPECIALIZED_EN[item.label]?.label ?? item.label)}</p>
+                  <p className="text-gray-500 text-xs text-center mt-1 leading-relaxed hidden group-hover:block">{ar ? item.desc : (SPECIALIZED_EN[item.label]?.desc ?? item.desc)}</p>
                 </div>
               </motion.div>
             ))}
@@ -663,18 +723,18 @@ export default function Services() {
                 <div className="w-12 h-12 rounded-full bg-primary/10 group-hover:bg-primary/20 flex items-center justify-center transition-colors">
                   <span className="text-2xl text-primary font-bold leading-none">+</span>
                 </div>
-                <p className="text-primary/60 text-xs text-center px-2">ارفع طلبك</p>
+                <p className="text-primary/60 text-xs text-center px-2">{ar ? "ارفع طلبك" : "Submit Request"}</p>
               </div>
               <div className="p-3 bg-white border border-dashed border-primary/20 border-t-0">
-                <p className="font-bold text-primary text-sm text-center">خدمة غير مذكورة؟</p>
-                <p className="text-gray-400 text-xs text-center mt-1">أرسل طلبك وسنتابعه</p>
+                <p className="font-bold text-primary text-sm text-center">{ar ? "خدمة غير مذكورة؟" : "Service not listed?"}</p>
+                <p className="text-gray-400 text-xs text-center mt-1">{ar ? "أرسل طلبك وسنتابعه" : "Send your request"}</p>
               </div>
             </motion.div>
           </div>
           <div className="text-center mt-10">
             <Link href="/register/company">
               <Button size="lg" className="h-12 px-10 font-bold">
-                اطلب أي خدمة من هذه الخدمات <ArrowLeft className="mr-2" size={18} />
+                {ar ? "اطلب أي خدمة من هذه الخدمات" : "Request Any of These Services"} <ArrowLeft className="mr-2" size={18} />
               </Button>
             </Link>
           </div>
@@ -699,7 +759,7 @@ export default function Services() {
               >
                 {cat.highlight && (
                   <div className="bg-secondary text-primary text-center py-2.5 text-sm font-bold flex items-center justify-center gap-2">
-                    <Star size={16} /> الخدمة الأساسية — توفير فعلي في التكاليف التشغيلية <Star size={16} />
+                    <Star size={16} /> {ar ? "الخدمة الأساسية — توفير فعلي في التكاليف التشغيلية" : "Core Service — Actual Savings on Operational Costs"} <Star size={16} />
                   </div>
                 )}
                 <div className={`grid lg:grid-cols-2 ${!isEven ? "lg:grid-flow-col-dense" : ""}`}>
@@ -715,10 +775,14 @@ export default function Services() {
                   </div>
                   {/* Content */}
                   <div className={`p-8 lg:p-10 bg-white ${!isEven ? "lg:col-start-1" : ""}`}>
-                    <h2 className="text-2xl font-bold text-gray-900 mb-3">{cat.label}</h2>
-                    <p className="text-gray-600 leading-relaxed mb-6 text-[15px]">{cat.description}</p>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-3">
+                      {ar ? cat.label : (CATEGORIES_EN[cat.id]?.label ?? cat.label)}
+                    </h2>
+                    <p className="text-gray-600 leading-relaxed mb-6 text-[15px]">
+                      {ar ? cat.description : (CATEGORIES_EN[cat.id]?.description ?? cat.description)}
+                    </p>
                     <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      {cat.services.map((service, i) => (
+                      {(ar ? cat.services : (CATEGORIES_EN[cat.id]?.services ?? cat.services)).map((service, i) => (
                         <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
                           <CheckCircle2 size={15} className={`mt-0.5 flex-shrink-0 ${colors.text}`} />
                           {service}
@@ -727,11 +791,11 @@ export default function Services() {
                     </ul>
                     <div className="mt-8 flex gap-3 flex-wrap">
                       <Link href="/register/company">
-                        <Button size="sm" className="font-bold">طلب هذه الخدمة</Button>
+                        <Button size="sm" className="font-bold">{ar ? "طلب هذه الخدمة" : "Request This Service"}</Button>
                       </Link>
                       <Link href="/contact">
                         <Button variant="outline" size="sm" className={`${colors.text} border-current hover:opacity-80`}>
-                          استفسار
+                          {ar ? "استفسار" : "Inquire"}
                         </Button>
                       </Link>
                     </div>
@@ -750,54 +814,56 @@ export default function Services() {
             <div className="w-16 h-16 bg-secondary/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
               <ClipboardList size={32} className="text-primary" />
             </div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">خدمة غير مذكورة؟ ارفع طلبك</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              {ar ? "خدمة غير مذكورة؟ ارفع طلبك" : "Service Not Listed? Submit Your Request"}
+            </h2>
             <p className="text-gray-600 text-lg leading-relaxed max-w-xl mx-auto">
-              إذا كانت الخدمة المطلوبة غير مدرجة أعلاه، أخبرنا باحتياجكم التشغيلي وسيتولى فريق GSS دراسته وتقديم الحل المناسب.
+              {ar
+                ? "إذا كانت الخدمة المطلوبة غير مدرجة أعلاه، أخبرنا باحتياجكم التشغيلي وسيتولى فريق GSS دراسته وتقديم الحل المناسب."
+                : "If the service you need is not listed above, tell us about your operational need and the GSS team will study it and provide a suitable solution."}
             </p>
           </div>
           <form onSubmit={handleCustomSubmit} className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 space-y-5">
-            {/* Row 1: اسم المنشأة + رقم الحساب */}
             <div className="grid md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">اسم المنشأة <span className="text-red-500">*</span></label>
-                <Input value={customForm.companyName} onChange={e => setCustomForm(p => ({ ...p, companyName: e.target.value }))} placeholder="اسم الشركة أو المنشأة" required />
+                <label className="block text-sm font-medium text-gray-700 mb-1">{ar ? "اسم المنشأة" : "Facility Name"} <span className="text-red-500">*</span></label>
+                <Input value={customForm.companyName} onChange={e => setCustomForm(p => ({ ...p, companyName: e.target.value }))} placeholder={ar ? "اسم الشركة أو المنشأة" : "Company or facility name"} required />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">رقم حساب المنشأة</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{ar ? "رقم حساب المنشأة" : "Facility Account Number"}</label>
                 <Input dir="ltr" value={customForm.accountNumber} onChange={e => setCustomForm(p => ({ ...p, accountNumber: e.target.value }))} placeholder="GSS-YYYY-XXXXX" />
               </div>
             </div>
-            {/* Row 2: اسم الموظف + رقم الجوال */}
             <div className="grid md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">اسم الموظف المخوّل بالتواصل <span className="text-red-500">*</span></label>
-                <Input value={customForm.employeeName} onChange={e => setCustomForm(p => ({ ...p, employeeName: e.target.value }))} placeholder="الاسم حسب العقد" required />
+                <label className="block text-sm font-medium text-gray-700 mb-1">{ar ? "اسم الموظف المخوّل بالتواصل" : "Authorized Contact Name"} <span className="text-red-500">*</span></label>
+                <Input value={customForm.employeeName} onChange={e => setCustomForm(p => ({ ...p, employeeName: e.target.value }))} placeholder={ar ? "الاسم حسب العقد" : "Name as per contract"} required />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">رقم الجوال <span className="text-red-500">*</span></label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{ar ? "رقم الجوال" : "Mobile Number"} <span className="text-red-500">*</span></label>
                 <Input dir="ltr" value={customForm.phone} onChange={e => setCustomForm(p => ({ ...p, phone: e.target.value }))} placeholder="05xxxxxxxx" required />
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">البريد الإلكتروني</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{ar ? "البريد الإلكتروني" : "Email Address"}</label>
               <Input dir="ltr" type="email" value={customForm.email} onChange={e => setCustomForm(p => ({ ...p, email: e.target.value }))} placeholder="example@company.com" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">وصف الاحتياج التشغيلي <span className="text-red-500">*</span></label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{ar ? "وصف الاحتياج التشغيلي" : "Operational Need Description"} <span className="text-red-500">*</span></label>
               <Textarea
                 value={customForm.description}
                 onChange={e => setCustomForm(p => ({ ...p, description: e.target.value }))}
-                placeholder="صف باختصار ما تحتاجه منشأتكم، وسيتواصل معك فريق GSS لدراسة الطلب وتقديم حل مناسب..."
+                placeholder={ar ? "صف باختصار ما تحتاجه منشأتكم، وسيتواصل معك فريق GSS لدراسة الطلب وتقديم حل مناسب..." : "Briefly describe what your facility needs, and the GSS team will get in touch to study and resolve your request..."}
                 rows={4}
                 required
               />
             </div>
             <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-800">
-              <strong>ملاحظة:</strong> سيتواصل معك فريق GSS خلال 24–48 ساعة لمناقشة طلبك والتحقق من إمكانية التنفيذ.
+              <strong>{ar ? "ملاحظة:" : "Note:"}</strong> {ar ? "سيتواصل معك فريق GSS خلال 24–48 ساعة لمناقشة طلبك والتحقق من إمكانية التنفيذ." : "The GSS team will contact you within 24–48 hours to discuss your request and verify feasibility."}
             </div>
             <Button type="submit" className="w-full h-12 text-base font-bold" disabled={submitting} data-testid="btn-submit-custom-request">
-              {submitting ? "جاري الإرسال..." : (
-                <span className="flex items-center justify-center gap-2"><Send size={18} /> إرسال الطلب</span>
+              {submitting ? (ar ? "جاري الإرسال..." : "Sending...") : (
+                <span className="flex items-center justify-center gap-2"><Send size={18} /> {ar ? "إرسال الطلب" : "Submit Request"}</span>
               )}
             </Button>
           </form>
@@ -807,19 +873,23 @@ export default function Services() {
       {/* CTA */}
       <section className="py-16 bg-primary text-white text-center">
         <div className="max-w-4xl mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-4">هل أنتم مستعدون لتبسيط تشغيل منشأتكم؟</h2>
+          <h2 className="text-3xl font-bold mb-4">
+            {ar ? "هل أنتم مستعدون لتبسيط تشغيل منشأتكم؟" : "Ready to Simplify Your Facility's Operations?"}
+          </h2>
           <p className="text-white/80 text-lg mb-8 max-w-2xl mx-auto">
-            سجّلوا الآن وسيتولى فريق GSS إدارة جميع خدماتكم التشغيلية عبر نقطة اتصال واحدة.
+            {ar
+              ? "سجّلوا الآن وسيتولى فريق GSS إدارة جميع خدماتكم التشغيلية عبر نقطة اتصال واحدة."
+              : "Register now and the GSS team will manage all your operational services through a single point of contact."}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/register/company">
               <Button size="lg" className="h-14 px-10 text-lg font-bold bg-secondary hover:bg-secondary/90 text-primary" data-testid="cta-services-register">
-                سجّل منشأتك الآن <ArrowLeft className="mr-2" size={20} />
+                {ar ? "سجّل منشأتك الآن" : "Register Your Facility Now"} <ArrowLeft className="mr-2" size={20} />
               </Button>
             </Link>
             <Link href="/contact">
               <Button size="lg" variant="outline" className="h-14 px-10 text-lg text-white border-white hover:bg-white/10">
-                تواصل معنا
+                {ar ? "تواصل معنا" : "Contact Us"}
               </Button>
             </Link>
           </div>

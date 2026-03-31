@@ -1,10 +1,33 @@
-# Workspace
+# GSS Platform Workspace
 
-## Overview
+## Project Overview
 
-pnpm workspace monorepo using TypeScript. Each package manages its own dependencies.
+**GSS (Gulf Support Services) Platform** — A bilingual (Arabic/English) React + TypeScript web application for centralized operational management in Saudi Arabia. Serves two audiences:
 
-## Stack
+1. **Companies** — Connect with certified vendors and dedicated account managers via a multi-step registration form.
+2. **Individual Customers** — Access direct vendor pricing and full request follow-up.
+
+### Key Features
+- **Full bilingual support** (AR/EN) across all pages — toggled via `gss_lang` localStorage key (defaults to `"ar"`), RTL/LTR managed via HTML attribute.
+- **Individual Auth** — localStorage-based auth (keys: `gss_individual_accounts`, `gss_individual_session`, `gss_individual_requests`). Account numbers: `GSS-IND-XXXXX`.
+- **Company Registration** — 8-step form: Facility Info → Documents → Delegates → Services → Branches → Vendors → Operations → Declarations.
+- **Bilingual pattern**: `const ar = lang === "ar"` then `ar ? "Arabic text" : "English text"`.
+- **No hidden markup policy**: no salary numbers shown in cost savings, no commissions hidden in vendor prices.
+
+### Important Files
+- `artifacts/gss-platform/src/pages/Services.tsx` — Service catalog with categories, specialized services, custom request form
+- `artifacts/gss-platform/src/pages/register/RegisterCompany.tsx` — 8-step company registration form (fully bilingual)
+- `artifacts/gss-platform/src/pages/Home.tsx` — Landing page with sectors section
+- `artifacts/gss-platform/src/pages/Companies.tsx` — Companies overview
+- `artifacts/gss-platform/src/components/layout/Navbar.tsx` — Bilingual navbar
+- `artifacts/gss-platform/src/i18n/translations.ts` — Core i18n translations
+- `artifacts/gss-platform/src/contexts/IndividualAuthContext.tsx` — Individual user auth context
+
+### Translation Key (Services.tsx)
+- `CATEGORIES_EN` — keyed by `cat.id` (e.g. `"maintenance"`, `"utilities"`)
+- `SPECIALIZED_EN` — keyed by Arabic label (e.g. `"تكييف"`, `"سباكة"`)
+
+## Tech Stack
 
 - **Monorepo tool**: pnpm workspaces
 - **Node.js version**: 24

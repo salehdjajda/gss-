@@ -1,9 +1,13 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function HowItWorks() {
-  const steps = [
+  const { lang } = useLanguage();
+  const ar = lang === "ar";
+
+  const steps = ar ? [
     {
       num: "01",
       title: "إرسال الطلب",
@@ -29,15 +33,45 @@ export default function HowItWorks() {
       title: "الإغلاق والتقارير",
       desc: "بعد التأكد من رضا العميل وإنجاز العمل، يُغلق الطلب وتُصدر تقارير أداء دورية توضح المصروفات وتفاصيل العمليات المنجزة."
     }
+  ] : [
+    {
+      num: "01",
+      title: "Submit Request",
+      desc: "Through the facility dashboard, submit a service request (maintenance, cleaning, IT, etc.) with details, location, and priority level."
+    },
+    {
+      num: "02",
+      title: "Needs Analysis",
+      desc: "GSS operations team reviews the request and understands technical and material requirements, reaching out for clarification if needed."
+    },
+    {
+      num: "03",
+      title: "Vendor Selection",
+      desc: "We leverage our extensive database to assign the most suitable, highest-quality, and geographically closest vendor or technician, then negotiate pricing."
+    },
+    {
+      num: "04",
+      title: "Execution Monitoring",
+      desc: "Our team oversees execution step by step, ensuring vendor compliance with time and quality standards, keeping the facility updated on request status."
+    },
+    {
+      num: "05",
+      title: "Closure & Reports",
+      desc: "After confirming client satisfaction and work completion, the request is closed and periodic performance reports are issued showing expenditures and operation details."
+    }
   ];
 
   return (
     <div className="pb-24">
       <section className="bg-primary py-20 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">آلية العمل في منصة GSS</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">
+            {ar ? "آلية العمل في منصة GSS" : "How GSS Works"}
+          </h1>
           <p className="text-xl text-primary-foreground/80 max-w-3xl mx-auto leading-relaxed">
-            صممنا سير العمل ليكون شفافاً، موثوقاً، ويضمن التدخل البشري الخبير في كل مرحلة.
+            {ar
+              ? "صممنا سير العمل ليكون شفافاً، موثوقاً، ويضمن التدخل البشري الخبير في كل مرحلة."
+              : "We designed our workflow to be transparent, reliable, and ensure expert human involvement at every stage."}
           </p>
         </div>
       </section>
@@ -45,10 +79,10 @@ export default function HowItWorks() {
       <section className="py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="absolute top-0 bottom-0 right-12 w-0.5 bg-gray-200 hidden md:block"></div>
-          
+
           <div className="space-y-16 relative">
             {steps.map((step, i) => (
-              <motion.div 
+              <motion.div
                 key={i}
                 initial={{ opacity: 0, x: 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -68,10 +102,12 @@ export default function HowItWorks() {
           </div>
         </div>
       </section>
-      
+
       <section className="py-10 text-center">
         <Link href="/register/company">
-          <Button size="lg" className="h-14 px-10 text-lg font-bold">ابدأ تجربتك الآن</Button>
+          <Button size="lg" className="h-14 px-10 text-lg font-bold">
+            {ar ? "ابدأ تجربتك الآن" : "Get Started Today"}
+          </Button>
         </Link>
       </section>
     </div>
