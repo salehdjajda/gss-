@@ -5,9 +5,11 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import logoImg from "@assets/image_1774909317242.png";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useIndividualAuth } from "@/contexts/IndividualAuthContext";
 
 export function Navbar() {
   const { t, lang, setLang } = useLanguage();
+  const { isLoggedIn, account } = useIndividualAuth();
   const [location] = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isJoinOpen, setIsJoinOpen] = useState(false);
@@ -80,6 +82,20 @@ export function Navbar() {
               <Globe size={15} />
               {lang === "ar" ? "EN" : "عر"}
             </button>
+
+            {/* Individual Account Badge (when logged in) */}
+            {isLoggedIn && account && (
+              <Link href="/dashboard/individual"
+                className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-primary/8 border border-primary/20 hover:bg-primary/12 transition-colors">
+                <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white text-xs font-black">
+                  {account.name.charAt(0)}
+                </div>
+                <div className="leading-none">
+                  <p className="text-xs font-bold text-primary">{account.name.split(" ")[0]}</p>
+                  <p className="text-[10px] text-gray-400 font-mono">{account.accountNumber}</p>
+                </div>
+              </Link>
+            )}
 
             {/* Join dropdown */}
             <div className="relative" ref={joinRef}>

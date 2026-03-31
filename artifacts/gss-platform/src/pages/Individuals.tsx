@@ -7,6 +7,7 @@ import {
   Award, Zap, ClipboardCheck, Clock, ChevronDown, ChevronUp, Send
 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useIndividualAuth } from "@/contexts/IndividualAuthContext";
 
 // ── Service categories ────────────────────────────────────────────────────────
 const SERVICE_CATEGORIES = [
@@ -225,6 +226,8 @@ const STEPS_EN = [
 
 export default function Individuals() {
   const { lang, isRTL } = useLanguage();
+  const { isLoggedIn }  = useIndividualAuth();
+  const ctaHref = isLoggedIn ? "/request/service" : "/register/individual";
   const Arrow = isRTL ? ArrowLeft : ArrowRight;
 
   const features  = lang === "ar" ? FEATURES_AR : FEATURES_EN;
@@ -257,7 +260,7 @@ export default function Individuals() {
                   ? "تربطك منصة GSS بموردين وفنيين معتمدين بسعر التنفيذ الحقيقي، مع متابعة كاملة حتى إنجاز الخدمة — مقابل رسوم خدمة شفافة ومعلنة مسبقًا فقط."
                   : "GSS connects you with certified vendors and technicians at the true execution cost, with full follow-up until service completion — for a transparent, pre-announced service fee only."}
               </p>
-              <Link href="/register/individual">
+              <Link href={ctaHref}>
                 <Button size="lg" className="h-14 px-10 text-lg font-bold bg-secondary hover:bg-secondary/90 text-primary">
                   {lang === "ar" ? "اطلب خدمتك الآن" : "Request Your Service Now"} <Arrow className="ms-2" size={20} />
                 </Button>
@@ -426,7 +429,7 @@ export default function Individuals() {
           </div>
 
           <div className="text-center mt-10">
-            <Link href="/register/individual">
+            <Link href={ctaHref}>
               <Button size="lg" className="h-13 px-10 text-lg font-bold">
                 {lang === "ar" ? "اطلب خدمتك الآن" : "Request Your Service Now"} <Arrow className="ms-2" size={20} />
               </Button>
@@ -466,7 +469,7 @@ export default function Individuals() {
               ? "ضمان الجودة + سعر شفاف + فنيون مرخصون"
               : "Quality Guarantee + Transparent Pricing + Licensed Technicians"}
           </p>
-          <Link href="/register/individual">
+          <Link href={ctaHref}>
             <Button size="lg" className="h-14 px-12 text-xl font-bold bg-secondary hover:bg-secondary/90 text-primary">
               {lang === "ar" ? "اطلب خدمتك الآن" : "Request Your Service Now"} <Arrow className="ms-2" size={22} />
             </Button>
