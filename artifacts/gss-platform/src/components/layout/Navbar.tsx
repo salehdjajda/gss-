@@ -29,6 +29,7 @@ export function Navbar() {
     { href: "/",            label: t("nav_home") },
     { href: "/companies",   label: t("nav_companies") },
     { href: "/individuals", label: t("nav_individuals") },
+    { href: "/vendors",     label: t("nav_vendors") },
     { href: "/services",    label: t("nav_services") },
     { href: "/how-it-works",label: t("nav_howItWorks") },
     { href: "/pricing",     label: t("nav_pricing") },

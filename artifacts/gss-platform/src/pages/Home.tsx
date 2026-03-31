@@ -5,19 +5,12 @@ import logoImg from "@assets/image_1774909317242.png";
 import {
   ArrowLeft,
   ShieldCheck,
-  Coins,
   Clock,
-  ChartLine,
   Users,
-  RefreshCcw,
   CheckCircle2,
-  Building2,
   Wrench,
   TrendingUp,
   FileText,
-  TrendingDown,
-  BarChart3,
-  AlertTriangle,
 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -35,114 +28,32 @@ export default function Home() {
     visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
   };
 
-  const challengeCategories = ar ? [
-    {
-      icon: Wrench,
-      title: "تحديات تشغيلية شائعة",
-      points: [
-        "تعدد الموردين واختلاف مستوى التنسيق بينهم",
-        "استهلاك وقت إداري كبير في التنسيق اليومي",
-        "تفاوت الأسعار بين الموردين لنفس الخدمة",
-        "صعوبة توحيد جودة التنفيذ عبر الفروع",
-      ],
-    },
-    {
-      icon: Coins,
-      title: "تحديات في إدارة التكاليف",
-      points: [
-        "عدم وضوح كامل لتفاصيل المصروفات التشغيلية",
-        "تكاليف غير مباشرة يصعب ملاحظتها (إعادة أعمال، تأخير)",
-        "صعوبة مقارنة عروض الموردين بشكل منهجي",
-        "ارتفاع التكلفة الإجمالية نتيجة غياب التنسيق المركزي",
-      ],
-    },
-    {
-      icon: BarChart3,
-      title: "تحديات في المتابعة والتقارير",
-      points: [
-        "غياب رؤية مركزية لجميع الطلبات التشغيلية",
-        "تشتت البيانات بين الأقسام والفروع",
-        "صعوبة إعداد تقارير تشغيلية دقيقة بشكل دوري",
-        "ضعف القدرة على تحليل الأداء واتخاذ قرارات مبنية على بيانات",
-      ],
-    },
-    {
-      icon: RefreshCcw,
-      title: "تحديات في استمرارية التشغيل",
-      points: [
-        "تأخر الاستجابة لبعض الطلبات التشغيلية",
-        "الاعتماد على أشخاص محددين في المتابعة",
-        "صعوبة متابعة التراخيص والعقود بشكل استباقي",
-        "تباين مستوى الخدمة بين موقع وآخر",
-      ],
-    },
+  const gssSupportPoints = ar ? [
+    "تنظيم الطلبات عبر نقطة تشغيل واحدة",
+    "توحيد التنسيق مع الموردين",
+    "تحسين وضوح المصروفات التشغيلية",
+    "متابعة التنفيذ حتى الإغلاق",
+    "توفير تقارير تشغيلية تدعم اتخاذ القرار",
   ] : [
-    {
-      icon: Wrench,
-      title: "Common Operational Challenges",
-      points: [
-        "Multiple vendors with inconsistent coordination",
-        "High administrative time spent on daily coordination",
-        "Price variations between vendors for the same service",
-        "Difficulty maintaining consistent quality across branches",
-      ],
-    },
-    {
-      icon: Coins,
-      title: "Cost Management Challenges",
-      points: [
-        "Lack of full clarity on operational expense details",
-        "Hidden indirect costs (rework, delays)",
-        "Difficulty comparing vendor quotes systematically",
-        "Higher total costs due to absence of central coordination",
-      ],
-    },
-    {
-      icon: BarChart3,
-      title: "Monitoring & Reporting Challenges",
-      points: [
-        "No centralized view of all operational requests",
-        "Data scattered across departments and branches",
-        "Difficulty producing accurate operational reports periodically",
-        "Limited ability to analyze performance and make data-driven decisions",
-      ],
-    },
-    {
-      icon: RefreshCcw,
-      title: "Operational Continuity Challenges",
-      points: [
-        "Delayed responses to some operational requests",
-        "Dependency on specific individuals for follow-up",
-        "Difficulty proactively tracking licenses and contracts",
-        "Inconsistent service levels across locations",
-      ],
-    },
-  ];
-
-  const impactItems = ar ? [
-    { icon: Clock,         label: "وقت إداري أعلى من اللازم" },
-    { icon: TrendingDown,  label: "تكلفة تشغيلية أكبر من المتوقع" },
-    { icon: AlertTriangle, label: "تحكم أقل في جودة التنفيذ" },
-    { icon: ChartLine,     label: "رؤية محدودة لاتخاذ القرار" },
-  ] : [
-    { icon: Clock,         label: "Higher-than-necessary admin time" },
-    { icon: TrendingDown,  label: "Larger-than-expected operational costs" },
-    { icon: AlertTriangle, label: "Less control over execution quality" },
-    { icon: ChartLine,     label: "Limited visibility for decision-making" },
+    "Organizing requests through a single operational point",
+    "Unifying coordination with vendors",
+    "Improving clarity of operational expenses",
+    "Following up on execution until closure",
+    "Providing operational reports that support decision-making",
   ];
 
   const howSteps = ar ? [
-    { step: "1", title: "ترسل المنشأة الطلب", desc: "عبر قناة واحدة بسيطة داخل المنصة." },
-    { step: "2", title: "يحلّل فريق GSS الاحتياج", desc: "دراسة دقيقة لفهم المتطلبات الفعلية قبل أي إجراء." },
-    { step: "3", title: "اختيار المورد الأنسب", desc: "نختار المورد الأفضل سعراً وجودةً من شبكتنا المعتمدة — وليس موردًا ثابتًا." },
-    { step: "4", title: "متابعة التنفيذ حتى الإغلاق", desc: "نشرف على سير العمل ونتابع حتى اكتمال التنفيذ بنجاح." },
-    { step: "5", title: "إصدار التقرير التشغيلي", desc: "تقرير إنجاز شامل وفاتورة موحدة تدعم اتخاذ القرار." },
+    { step: "1", title: "ترسل المنشأة الطلب عبر قناة تشغيل واحدة داخل المنصة", desc: "" },
+    { step: "2", title: "يتم تحليل الاحتياج التشغيلي قبل التنفيذ", desc: "" },
+    { step: "3", title: "اختيار المورد الأنسب وفق السعر والجودة", desc: "" },
+    { step: "4", title: "متابعة التنفيذ حتى إغلاق الطلب", desc: "" },
+    { step: "5", title: "إصدار تقرير إنجاز تشغيلي يدعم اتخاذ القرار", desc: "" },
   ] : [
-    { step: "1", title: "Facility Sends Request", desc: "Through a single simple channel inside the platform." },
-    { step: "2", title: "GSS Analyzes the Need", desc: "Precise study to understand actual requirements before any action." },
-    { step: "3", title: "Best Vendor Selected", desc: "We select the best vendor by price and quality from our certified network — not a fixed vendor." },
-    { step: "4", title: "Execution Monitored to Closure", desc: "We oversee the workflow and follow up until execution is complete." },
-    { step: "5", title: "Operational Report Issued", desc: "Comprehensive completion report and unified invoice supporting decision-making." },
+    { step: "1", title: "Facility submits the request via a single operational channel inside the platform", desc: "" },
+    { step: "2", title: "Operational need is analyzed before execution", desc: "" },
+    { step: "3", title: "Most suitable vendor selected based on price and quality", desc: "" },
+    { step: "4", title: "Execution is monitored until the request is closed", desc: "" },
+    { step: "5", title: "An operational completion report is issued to support decision-making", desc: "" },
   ];
 
   const vendorCriteria = ar ? [
@@ -192,8 +103,8 @@ export default function Home() {
   ];
 
   const trustItems = ar
-    ? ["نقطة اتصال واحدة لجميع الخدمات", "لا عمولات مخفية", "بدء سريع دون التزام"]
-    : ["Single point of contact for all services", "No hidden commissions", "Fast start, no commitment"];
+    ? ["نقطة تشغيل واحدة لجميع الخدمات", "رسوم واضحة وشفافة", "بدء مرن حسب الطلب"]
+    : ["Single operational point for all services", "Clear and transparent fees", "Flexible on-demand start"];
 
   return (
     <div className="w-full overflow-hidden">
@@ -246,15 +157,15 @@ export default function Home() {
             >
               {ar ? (
                 <>
-                  مدير العمليات الخارجي
+                  منصة إدارة الخدمات
                   <br />
-                  <span className="text-secondary">لخدمات منشأتكم التشغيلية</span>
+                  <span className="text-secondary">التشغيلية لمنشأتكم</span>
                 </>
               ) : (
                 <>
-                  Your External Operations Manager
+                  Operational Services Management
                   <br />
-                  <span className="text-secondary">for Facility Services</span>
+                  <span className="text-secondary">Platform for Your Facility</span>
                 </>
               )}
             </motion.h1>
@@ -266,8 +177,8 @@ export default function Home() {
               className="text-lg md:text-xl text-slate-300 mb-10 leading-relaxed"
             >
               {ar
-                ? "تعمل منصة GSS كمدير عمليات خارجي يدعم منشأتكم في تنظيم الطلبات التشغيلية ومتابعة الموردين وتحليل المصروفات واقتراح الحلول الأكثر كفاءة، مما يساهم في رفع جودة الأداء التشغيلي وتقليل الأعباء الإدارية دون الحاجة إلى إنشاء فريق تشغيل داخلي إضافي."
-                : "GSS acts as an external operations manager supporting your facility in organizing operational requests, monitoring vendors, analyzing expenses, and proposing more efficient solutions — improving operational performance without the need to build an additional internal operations team."}
+                ? "تدعم منصة GSS منشأتكم في تنظيم الطلبات التشغيلية، متابعة الموردين، وتحليل المصروفات التشغيلية عبر نقطة تشغيل واحدة، بما يرفع كفاءة الأداء ويعزز التحكم في التكاليف دون الحاجة إلى توسيع فريق التشغيل الداخلي."
+                : "GSS supports your facility in organizing operational requests, tracking vendors, and analyzing operational expenses through a single operational point — raising performance efficiency and enhancing cost control without expanding your internal operations team."}
             </motion.p>
 
             <motion.div
@@ -286,14 +197,24 @@ export default function Home() {
                   <ArrowLeft className="mr-2" size={20} />
                 </Button>
               </Link>
-              <Link href="/companies">
+              <Link href="/contact">
                 <Button
                   size="lg"
                   variant="outline"
                   className="w-full sm:w-auto h-14 px-8 text-lg text-white border-white/40 hover:bg-white/10 rounded-2xl backdrop-blur-sm"
+                  data-testid="hero-btn-demo"
+                >
+                  {ar ? "طلب عرض تشغيلي لمنشأتك" : "Request Operational Demo"}
+                </Button>
+              </Link>
+              <Link href="/companies">
+                <Button
+                  size="lg"
+                  variant="ghost"
+                  className="w-full sm:w-auto h-14 px-6 text-base text-slate-300 hover:text-white hover:bg-white/5 rounded-2xl"
                   data-testid="hero-btn-learn"
                 >
-                  {ar ? "اعرف أكثر" : "Learn More"}
+                  {ar ? "كيف تدعم GSS تشغيل منشأتكم" : "How GSS Supports Your Operations"}
                 </Button>
               </Link>
             </motion.div>
@@ -329,90 +250,56 @@ export default function Home() {
                 ? "كيف يمكن تعزيز كفاءة إدارة الخدمات التشغيلية في منشأتكم؟"
                 : "How Can Operational Service Management Efficiency Be Enhanced in Your Facility?"}
             </h2>
-            <p className="text-slate-400 text-lg max-w-3xl mx-auto leading-relaxed">
-              {ar
-                ? "حتى المنشآت الأكثر تنظيمًا تواجه تحديات تشغيلية يومية تؤثر بشكل غير مباشر على الكفاءة والتكلفة وسرعة التنفيذ. تعمل منصة GSS على دعم منشأتكم في التعامل مع هذه الجوانب بكفاءة أعلى."
-                : "Even the most organized facilities face daily operational challenges that indirectly affect efficiency, cost, and execution speed. GSS supports your facility in handling these aspects with greater efficiency."}
-            </p>
           </div>
 
-          {/* 4 Challenge Categories */}
+          {/* Two-column: intro + GSS support points */}
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={staggerContainer}
-            className="grid md:grid-cols-2 gap-5 mb-8"
+            className="grid lg:grid-cols-2 gap-10 items-start"
           >
-            {challengeCategories.map((cat, i) => (
-              <motion.div
-                key={i}
-                variants={fadeInUp}
-                className="bg-slate-800/60 border border-slate-700/80 rounded-2xl p-6 hover:border-slate-600 transition-colors"
-              >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-secondary/15 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <cat.icon size={20} className="text-secondary" />
-                  </div>
-                  <h3 className="font-bold text-white text-base">{cat.title}</h3>
-                </div>
-                <ul className="space-y-2.5">
-                  {cat.points.map((pt, j) => (
-                    <li key={j} className="flex items-start gap-2.5 text-slate-300 text-sm leading-relaxed">
-                      <span className="mt-2 w-1.5 h-1.5 rounded-full bg-red-400 flex-shrink-0" />
-                      {pt}
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          {/* Impact Strip */}
-          <div className="bg-red-950/40 border border-red-500/20 rounded-2xl px-6 py-5 mb-6">
-            <p className="text-center text-red-300 font-bold text-sm mb-5">
-              {ar ? "النتيجة عند عدم معالجة هذه الجوانب" : "The Result When These Areas Are Left Unaddressed"}
-            </p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {impactItems.map((item, i) => (
-                <div key={i} className="flex flex-col items-center text-center gap-2">
-                  <div className="w-9 h-9 bg-red-900/40 rounded-xl flex items-center justify-center">
-                    <item.icon size={18} className="text-red-400" />
-                  </div>
-                  <p className="text-slate-300 text-xs leading-relaxed">{item.label}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* GSS Solution */}
-          <div className="bg-primary/25 border border-primary/40 rounded-2xl p-7 flex flex-col md:flex-row items-center gap-6">
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-2">
-                <CheckCircle2 size={18} className="text-secondary flex-shrink-0" />
-                <h3 className="text-lg font-bold text-secondary">
-                  {ar ? "كيف تعالج GSS هذه التحديات؟" : "How Does GSS Address These Challenges?"}
-                </h3>
-              </div>
-              <p className="text-slate-300 leading-relaxed text-sm">
+            {/* Left: Intro paragraph */}
+            <motion.div variants={fadeInUp}>
+              <p className="text-slate-300 text-lg leading-relaxed mb-8">
                 {ar
-                  ? "تعمل منصة GSS كطبقة تشغيل داعمة تعزز كفاءة إدارة الخدمات التشغيلية، من خلال تنظيم الطلبات، وتوحيد التنسيق مع الموردين، وتحسين وضوح المصروفات، وتوفير تقارير تشغيلية تدعم اتخاذ القرار."
-                  : "GSS acts as a supporting operational layer that enhances operational service management efficiency — through organizing requests, unifying vendor coordination, improving expense clarity, and providing decision-supporting operational reports."}
+                  ? "حتى المنشآت الأكثر تنظيمًا تحتاج إلى مستوى أعلى من التنسيق بين الموردين، وتحكم أوضح في المصروفات التشغيلية، ورؤية مركزية تدعم اتخاذ القرار عبر الفروع والمرافق المختلفة."
+                  : "Even the most organized facilities need a higher level of vendor coordination, clearer control over operational expenses, and a centralized view that supports decision-making across branches and facilities."}
               </p>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
-              <Link href="/register/company">
-                <Button size="lg" className="h-12 px-7 font-bold bg-secondary text-primary hover:bg-secondary/90" data-testid="link-challenge-register">
-                  {ar ? "سجّل منشأتك" : "Register Your Facility"} <ArrowLeft className="mr-2" size={16} />
-                </Button>
-              </Link>
-              <Link href="/companies">
-                <Button size="lg" variant="outline" className="h-12 px-7 font-bold border-white/30 text-white hover:bg-white/10">
-                  {ar ? "اعرف أكثر" : "Learn More"}
-                </Button>
-              </Link>
-            </div>
-          </div>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Link href="/register/company">
+                  <Button size="lg" className="h-12 px-7 font-bold bg-secondary text-primary hover:bg-secondary/90" data-testid="link-challenge-register">
+                    {ar ? "سجّل منشأتك" : "Register Your Facility"} <ArrowLeft className="mr-2" size={16} />
+                  </Button>
+                </Link>
+                <Link href="/companies">
+                  <Button size="lg" variant="outline" className="h-12 px-7 font-bold border-white/30 text-white hover:bg-white/10">
+                    {ar ? "اعرف أكثر" : "Learn More"}
+                  </Button>
+                </Link>
+              </div>
+            </motion.div>
+
+            {/* Right: GSS support points */}
+            <motion.div variants={fadeInUp} className="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-7">
+              <p className="text-secondary font-bold text-base mb-5">
+                {ar
+                  ? "تدعم منصة GSS منشأتكم في تحسين هذه الجوانب من خلال:"
+                  : "GSS supports your facility in improving these aspects through:"}
+              </p>
+              <ul className="space-y-4">
+                {gssSupportPoints.map((point, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <div className="mt-0.5 w-6 h-6 rounded-full bg-secondary/20 flex items-center justify-center flex-shrink-0">
+                      <CheckCircle2 size={14} className="text-secondary" />
+                    </div>
+                    <span className="text-slate-200 leading-relaxed">{point}</span>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          </motion.div>
 
         </div>
       </section>
@@ -472,8 +359,8 @@ export default function Home() {
               </h2>
               <p className="text-slate-300 text-lg leading-relaxed mb-8">
                 {ar
-                  ? "لا تعتمد منصة GSS على مورد واحد لتنفيذ الخدمات، بل يتم اختيار المورد الأنسب سعراً وجودةً لكل حالة تشغيلية بما يحقق أفضل مصلحة للمنشأة."
-                  : "GSS doesn't rely on a single vendor. The most suitable vendor by price and quality is selected for each operational case to achieve the best outcome for the facility."}
+                  ? "لا تعتمد منصة GSS على مورد واحد لتنفيذ الخدمات، بل يتم اختيار المورد الأنسب لكل حالة تشغيلية بما يحقق أفضل قيمة مقابل التكلفة."
+                  : "GSS doesn't rely on a single vendor. The most suitable vendor is selected for each operational case to achieve the best value against cost."}
               </p>
               <p className="text-secondary font-bold text-xl">
                 {ar
@@ -597,10 +484,12 @@ export default function Home() {
       <section className="bg-primary py-24 text-white text-center">
         <div className="max-w-4xl mx-auto px-4">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            {ar ? "ابدأ بتنظيم عملياتك التشغيلية اليوم" : "Start Organizing Your Operations Today"}
+            {ar ? "ابدأ بتنظيم خدمات منشأتكم التشغيلية" : "Start Organizing Your Facility's Operational Services"}
           </h2>
           <p className="text-xl text-primary-foreground/80 mb-10 leading-relaxed">
-            {ar ? "بدون التزامات — بدء سريع — نتائج واضحة" : "No commitments — Fast start — Clear results"}
+            {ar
+              ? "عبر نقطة تشغيل واحدة، مع نموذج تشغيل مرن حسب الطلب وإمكانية إضافة مزايا تشغيلية متقدمة حسب احتياجاتكم."
+              : "Through a single operational point, with a flexible on-demand model and the ability to add advanced operational features based on your needs."}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/register/company">
