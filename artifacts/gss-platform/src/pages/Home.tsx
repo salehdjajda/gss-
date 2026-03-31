@@ -15,6 +15,9 @@ import {
   Wrench,
   TrendingUp,
   FileText,
+  TrendingDown,
+  BarChart3,
+  AlertTriangle,
 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -32,96 +35,100 @@ export default function Home() {
     visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
   };
 
-  const problems = ar ? [
-    "تعدد الموردين دون تنسيق فعّال",
-    "ضياع وقت الإدارة في المتابعة اليومية",
-    "تكاليف تشغيلية غير واضحة أو مرتفعة",
-    "غياب التقارير والبيانات التشغيلية",
-    "صعوبة إيجاد موردين موثوقين",
-    "إعادة تنفيذ أعمال بسبب ضعف التنسيق",
+  const challengeCategories = ar ? [
+    {
+      icon: Wrench,
+      title: "تحديات تشغيلية شائعة",
+      points: [
+        "تعدد الموردين واختلاف مستوى التنسيق بينهم",
+        "استهلاك وقت إداري كبير في التنسيق اليومي",
+        "تفاوت الأسعار بين الموردين لنفس الخدمة",
+        "صعوبة توحيد جودة التنفيذ عبر الفروع",
+      ],
+    },
+    {
+      icon: Coins,
+      title: "تحديات في إدارة التكاليف",
+      points: [
+        "عدم وضوح كامل لتفاصيل المصروفات التشغيلية",
+        "تكاليف غير مباشرة يصعب ملاحظتها (إعادة أعمال، تأخير)",
+        "صعوبة مقارنة عروض الموردين بشكل منهجي",
+        "ارتفاع التكلفة الإجمالية نتيجة غياب التنسيق المركزي",
+      ],
+    },
+    {
+      icon: BarChart3,
+      title: "تحديات في المتابعة والتقارير",
+      points: [
+        "غياب رؤية مركزية لجميع الطلبات التشغيلية",
+        "تشتت البيانات بين الأقسام والفروع",
+        "صعوبة إعداد تقارير تشغيلية دقيقة بشكل دوري",
+        "ضعف القدرة على تحليل الأداء واتخاذ قرارات مبنية على بيانات",
+      ],
+    },
+    {
+      icon: RefreshCcw,
+      title: "تحديات في استمرارية التشغيل",
+      points: [
+        "تأخر الاستجابة لبعض الطلبات التشغيلية",
+        "الاعتماد على أشخاص محددين في المتابعة",
+        "صعوبة متابعة التراخيص والعقود بشكل استباقي",
+        "تباين مستوى الخدمة بين موقع وآخر",
+      ],
+    },
   ] : [
-    "Multiple vendors with no effective coordination",
-    "Management time wasted on daily follow-ups",
-    "Unclear or inflated operational costs",
-    "Lack of reports and operational data",
-    "Difficulty finding reliable vendors",
-    "Repeated work due to poor coordination",
+    {
+      icon: Wrench,
+      title: "Common Operational Challenges",
+      points: [
+        "Multiple vendors with inconsistent coordination",
+        "High administrative time spent on daily coordination",
+        "Price variations between vendors for the same service",
+        "Difficulty maintaining consistent quality across branches",
+      ],
+    },
+    {
+      icon: Coins,
+      title: "Cost Management Challenges",
+      points: [
+        "Lack of full clarity on operational expense details",
+        "Hidden indirect costs (rework, delays)",
+        "Difficulty comparing vendor quotes systematically",
+        "Higher total costs due to absence of central coordination",
+      ],
+    },
+    {
+      icon: BarChart3,
+      title: "Monitoring & Reporting Challenges",
+      points: [
+        "No centralized view of all operational requests",
+        "Data scattered across departments and branches",
+        "Difficulty producing accurate operational reports periodically",
+        "Limited ability to analyze performance and make data-driven decisions",
+      ],
+    },
+    {
+      icon: RefreshCcw,
+      title: "Operational Continuity Challenges",
+      points: [
+        "Delayed responses to some operational requests",
+        "Dependency on specific individuals for follow-up",
+        "Difficulty proactively tracking licenses and contracts",
+        "Inconsistent service levels across locations",
+      ],
+    },
   ];
 
-  const benefits = ar ? [
-    {
-      icon: ShieldCheck,
-      title: "توفير الوقت الإداري",
-      desc: "إدارة جميع الخدمات التشغيلية عبر نقطة اتصال واحدة بدلاً من التواصل مع عدة موردين ومتابعة التنفيذ بشكل يومي.",
-      result: "تقليل العبء التشغيلي على الإدارات الداخلية",
-    },
-    {
-      icon: Coins,
-      title: "تقليل التكاليف التشغيلية",
-      desc: "نساعد منشأتكم على تقليل المصروفات الناتجة عن تعدد الموردين، وضعف التنسيق، وتفاوت الأسعار، وتكرار تنفيذ الأعمال.",
-      result: "ترشيد الإنفاق التشغيلي بشكل مستدام",
-    },
-    {
-      icon: Users,
-      title: "فريق تشغيل خارجي لمنشأتكم",
-      desc: "تعمل منصة GSS كامتداد لفريقكم الداخلي دون الحاجة إلى توظيف مدير تشغيل أو مشرف مرافق أو منسق خدمات.",
-      result: "توفير تكاليف التوظيف والإدارة الداخلية",
-    },
-    {
-      icon: RefreshCcw,
-      title: "الاستمرار مع موردييكم الحاليين",
-      desc: "يمكن لمنشأتكم الاستمرار في العمل مع مورديكم الحاليين بينما تتولى منصة GSS تنظيم التنفيذ وتحسين المتابعة.",
-      result: "لا تغيير في العلاقات التعاقدية القائمة",
-    },
-    {
-      icon: Building2,
-      title: "بدائل تشغيلية عند الحاجة",
-      desc: "في حال ارتفاع التكلفة أو انخفاض الجودة، توفر المنصة شبكة موردين معتمدين كبدائل مناسبة دون تعطيل الأعمال.",
-      result: "استمرارية التشغيل في جميع الأوقات",
-    },
-    {
-      icon: ChartLine,
-      title: "تقارير تشغيلية داعمة للقرار",
-      desc: "تقارير دورية تساعد الإدارات على متابعة الأداء، وتحليل المصروفات، واكتشاف فرص التوفير، واتخاذ قرارات تشغيلية مبنية على بيانات.",
-      result: "رؤية واضحة وشفافة لكل ريال ينفق",
-    },
+  const impactItems = ar ? [
+    { icon: Clock,         label: "وقت إداري أعلى من اللازم" },
+    { icon: TrendingDown,  label: "تكلفة تشغيلية أكبر من المتوقع" },
+    { icon: AlertTriangle, label: "تحكم أقل في جودة التنفيذ" },
+    { icon: ChartLine,     label: "رؤية محدودة لاتخاذ القرار" },
   ] : [
-    {
-      icon: ShieldCheck,
-      title: "Save Management Time",
-      desc: "Manage all operational services through a single point of contact instead of communicating with multiple vendors and following up daily.",
-      result: "Reduced operational burden on internal management",
-    },
-    {
-      icon: Coins,
-      title: "Reduce Operational Costs",
-      desc: "We help your facility cut expenses from multiple vendors, poor coordination, price variations, and repeated work execution.",
-      result: "Sustainable reduction in operational spending",
-    },
-    {
-      icon: Users,
-      title: "External Operations Team",
-      desc: "GSS acts as an extension of your internal team without hiring an operations manager, facilities supervisor, or services coordinator.",
-      result: "Savings on recruitment and internal management costs",
-    },
-    {
-      icon: RefreshCcw,
-      title: "Keep Your Current Vendors",
-      desc: "Your facility can continue working with existing vendors while GSS organizes execution and improves follow-up.",
-      result: "No changes to existing contractual relationships",
-    },
-    {
-      icon: Building2,
-      title: "Operational Alternatives When Needed",
-      desc: "If costs rise or quality drops, the platform provides a network of certified vendors as suitable alternatives without disrupting operations.",
-      result: "Operational continuity at all times",
-    },
-    {
-      icon: ChartLine,
-      title: "Decision-Supporting Reports",
-      desc: "Periodic reports help management monitor performance, analyze expenses, discover savings opportunities, and make data-driven operational decisions.",
-      result: "Clear, transparent view of every riyal spent",
-    },
+    { icon: Clock,         label: "Higher-than-necessary admin time" },
+    { icon: TrendingDown,  label: "Larger-than-expected operational costs" },
+    { icon: AlertTriangle, label: "Less control over execution quality" },
+    { icon: ChartLine,     label: "Limited visibility for decision-making" },
   ];
 
   const howSteps = ar ? [
@@ -308,121 +315,105 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Problem Section */}
+      {/* Challenges & Solution — Unified Section */}
       <section className="py-20 bg-slate-900 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+          {/* Header */}
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">
-              {ar ? "هل تواجه منشأتك هذه التحديات؟" : "Is Your Facility Facing These Challenges?"}
-            </h2>
-            <p className="text-slate-400 text-lg max-w-2xl mx-auto">
+            <span className="inline-block bg-secondary/20 text-secondary font-bold text-xs px-4 py-1.5 rounded-full mb-4 tracking-wide uppercase">
+              {ar ? "التحديات والحلول" : "Challenges & Solutions"}
+            </span>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 leading-snug">
               {ar
-                ? "معظم المنشآت تعاني يومياً من فوضى إدارة الخدمات التشغيلية. GSS جاءت لحل هذه المشكلة."
-                : "Most facilities suffer daily from operational service management chaos. GSS was built to solve this problem."}
+                ? "كيف يمكن تعزيز كفاءة إدارة الخدمات التشغيلية في منشأتكم؟"
+                : "How Can Operational Service Management Efficiency Be Enhanced in Your Facility?"}
+            </h2>
+            <p className="text-slate-400 text-lg max-w-3xl mx-auto leading-relaxed">
+              {ar
+                ? "حتى المنشآت الأكثر تنظيمًا تواجه تحديات تشغيلية يومية تؤثر بشكل غير مباشر على الكفاءة والتكلفة وسرعة التنفيذ. تعمل منصة GSS على دعم منشأتكم في التعامل مع هذه الجوانب بكفاءة أعلى."
+                : "Even the most organized facilities face daily operational challenges that indirectly affect efficiency, cost, and execution speed. GSS supports your facility in handling these aspects with greater efficiency."}
             </p>
           </div>
+
+          {/* 4 Challenge Categories */}
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={staggerContainer}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+            className="grid md:grid-cols-2 gap-5 mb-8"
           >
-            {problems.map((problem, i) => (
+            {challengeCategories.map((cat, i) => (
               <motion.div
                 key={i}
                 variants={fadeInUp}
-                className="flex items-start gap-3 bg-slate-800/60 border border-slate-700 rounded-xl px-6 py-4"
+                className="bg-slate-800/60 border border-slate-700/80 rounded-2xl p-6 hover:border-slate-600 transition-colors"
               >
-                <span className="mt-1 flex-shrink-0 w-5 h-5 rounded-full bg-red-500/20 border border-red-500/40 flex items-center justify-center">
-                  <span className="w-2 h-2 rounded-full bg-red-400"></span>
-                </span>
-                <p className="text-slate-300">{problem}</p>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-secondary/15 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <cat.icon size={20} className="text-secondary" />
+                  </div>
+                  <h3 className="font-bold text-white text-base">{cat.title}</h3>
+                </div>
+                <ul className="space-y-2.5">
+                  {cat.points.map((pt, j) => (
+                    <li key={j} className="flex items-start gap-2.5 text-slate-300 text-sm leading-relaxed">
+                      <span className="mt-2 w-1.5 h-1.5 rounded-full bg-red-400 flex-shrink-0" />
+                      {pt}
+                    </li>
+                  ))}
+                </ul>
               </motion.div>
             ))}
           </motion.div>
-          <p className="text-center text-slate-400 mt-10 text-lg font-medium">
-            {ar ? "وقت ضائع — تكلفة أعلى — تحكم أقل" : "Lost time — Higher costs — Less control"}
-          </p>
-        </div>
-      </section>
 
-      {/* Partnership Message Banner */}
-      <section className="py-16 bg-secondary/10 border-y border-secondary/20">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <p className="text-2xl md:text-3xl font-bold text-primary leading-relaxed">
-            {ar ? (
-              <>
-                نحن لا ندير الطلبات التشغيلية فقط،
-                <br />
-                <span className="text-secondary">
-                  بل نعمل كشريك تشغيل يساعد منشأتكم على تحسين الكفاءة
-                  وتقليل التكاليف وتنظيم الخدمات اليومية بشكل مستمر.
-                </span>
-              </>
-            ) : (
-              <>
-                We don't just manage operational requests,
-                <br />
-                <span className="text-secondary">
-                  we act as an operations partner helping your facility improve efficiency,
-                  reduce costs, and organize daily services continuously.
-                </span>
-              </>
-            )}
-          </p>
-        </div>
-      </section>
-
-      {/* Benefits Section */}
-      <section className="py-24 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-primary mb-4">
-              {ar ? "ماذا توفر منصة GSS لمنشأتكم؟" : "What Does GSS Provide Your Facility?"}
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto text-lg">
-              {ar
-                ? "نساعد منشأتكم على تقليل التكاليف التشغيلية وتحسين كفاءة إدارة الخدمات اليومية."
-                : "We help your facility reduce operational costs and improve the efficiency of managing daily services."}
+          {/* Impact Strip */}
+          <div className="bg-red-950/40 border border-red-500/20 rounded-2xl px-6 py-5 mb-6">
+            <p className="text-center text-red-300 font-bold text-sm mb-5">
+              {ar ? "النتيجة عند عدم معالجة هذه الجوانب" : "The Result When These Areas Are Left Unaddressed"}
             </p>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {impactItems.map((item, i) => (
+                <div key={i} className="flex flex-col items-center text-center gap-2">
+                  <div className="w-9 h-9 bg-red-900/40 rounded-xl flex items-center justify-center">
+                    <item.icon size={18} className="text-red-400" />
+                  </div>
+                  <p className="text-slate-300 text-xs leading-relaxed">{item.label}</p>
+                </div>
+              ))}
+            </div>
           </div>
 
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={staggerContainer}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-          >
-            {benefits.map((benefit, i) => (
-              <motion.div
-                key={i}
-                variants={fadeInUp}
-                className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
-              >
-                <div className="w-14 h-14 bg-primary/5 text-primary rounded-xl flex items-center justify-center mb-6">
-                  <benefit.icon size={28} />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{benefit.title}</h3>
-                <p className="text-gray-600 leading-relaxed mb-4">{benefit.desc}</p>
-                <div className="border-t border-gray-100 pt-4">
-                  <p className="text-sm font-semibold text-secondary flex items-center gap-2">
-                    <CheckCircle2 size={16} className="flex-shrink-0" />
-                    {benefit.result}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          <div className="text-center mt-12">
-            <Link href="/companies">
-              <Button size="lg" variant="outline" className="h-12 px-8 text-base font-semibold border-primary text-primary hover:bg-primary hover:text-white" data-testid="link-more-companies">
-                {ar ? "استكشف كيف تساعد منصة GSS منشأتكم" : "Explore How GSS Helps Your Facility"}
-              </Button>
-            </Link>
+          {/* GSS Solution */}
+          <div className="bg-primary/25 border border-primary/40 rounded-2xl p-7 flex flex-col md:flex-row items-center gap-6">
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-2">
+                <CheckCircle2 size={18} className="text-secondary flex-shrink-0" />
+                <h3 className="text-lg font-bold text-secondary">
+                  {ar ? "كيف تعالج GSS هذه التحديات؟" : "How Does GSS Address These Challenges?"}
+                </h3>
+              </div>
+              <p className="text-slate-300 leading-relaxed text-sm">
+                {ar
+                  ? "تعمل منصة GSS كطبقة تشغيل داعمة تعزز كفاءة إدارة الخدمات التشغيلية، من خلال تنظيم الطلبات، وتوحيد التنسيق مع الموردين، وتحسين وضوح المصروفات، وتوفير تقارير تشغيلية تدعم اتخاذ القرار."
+                  : "GSS acts as a supporting operational layer that enhances operational service management efficiency — through organizing requests, unifying vendor coordination, improving expense clarity, and providing decision-supporting operational reports."}
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
+              <Link href="/register/company">
+                <Button size="lg" className="h-12 px-7 font-bold bg-secondary text-primary hover:bg-secondary/90" data-testid="link-challenge-register">
+                  {ar ? "سجّل منشأتك" : "Register Your Facility"} <ArrowLeft className="mr-2" size={16} />
+                </Button>
+              </Link>
+              <Link href="/companies">
+                <Button size="lg" variant="outline" className="h-12 px-7 font-bold border-white/30 text-white hover:bg-white/10">
+                  {ar ? "اعرف أكثر" : "Learn More"}
+                </Button>
+              </Link>
+            </div>
           </div>
+
         </div>
       </section>
 

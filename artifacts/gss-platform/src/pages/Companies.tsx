@@ -225,6 +225,150 @@ export default function Companies() {
         </div>
       </section>
 
+      {/* CHALLENGES & SOLUTION */}
+      <section className="py-20 bg-slate-900 text-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <span className="inline-block bg-secondary/20 text-secondary font-bold text-xs px-4 py-1.5 rounded-full mb-4 tracking-wide uppercase">
+              {ar ? "التحديات والحلول" : "Challenges & Solutions"}
+            </span>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 leading-snug">
+              {ar
+                ? "كيف يمكن تعزيز كفاءة إدارة الخدمات التشغيلية في منشأتكم؟"
+                : "How Can Operational Service Management Efficiency Be Enhanced in Your Facility?"}
+            </h2>
+            <p className="text-slate-400 text-base max-w-2xl mx-auto leading-relaxed">
+              {ar
+                ? "حتى المنشآت الأكثر تنظيمًا تواجه تحديات تشغيلية يومية تؤثر بشكل غير مباشر على الكفاءة والتكلفة وسرعة التنفيذ."
+                : "Even the most organized facilities face daily operational challenges that indirectly affect efficiency, cost, and execution speed."}
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-5 mb-7">
+            {(ar ? [
+              {
+                icon: ShieldCheck,
+                title: "تحديات تشغيلية شائعة",
+                points: [
+                  "تعدد الموردين واختلاف مستوى التنسيق بينهم",
+                  "استهلاك وقت إداري كبير في التنسيق اليومي",
+                  "تفاوت الأسعار وصعوبة توحيد جودة التنفيذ عبر الفروع",
+                ],
+              },
+              {
+                icon: TrendingDown,
+                title: "تحديات في إدارة التكاليف",
+                points: [
+                  "عدم وضوح تفاصيل المصروفات التشغيلية",
+                  "تكاليف غير مباشرة يصعب ملاحظتها (إعادة أعمال، تأخير)",
+                  "ارتفاع التكلفة نتيجة غياب التنسيق المركزي",
+                ],
+              },
+              {
+                icon: BarChart3,
+                title: "تحديات في المتابعة والتقارير",
+                points: [
+                  "غياب رؤية مركزية لجميع الطلبات التشغيلية",
+                  "صعوبة إعداد تقارير تشغيلية دقيقة بشكل دوري",
+                  "ضعف القدرة على تحليل الأداء واتخاذ قرارات مبنية على بيانات",
+                ],
+              },
+              {
+                icon: RefreshCcw,
+                title: "تحديات في استمرارية التشغيل",
+                points: [
+                  "تأخر الاستجابة لبعض الطلبات التشغيلية",
+                  "الاعتماد على أشخاص محددين في المتابعة",
+                  "صعوبة متابعة التراخيص والعقود بشكل استباقي",
+                ],
+              },
+            ] : [
+              {
+                icon: ShieldCheck,
+                title: "Common Operational Challenges",
+                points: [
+                  "Multiple vendors with inconsistent coordination",
+                  "High administrative time spent on daily coordination",
+                  "Price variations and difficulty unifying execution quality across branches",
+                ],
+              },
+              {
+                icon: TrendingDown,
+                title: "Cost Management Challenges",
+                points: [
+                  "Lack of clarity on operational expense details",
+                  "Hidden indirect costs (rework, delays)",
+                  "Higher total costs due to absence of central coordination",
+                ],
+              },
+              {
+                icon: BarChart3,
+                title: "Monitoring & Reporting Challenges",
+                points: [
+                  "No centralized view of all operational requests",
+                  "Difficulty producing accurate operational reports periodically",
+                  "Limited ability to analyze performance and make data-driven decisions",
+                ],
+              },
+              {
+                icon: RefreshCcw,
+                title: "Operational Continuity Challenges",
+                points: [
+                  "Delayed responses to some operational requests",
+                  "Dependency on specific individuals for follow-up",
+                  "Difficulty proactively tracking licenses and contracts",
+                ],
+              },
+            ]).map((cat, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.08 }}
+                className="bg-slate-800/60 border border-slate-700/80 rounded-2xl p-6 hover:border-slate-600 transition-colors"
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-secondary/15 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <cat.icon size={20} className="text-secondary" />
+                  </div>
+                  <h3 className="font-bold text-white text-base">{cat.title}</h3>
+                </div>
+                <ul className="space-y-2.5">
+                  {cat.points.map((pt, j) => (
+                    <li key={j} className="flex items-start gap-2.5 text-slate-300 text-sm leading-relaxed">
+                      <span className="mt-2 w-1.5 h-1.5 rounded-full bg-red-400 flex-shrink-0" />
+                      {pt}
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="bg-primary/25 border border-primary/40 rounded-2xl p-6 flex flex-col md:flex-row items-center gap-6">
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-2">
+                <CheckCircle2 size={18} className="text-secondary flex-shrink-0" />
+                <h3 className="text-base font-bold text-secondary">
+                  {ar ? "كيف تعالج GSS هذه التحديات؟" : "How Does GSS Address These Challenges?"}
+                </h3>
+              </div>
+              <p className="text-slate-300 leading-relaxed text-sm">
+                {ar
+                  ? "تعمل منصة GSS كطبقة تشغيل داعمة من خلال تنظيم الطلبات، وتوحيد التنسيق مع الموردين، وتحسين وضوح المصروفات، وتوفير تقارير تشغيلية تدعم اتخاذ القرار."
+                  : "GSS acts as a supporting operational layer — organizing requests, unifying vendor coordination, improving expense clarity, and providing decision-supporting operational reports."}
+              </p>
+            </div>
+            <Link href="/register/company" className="flex-shrink-0">
+              <Button size="lg" className="h-12 px-7 font-bold bg-secondary text-primary hover:bg-secondary/90" data-testid="cta-challenges-register">
+                {ar ? "سجّل منشأتك مجاناً" : "Register Your Facility Free"} <ArrowLeft className="mr-2" size={16} />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* REAL SCENARIO */}
       <section id="scenario" className="py-16 bg-gray-50">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
