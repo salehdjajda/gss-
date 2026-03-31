@@ -13,7 +13,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import {
   CheckCircle2, Building2, ArrowLeft, Layers, Users, ShieldCheck,
-  Paperclip, X, Plus, Trash2, FileText, MapPin, Truck, BarChart2
+  Paperclip, X, Plus, Trash2, FileText, MapPin, Truck, BarChart2, Star
 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -92,6 +92,7 @@ const schema = z.object({
   hasTicketSystem: z.string().optional(),
   collaborationModel: z.string().min(1, "يرجى تحديد نموذج التعاون"),
   budgetDefined: z.string().optional(),
+  selectedPackage: z.string().optional(),
   authorizationConfirmed: z.boolean().refine(val => val === true, "يجب تأكيد التفويض"),
   agreementConfirmed: z.boolean().refine(val => val === true, "يجب الموافقة على الاتفاقية"),
   feesConfirmed: z.boolean().refine(val => val === true, "يجب الإقرار بآلية الرسوم"),
@@ -99,7 +100,7 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-const TOTAL_STEPS = 8;
+const TOTAL_STEPS = 9;
 
 const STEP_LABELS = [
   { label: "بيانات المنشأة", labelEn: "Facility Info",    icon: Building2 },
@@ -109,6 +110,7 @@ const STEP_LABELS = [
   { label: "الفروع",          labelEn: "Branches",          icon: MapPin },
   { label: "الموردون",        labelEn: "Vendors",           icon: Truck },
   { label: "التشغيل",         labelEn: "Operations",        icon: BarChart2 },
+  { label: "الباقة",          labelEn: "Package",           icon: Star },
   { label: "الإرسال",         labelEn: "Submit",            icon: ShieldCheck },
 ];
 
@@ -149,7 +151,7 @@ export default function RegisterCompany() {
       branches: [],
       hasCurrentVendors: "no", vendors: [],
       monthlyRequestsVolume: "", hasEmergencies: "", hasInternalTeam: "", hasTicketSystem: "",
-      collaborationModel: "", budgetDefined: "",
+      collaborationModel: "", budgetDefined: "", selectedPackage: "",
       authorizationConfirmed: false, agreementConfirmed: false, feesConfirmed: false,
     },
   });
@@ -162,6 +164,7 @@ export default function RegisterCompany() {
   const watchCollab = form.watch("collaborationModel");
   const watchBranchCount = form.watch("branchCountRange");
   const watchActivity = form.watch("activityType");
+  const watchPackage = form.watch("selectedPackage");
 
   const goNext = async (fields: (keyof FormData)[]) => {
     const valid = await form.trigger(fields as any);
@@ -946,9 +949,145 @@ export default function RegisterCompany() {
               )}
 
               {/* ═══════════════════════════════════════════════ */}
-              {/* STEP 8: الإقرارات والإرسال */}
+              {/* STEP 8: اختيار الباقة */}
               {/* ═══════════════════════════════════════════════ */}
               {step === 8 && (
+                <div className="space-y-6">
+                  <SectionTitle title={ar ? "اختر الباقة المناسبة لمنشأتكم" : "Choose the Right Package for Your Facility"} />
+                  <p className="text-gray-500 text-sm leading-relaxed -mt-2">
+                    {ar
+                      ? "يمكنكم البدء بالخدمة مباشرةً دون اشتراك، أو اختيار باقة تشغيلية تمنح منشأتكم مستوى أعلى من المتابعة والدعم. الرسوم تُحدَّد بعد دراسة الاحتياج الفعلي."
+                      : "You can start the service directly without a subscription, or choose an operational package that gives your facility a higher level of follow-up and support. Fees are defined after assessing your actual needs."}
+                  </p>
+
+                  <FormField control={form.control} name="selectedPackage" render={({ field }) => (
+                    <FormItem>
+                      <div className="space-y-3">
+
+                        {/* On-Demand */}
+                        <button type="button" onClick={() => form.setValue("selectedPackage", "on-demand")}
+                          className={`w-full text-right rounded-xl border-2 px-5 py-4 transition-colors ${watchPackage === "on-demand" ? "border-primary bg-primary/5" : "border-gray-200 hover:border-primary/40"}`}>
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-xs bg-gray-100 text-gray-600 rounded-full px-3 py-0.5 font-medium">{ar ? "بدون اشتراك" : "No Subscription"}</span>
+                            <p className="font-bold text-gray-900">{ar ? "الخدمة حسب الطلب" : "On-Demand Service"}</p>
+                          </div>
+                          <p className="text-sm text-gray-500">{ar ? "استقبال الطلبات التشغيلية وتنسيق الموردين ومتابعة التنفيذ — بدون التزام شهري." : "Operational request handling, vendor coordination, and follow-up — no monthly commitment."}</p>
+                        </button>
+
+                        {/* Tier 1 */}
+                        <button type="button" onClick={() => form.setValue("selectedPackage", "tier1")}
+                          className={`w-full text-right rounded-xl border-2 px-5 py-4 transition-colors ${watchPackage === "tier1" ? "border-primary bg-primary/5" : "border-gray-200 hover:border-primary/40"}`}>
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-xs bg-primary/10 text-primary rounded-full px-3 py-0.5 font-medium">{ar ? "المستوى الأول" : "Tier 1"}</span>
+                            <p className="font-bold text-gray-900">{ar ? "باقة المتابعة الأساسية" : "Basic Follow-Up Package"}</p>
+                          </div>
+                          <p className="text-sm text-gray-500 mb-2">{ar ? "مناسبة للمنشآت الصغيرة أو ذات الطلبات المحدودة." : "Suitable for small businesses or those with limited requests."}</p>
+                          <ul className="space-y-1">
+                            {(ar ? [
+                              "تنظيم ومتابعة الطلبات التشغيلية",
+                              "الوصول إلى شبكة الموردين المعتمدين",
+                              "تجميع الطلبات عبر نقطة تشغيل واحدة",
+                              "متابعة التنفيذ حتى إغلاق الطلب",
+                            ] : [
+                              "Operational request organization and follow-up",
+                              "Access to the certified vendor network",
+                              "Request aggregation through a single point",
+                              "Follow-up until request closure",
+                            ]).map((f, i) => (
+                              <li key={i} className="flex items-center gap-2 text-xs text-gray-600">
+                                <CheckCircle2 size={12} className="text-primary flex-shrink-0" />{f}
+                              </li>
+                            ))}
+                          </ul>
+                        </button>
+
+                        {/* Tier 2 */}
+                        <button type="button" onClick={() => form.setValue("selectedPackage", "tier2")}
+                          className={`w-full text-right rounded-xl border-2 px-5 py-4 transition-colors relative ${watchPackage === "tier2" ? "border-secondary bg-secondary/5" : "border-gray-200 hover:border-secondary/40"}`}>
+                          <span className="absolute top-3 left-3 text-xs bg-secondary text-primary font-bold rounded-full px-3 py-0.5">⭐ {ar ? "الأكثر اختيارًا" : "Most Popular"}</span>
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-xs bg-secondary/15 text-secondary rounded-full px-3 py-0.5 font-medium">{ar ? "المستوى الثاني" : "Tier 2"}</span>
+                            <p className="font-bold text-gray-900">{ar ? "باقة المتابعة المتقدمة" : "Advanced Follow-Up Package"}</p>
+                          </div>
+                          <p className="text-sm text-gray-500 mb-2">{ar ? "مناسبة للمنشآت المتوسطة أو متعددة المواقع." : "Suitable for medium businesses or multi-location companies."}</p>
+                          <ul className="space-y-1">
+                            {(ar ? [
+                              "جميع مزايا المستوى الأول",
+                              "👤 مدير حساب مخصص للمتابعة التشغيلية",
+                              "📊 تقارير تشغيلية دورية مبسطة",
+                              "⏰ تنبيهات انتهاء العقود والتراخيص",
+                              "⚡ أولوية أعلى في الاستجابة للطلبات",
+                            ] : [
+                              "All Tier 1 features",
+                              "👤 Dedicated account manager",
+                              "📊 Periodic simplified operational reports",
+                              "⏰ Contract and license expiry alerts",
+                              "⚡ Higher response priority",
+                            ]).map((f, i) => (
+                              <li key={i} className="flex items-center gap-2 text-xs text-gray-600">
+                                <CheckCircle2 size={12} className="text-secondary flex-shrink-0" />{f}
+                              </li>
+                            ))}
+                          </ul>
+                        </button>
+
+                        {/* Tier 3 */}
+                        <button type="button" onClick={() => form.setValue("selectedPackage", "tier3")}
+                          className={`w-full text-right rounded-xl border-2 px-5 py-4 transition-colors ${watchPackage === "tier3" ? "border-primary bg-primary/5" : "border-gray-200 hover:border-primary/40"}`}>
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-xs bg-primary/10 text-primary rounded-full px-3 py-0.5 font-medium">{ar ? "المستوى الثالث" : "Tier 3"}</span>
+                            <p className="font-bold text-gray-900">{ar ? "باقة الإدارة التشغيلية الشاملة" : "Full Operational Management Package"}</p>
+                          </div>
+                          <p className="text-sm text-gray-500 mb-2">{ar ? "مناسبة للمنشآت الكبيرة أو متعددة الفروع ذات التشغيل المستمر." : "Suitable for large or multi-branch businesses with continuous operations."}</p>
+                          <ul className="space-y-1">
+                            {(ar ? [
+                              "جميع مزايا المستويات السابقة",
+                              "🏢 إدارة تشغيل مركزية لجميع الفروع",
+                              "📊 تقارير تحليلية تشغيلية مفصلة",
+                              "💰 تحليل المصروفات التشغيلية",
+                              "⚡ أولوية قصوى في الاستجابة والتنفيذ",
+                            ] : [
+                              "All previous tier features",
+                              "🏢 Centralized operations management for all branches",
+                              "📊 Detailed monthly operational analytics",
+                              "💰 Operational expense analysis",
+                              "⚡ Top-priority response and execution",
+                            ]).map((f, i) => (
+                              <li key={i} className="flex items-center gap-2 text-xs text-gray-600">
+                                <CheckCircle2 size={12} className="text-primary flex-shrink-0" />{f}
+                              </li>
+                            ))}
+                          </ul>
+                        </button>
+
+                        {/* Undecided */}
+                        <button type="button" onClick={() => form.setValue("selectedPackage", "undecided")}
+                          className={`w-full text-right rounded-xl border-2 px-5 py-3 transition-colors ${watchPackage === "undecided" ? "border-primary bg-primary/5" : "border-gray-200 hover:border-primary/40"}`}>
+                          <p className="font-bold text-gray-900">{ar ? "غير متأكد — أحتاج توصية من فريق GSS" : "Unsure — I need a recommendation from the GSS team"}</p>
+                          <p className="text-sm text-gray-500 mt-0.5">{ar ? "سيتواصل معكم فريقنا لاقتراح الباقة الأنسب بناءً على احتياجاتكم." : "Our team will reach out to recommend the most suitable package based on your needs."}</p>
+                        </button>
+
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )} />
+
+                  <p className="text-xs text-gray-400 leading-relaxed">
+                    {ar
+                      ? "* الرسوم النهائية لجميع الباقات تُحدَّد بعد دراسة الاحتياج التشغيلي الفعلي لمنشأتكم. هذا الاختيار يساعدنا في فهم توقعاتكم فقط."
+                      : "* Final fees for all packages are determined after assessing your facility's actual operational needs. This selection only helps us understand your expectations."}
+                  </p>
+
+                  <div className="pt-2 flex justify-end">
+                    <Button type="button" onClick={() => setStep(9)}>{ar ? "التالي" : "Next"}</Button>
+                  </div>
+                </div>
+              )}
+
+              {/* ═══════════════════════════════════════════════ */}
+              {/* STEP 9: الإقرارات والإرسال */}
+              {/* ═══════════════════════════════════════════════ */}
+              {step === 9 && (
                 <div className="space-y-5">
                   <SectionTitle title={ar ? "الإقرارات وإرسال الطلب" : "Declarations & Submit"} />
 

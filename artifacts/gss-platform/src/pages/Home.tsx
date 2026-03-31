@@ -197,7 +197,7 @@ export default function Home() {
                   <ArrowLeft className="mr-2" size={20} />
                 </Button>
               </Link>
-              <Link href="/contact">
+              <Link href="/register/company">
                 <Button
                   size="lg"
                   variant="outline"
