@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
@@ -357,10 +357,35 @@ const colorMap: Record<string, { bg: string; text: string; border: string; badge
   amber:  { bg: "bg-amber-50",  text: "text-amber-700",  border: "border-amber-200",  badge: "bg-amber-100 text-amber-800" },
 };
 
+// Flat list of all searchable services from categories
+const SEARCHABLE_SERVICES = CATEGORIES.flatMap(cat =>
+  cat.services.map(s => ({ service: s, category: cat.label }))
+);
+
 export default function Services() {
   const { toast } = useToast();
   const [customForm, setCustomForm] = useState({ name: "", phone: "", email: "", description: "" });
   const [submitting, setSubmitting] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
+
+  const filteredServices = searchQuery.trim().length > 0
+    ? SEARCHABLE_SERVICES.filter(item =>
+        item.service.includes(searchQuery) || item.category.includes(searchQuery)
+      )
+    : SEARCHABLE_SERVICES;
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+        setIsSearchOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleCustomSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -384,10 +409,76 @@ export default function Services() {
         <div className="absolute inset-0 bg-gradient-to-b from-primary/95 to-primary/90" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">الخدمات التشغيلية الشاملة</h1>
-          <p className="text-xl text-white/80 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-white/80 max-w-3xl mx-auto leading-relaxed mb-10">
             تغطي منصة GSS جميع احتياجات قسم خدمات المساندة العامة — من الصيانة والكهرباء والمياه وإدارة الأسطول حتى الاستشارات التشغيلية. نقطة اتصال واحدة لكل شيء.
           </p>
-          <div className="mt-10 flex flex-wrap justify-center gap-2">
+
+          {/* Service Search */}
+          <div ref={searchRef} className="max-w-xl mx-auto relative mb-10" dir="rtl">
+            <div
+              className="flex items-center gap-3 bg-white rounded-2xl px-5 py-4 cursor-text shadow-xl"
+              onClick={() => setIsSearchOpen(true)}
+            >
+              <svg className="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={e => { setSearchQuery(e.target.value); setIsSearchOpen(true); }}
+                onFocus={() => setIsSearchOpen(true)}
+                placeholder="ابحث عن الخدمة التي تحتاجها..."
+                className="flex-1 bg-transparent text-gray-800 placeholder-gray-400 text-base outline-none font-medium"
+              />
+              {searchQuery && (
+                <button onClick={() => setSearchQuery("")} className="text-gray-400 hover:text-gray-600 flex-shrink-0">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              )}
+            </div>
+
+            {/* Results Dropdown */}
+            {isSearchOpen && (
+              <div className="absolute top-full mt-2 w-full bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50 text-right">
+                <div className="max-h-80 overflow-y-auto">
+                  {filteredServices.length > 0 ? (
+                    filteredServices.slice(0, 30).map((item, i) => (
+                      <div
+                        key={i}
+                        className="px-5 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-50 last:border-0"
+                        onClick={() => {
+                          // Scroll to the category section
+                          const cat = CATEGORIES.find(c => c.label === item.category);
+                          if (cat) { scrollTo(cat.id); setIsSearchOpen(false); setSearchQuery(""); }
+                        }}
+                      >
+                        <p className="text-gray-800 text-sm font-medium">{item.service}</p>
+                        <p className="text-gray-400 text-xs mt-0.5">{item.category}</p>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="px-5 py-4 text-gray-500 text-sm">لا توجد نتائج لـ "{searchQuery}"</div>
+                  )}
+                </div>
+                {/* Not found option */}
+                <Link
+                  href="/contact"
+                  onClick={() => setIsSearchOpen(false)}
+                  className="flex items-center gap-3 px-5 py-4 bg-primary/5 hover:bg-primary/10 border-t border-gray-100 transition-colors"
+                >
+                  <span className="text-lg">🔎</span>
+                  <div>
+                    <p className="text-primary font-semibold text-sm">خدمة غير موجودة؟</p>
+                    <p className="text-gray-500 text-xs">أرسل طلبك وسنتابع احتياجك مباشرة</p>
+                  </div>
+                </Link>
+              </div>
+            )}
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-2">
             {CATEGORIES.map(cat => (
               <button
                 key={cat.id}

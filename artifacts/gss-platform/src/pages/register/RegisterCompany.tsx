@@ -100,6 +100,7 @@ export default function RegisterCompany() {
   const [phase, setPhase] = useState<"intro" | "form" | "success">("intro");
   const [step, setStep] = useState(1);
   const [attachment, setAttachment] = useState<File | null>(null);
+  const [accountNumber, setAccountNumber] = useState<string>("");
   const fileRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<FormData>({
@@ -125,7 +126,7 @@ export default function RegisterCompany() {
   const onSubmit = (data: FormData) => {
     registerMutation.mutate(
       { data: { companyName: data.companyName, commercialRegister: data.commercialRegister, city: data.city, contactName: data.contactName, phone: data.phone, email: data.email, collaborationModel: data.collaborationModel, requestedServices: data.requestedServices, authorizationConfirmed: data.authorizationConfirmed } },
-      { onSuccess: () => setPhase("success"), onError: () => toast({ variant: "destructive", title: "حدث خطأ", description: "لم نتمكن من إتمام التسجيل، يرجى المحاولة مرة أخرى." }) }
+      { onSuccess: (res) => { setAccountNumber(res?.accountNumber ?? ""); setPhase("success"); }, onError: () => toast({ variant: "destructive", title: "حدث خطأ", description: "لم نتمكن من إتمام التسجيل، يرجى المحاولة مرة أخرى." }) }
     );
   };
 
@@ -185,23 +186,33 @@ export default function RegisterCompany() {
     return (
       <div className="min-h-screen bg-gradient-to-b from-green-50 to-white flex items-center justify-center py-12 px-4">
         <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="max-w-xl w-full text-center">
-          <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-8">
+          <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <CheckCircle2 size={48} className="text-green-600" />
           </div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">تم استلام طلب تسجيل منشأتكم بنجاح</h2>
-          <p className="text-gray-600 text-lg leading-relaxed mb-8">
-            سيقوم فريق العمليات في GSS بمراجعة بياناتكم وتحديد نموذج التشغيل المناسب لكم، وسيتم إرسال الاتفاقية التشغيلية إلى البريد الإلكتروني للمسؤول المسجل لتوقيعها وختمها وإعادة رفعها عبر المنصة.
+          <h2 className="text-3xl font-bold text-gray-900 mb-3">تم استلام طلب تسجيل منشأتكم بنجاح</h2>
+          <p className="text-gray-500 text-base leading-relaxed mb-6">
+            سيقوم فريق GSS بمراجعة بياناتكم وإرسال الاتفاقية التشغيلية إلى بريدكم الإلكتروني.
           </p>
-          <div className="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-8 text-right">
+
+          {/* Account Number */}
+          {accountNumber && (
+            <div className="bg-primary text-white rounded-2xl p-6 mb-6">
+              <p className="text-primary-foreground/70 text-sm mb-1">رقم حساب منشأتكم</p>
+              <p className="text-3xl font-black tracking-widest mb-2 font-mono">{accountNumber}</p>
+              <p className="text-primary-foreground/70 text-xs">احتفظوا بهذا الرقم — سيُستخدم في جميع تعاملاتكم مع GSS</p>
+            </div>
+          )}
+
+          <div className="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-6 text-right">
             <p className="text-amber-800 font-semibold text-sm mb-2">الخطوات التالية:</p>
-            <ul className="space-y-1 text-amber-700 text-sm">
-              <li className="flex items-start gap-2"><CheckCircle2 size={14} className="mt-0.5 flex-shrink-0" /> ستصلكم الاتفاقية التشغيلية عبر البريد الإلكتروني</li>
-              <li className="flex items-start gap-2"><CheckCircle2 size={14} className="mt-0.5 flex-shrink-0" /> قوموا بتوقيعها وختمها وإعادة رفعها</li>
-              <li className="flex items-start gap-2"><CheckCircle2 size={14} className="mt-0.5 flex-shrink-0" /> سيتم تفعيل حساب منشأتكم وبدء الخدمة</li>
+            <ul className="space-y-2 text-amber-700 text-sm">
+              <li className="flex items-start gap-2"><CheckCircle2 size={14} className="mt-0.5 flex-shrink-0 text-amber-600" /> ستصلكم الاتفاقية التشغيلية عبر البريد الإلكتروني</li>
+              <li className="flex items-start gap-2"><CheckCircle2 size={14} className="mt-0.5 flex-shrink-0 text-amber-600" /> قوموا بتوقيعها وختمها وإعادة رفعها</li>
+              <li className="flex items-start gap-2"><CheckCircle2 size={14} className="mt-0.5 flex-shrink-0 text-amber-600" /> سيتم تفعيل حسابكم وبدء الخدمة برقم {accountNumber || "حسابكم"}</li>
             </ul>
           </div>
-          <Button size="lg" className="h-12 px-10 font-bold" onClick={() => setLocation("/dashboard/company")} data-testid="btn-go-dashboard">
-            الانتقال إلى لوحة الطلبات
+          <Button size="lg" className="h-12 px-10 font-bold" onClick={() => setLocation("/")} data-testid="btn-go-home">
+            العودة للرئيسية
           </Button>
         </motion.div>
       </div>

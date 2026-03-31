@@ -17,6 +17,7 @@ export interface RegistrationResult {
   success: boolean;
   message: string;
   id: number;
+  accountNumber?: string;
 }
 
 export interface CompanyRegistrationBody {

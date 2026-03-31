@@ -1,4 +1,5 @@
 import { Router, type IRouter } from "express";
+import { eq } from "drizzle-orm";
 import { db } from "@workspace/db";
 import {
   companyRegistrationsTable,
@@ -46,11 +47,20 @@ router.post("/registrations/company", async (req, res): Promise<void> => {
     })
     .returning();
 
-  req.log.info({ id: record.id }, "Company registration created");
+  // Generate account number: GSS-YYYY-#####
+  const year = new Date().getFullYear();
+  const accountNumber = `GSS-${year}-${String(record.id).padStart(5, "0")}`;
+  await db
+    .update(companyRegistrationsTable)
+    .set({ accountNumber })
+    .where(eq(companyRegistrationsTable.id, record.id));
+
+  req.log.info({ id: record.id, accountNumber }, "Company registration created");
   res.status(201).json({
     success: true,
     message: "تم تسجيل المنشأة بنجاح. سيتواصل معكم فريق GSS قريباً.",
     id: record.id,
+    accountNumber,
   });
 });
 
