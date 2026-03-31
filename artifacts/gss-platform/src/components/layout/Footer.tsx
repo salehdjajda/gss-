@@ -10,16 +10,16 @@ export function Footer() {
           {/* Brand column */}
           <div className="col-span-1 md:col-span-1">
             <Link href="/" className="inline-block mb-4">
-              <div className="overflow-hidden" style={{ height: "40px", width: "200px" }}>
+              <div className="overflow-hidden" style={{ height: "46px", width: "210px" }}>
                 <img
                   src={logoImg}
                   alt="GSS"
                   style={{
-                    height: "128px",
+                    height: "140px",
                     width: "auto",
-                    marginTop: "-44px",
-                    filter: "brightness(0) invert(1)",
-                    opacity: 0.9,
+                    marginTop: "-48px",
+                    mixBlendMode: "screen",
+                    filter: "invert(1) hue-rotate(180deg) brightness(1.15) contrast(1.1)",
                   }}
                 />
               </div>
