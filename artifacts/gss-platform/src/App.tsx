@@ -15,9 +15,13 @@ function ScrollToTop() {
   return null;
 }
 
+// Context
+import { LanguageProvider } from "@/contexts/LanguageContext";
+
 // Page Imports
 import Home from "@/pages/Home";
 import Companies from "@/pages/Companies";
+import Individuals from "@/pages/Individuals";
 import HowItWorks from "@/pages/HowItWorks";
 import Reports from "@/pages/Reports";
 import Pricing from "@/pages/Pricing";
@@ -31,6 +35,7 @@ import Services from "@/pages/Services";
 import RegisterCompany from "@/pages/register/RegisterCompany";
 import RegisterVendor from "@/pages/register/RegisterVendor";
 import RegisterConsultant from "@/pages/register/RegisterConsultant";
+import RegisterIndividual from "@/pages/register/RegisterIndividual";
 
 // Dashboards
 import CompanyDashboard from "@/pages/dashboard/CompanyDashboard";
@@ -48,6 +53,7 @@ function Router() {
         <Switch>
           <Route path="/" component={Home} />
           <Route path="/companies" component={Companies} />
+          <Route path="/individuals" component={Individuals} />
           <Route path="/how-it-works" component={HowItWorks} />
           <Route path="/reports" component={Reports} />
           <Route path="/pricing" component={Pricing} />
@@ -60,6 +66,7 @@ function Router() {
           <Route path="/register/company" component={RegisterCompany} />
           <Route path="/register/vendor" component={RegisterVendor} />
           <Route path="/register/consultant" component={RegisterConsultant} />
+          <Route path="/register/individual" component={RegisterIndividual} />
           
           <Route path="/dashboard/company" component={CompanyDashboard} />
           <Route path="/dashboard/vendor" component={VendorDashboard} />
@@ -76,12 +83,14 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-          <Router />
-        </WouterRouter>
-        <Toaster />
-      </TooltipProvider>
+      <LanguageProvider>
+        <TooltipProvider>
+          <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
+            <Router />
+          </WouterRouter>
+          <Toaster />
+        </TooltipProvider>
+      </LanguageProvider>
     </QueryClientProvider>
   );
 }

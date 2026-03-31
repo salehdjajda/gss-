@@ -1,25 +1,13 @@
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, Globe } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import logoImg from "@assets/image_1774909317242.png";
-
-const mainLinks = [
-  { href: "/", label: "الرئيسية" },
-  { href: "/companies", label: "للمنشآت" },
-  { href: "/services", label: "الخدمات" },
-  { href: "/how-it-works", label: "آلية العمل" },
-  { href: "/pricing", label: "نموذج الرسوم" },
-  { href: "/contact", label: "تواصل معنا" },
-];
-
-const joinLinks = [
-  { href: "/register/vendor", label: "انضم كمورد / فني", icon: "🔧" },
-  { href: "/register/consultant", label: "انضم كشريك نجاح", icon: "🤝" },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export function Navbar() {
+  const { t, lang, setLang } = useLanguage();
   const [location] = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isJoinOpen, setIsJoinOpen] = useState(false);
@@ -35,6 +23,21 @@ export function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const mainLinks = [
+    { href: "/",            label: t("nav_home") },
+    { href: "/companies",   label: t("nav_companies") },
+    { href: "/individuals", label: t("nav_individuals") },
+    { href: "/services",    label: t("nav_services") },
+    { href: "/how-it-works",label: t("nav_howItWorks") },
+    { href: "/pricing",     label: t("nav_pricing") },
+    { href: "/contact",     label: t("nav_contact") },
+  ];
+
+  const joinLinks = [
+    { href: "/register/vendor",     label: t("nav_joinVendor"),  icon: "🔧" },
+    { href: "/register/consultant", label: t("nav_joinPartner"), icon: "🤝" },
+  ];
+
   return (
     <nav className="sticky top-0 z-50 w-full bg-white border-b border-gray-100 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -43,16 +46,12 @@ export function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex-shrink-0" data-testid="link-logo">
             <div className="overflow-hidden" style={{ height: "42px", width: "210px" }}>
-              <img
-                src={logoImg}
-                alt="GSS"
-                style={{ height: "136px", width: "auto", marginTop: "-47px" }}
-              />
+              <img src={logoImg} alt="GSS" style={{ height: "136px", width: "auto", marginTop: "-47px" }} />
             </div>
           </Link>
 
           {/* Desktop main links */}
-          <div className="hidden lg:flex items-center gap-1 flex-1 justify-center">
+          <div className="hidden lg:flex items-center gap-0.5 flex-1 justify-center">
             {mainLinks.map((link) => (
               <Link
                 key={link.href}
@@ -61,7 +60,7 @@ export function Navbar() {
                   location === link.href
                     ? "text-primary bg-primary/8 font-semibold"
                     : "text-gray-600 hover:text-primary hover:bg-gray-50"
-                }`}
+                } ${link.href === "/individuals" ? "text-secondary font-semibold" : ""}`}
                 data-testid={`link-nav-${link.href}`}
               >
                 {link.label}
@@ -71,13 +70,24 @@ export function Navbar() {
 
           {/* Desktop right actions */}
           <div className="hidden lg:flex items-center gap-2 flex-shrink-0">
+
+            {/* Language Toggle */}
+            <button
+              onClick={() => setLang(lang === "ar" ? "en" : "ar")}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-gray-500 hover:text-primary hover:bg-gray-50 transition-colors"
+              title={lang === "ar" ? "Switch to English" : "التبديل للعربية"}
+            >
+              <Globe size={15} />
+              {lang === "ar" ? "EN" : "عر"}
+            </button>
+
             {/* Join dropdown */}
             <div className="relative" ref={joinRef}>
               <button
                 onClick={() => setIsJoinOpen(!isJoinOpen)}
                 className="flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium text-gray-500 hover:text-primary hover:bg-gray-50 transition-colors"
               >
-                انضم إلى المنصة
+                {t("nav_joinPlatform")}
                 <ChevronDown size={15} className={`transition-transform duration-200 ${isJoinOpen ? "rotate-180" : ""}`} />
               </button>
               <AnimatePresence>
@@ -111,27 +121,25 @@ export function Navbar() {
                 className="bg-secondary hover:bg-secondary/90 text-primary font-bold px-5 h-10 text-sm rounded-xl shadow-sm"
                 data-testid="button-register-nav"
               >
-                سجّل منشأتك
+                {t("nav_registerCompany")}
               </Button>
             </Link>
           </div>
 
-          {/* Mobile: CTA + Hamburger */}
+          {/* Mobile: Lang + CTA + Hamburger */}
           <div className="lg:hidden flex items-center gap-2">
+            <button
+              onClick={() => setLang(lang === "ar" ? "en" : "ar")}
+              className="text-gray-500 hover:text-primary p-2 text-xs font-bold"
+            >
+              {lang === "ar" ? "EN" : "عر"}
+            </button>
             <Link href="/register/company">
-              <Button
-                size="sm"
-                className="bg-secondary hover:bg-secondary/90 text-primary font-bold text-xs px-4 h-9 rounded-xl"
-                data-testid="button-register-nav-mobile"
-              >
-                سجّل منشأتك
+              <Button size="sm" className="bg-secondary hover:bg-secondary/90 text-primary font-bold text-xs px-4 h-9 rounded-xl" data-testid="button-register-nav-mobile">
+                {t("nav_registerCompany")}
               </Button>
             </Link>
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-gray-600 hover:text-primary p-2"
-              data-testid="button-mobile-menu"
-            >
+            <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-gray-600 hover:text-primary p-2" data-testid="button-mobile-menu">
               {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
@@ -154,19 +162,15 @@ export function Navbar() {
                   href={link.href}
                   onClick={() => setIsMobileMenuOpen(false)}
                   className={`flex items-center px-4 py-3 rounded-xl text-base font-medium transition-colors ${
-                    location === link.href
-                      ? "text-primary bg-primary/8 font-semibold"
-                      : "text-gray-700 hover:text-primary hover:bg-gray-50"
-                  }`}
+                    location === link.href ? "text-primary bg-primary/8 font-semibold" : "text-gray-700 hover:text-primary hover:bg-gray-50"
+                  } ${link.href === "/individuals" ? "text-secondary" : ""}`}
                   data-testid={`link-mobile-nav-${link.href}`}
                 >
                   {link.label}
                 </Link>
               ))}
-
-              {/* Divider */}
               <div className="border-t border-gray-100 my-3" />
-              <p className="text-xs text-gray-400 font-medium px-4 pb-1">انضم إلى المنصة</p>
+              <p className="text-xs text-gray-400 font-medium px-4 pb-1">{t("nav_joinPlatform")}</p>
               {joinLinks.map((jl) => (
                 <Link
                   key={jl.href}
