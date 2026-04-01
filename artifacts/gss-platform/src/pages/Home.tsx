@@ -109,79 +109,91 @@ export default function Home() {
   return (
     <div className="w-full overflow-hidden">
       {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center overflow-hidden text-white">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden text-white">
+        {/* Background image + overlays */}
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1600&auto=format&fit=crop&q=80"
+            src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&auto=format&fit=crop&q=85"
             alt="GSS Platform"
             className="w-full h-full object-cover object-center"
           />
-          <div className="absolute inset-0 bg-gradient-to-l from-primary/95 via-primary/85 to-slate-900/70"></div>
-          <div className="absolute inset-0 opacity-5"
+          {/* Dark centered gradient */}
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-900/80 via-primary/90 to-slate-900/95" />
+          {/* Subtle grid pattern */}
+          <div
+            className="absolute inset-0 opacity-[0.04]"
             style={{
               backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
             }}
-          ></div>
-          <div className={`absolute top-8 ${ar ? "left-8" : "right-8"} hidden md:block`} style={{ height: "110px", width: "380px" }}>
-            <img
-              src={logoImg}
-              alt="GSS - General Support Services"
-              style={{
-                height: "340px",
-                width: "auto",
-                marginTop: "-112px",
-                mixBlendMode: "screen",
-                filter: "invert(1) hue-rotate(180deg) brightness(1.15) contrast(1.1)",
-              }}
-            />
-          </div>
+          />
+          {/* Gold glow at top */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-secondary/20 rounded-full blur-3xl" />
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full pt-16 pb-16 md:pt-24 lg:pt-28 lg:pb-28">
-          <div className="max-w-3xl">
-            <motion.h1
-              initial="hidden"
-              animate="visible"
-              variants={fadeInUp}
-              className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6"
-            >
-              {ar ? (
-                <>
-                  منصة إدارة الخدمات
-                  <br />
-                  <span className="text-secondary">التشغيلية للمنشآت والأفراد</span>
-                </>
-              ) : (
-                <>
-                  Operational Services Management
-                  <br />
-                  <span className="text-secondary">Platform for Facilities &amp; Individuals</span>
-                </>
-              )}
-            </motion.h1>
+        {/* Centered content */}
+        <div className="relative z-10 w-full px-4 sm:px-6 text-center flex flex-col items-center pt-24 pb-20">
 
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.6 }}
-              className="text-lg md:text-xl text-slate-300 mb-10 leading-relaxed"
-            >
-              {ar
-                ? "تدعم منصة GSS منشأتكم في تنظيم الطلبات التشغيلية، متابعة الموردين، وتحليل المصروفات التشغيلية عبر نقطة تشغيل واحدة، بما يرفع كفاءة الأداء ويعزز التحكم في التكاليف دون الحاجة إلى توسيع فريق التشغيل الداخلي."
-                : "GSS supports your facility in organizing operational requests, tracking vendors, and analyzing operational expenses through a single operational point — raising performance efficiency and enhancing cost control without expanding your internal operations team."}
-            </motion.p>
+          {/* Badge */}
+          <motion.div
+            initial={{ opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center gap-2 bg-white/10 border border-white/20 backdrop-blur-sm rounded-full px-5 py-2 mb-10"
+          >
+            <span className="w-2 h-2 bg-secondary rounded-full animate-pulse" />
+            <span className="text-sm font-medium text-white/90">
+              {ar ? "المنصة التشغيلية الأولى في المملكة" : "Saudi Arabia's First Operational Platform"}
+            </span>
+          </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.6 }}
-              className="flex flex-col sm:flex-row gap-4 items-start"
-            >
+          {/* Main headline — line 1 */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.15 }}
+            className="mb-2"
+          >
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-tight tracking-tight">
+              {ar ? "منصة إدارة الخدمات التشغيلية" : "Operational Services"}
+            </h1>
+          </motion.div>
+
+          {/* Main headline — line 2 (gold, bigger) */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+            className="mb-10"
+          >
+            <h2 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-secondary leading-tight tracking-tight">
+              {ar ? "للمنشآت والأفراد" : "Management Platform"}
+            </h2>
+          </motion.div>
+
+          {/* Subtitle */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.6 }}
+            className="text-base sm:text-lg md:text-xl text-slate-300 mb-12 leading-relaxed max-w-2xl"
+          >
+            {ar
+              ? "نقطة تشغيل واحدة لجميع خدماتكم — تنظيم الطلبات، متابعة الموردين، وتحليل المصروفات بكفاءة عالية"
+              : "One operational point for all your services — organize requests, track vendors, and analyze expenses efficiently"}
+          </motion.p>
+
+          {/* CTA Buttons */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.65, duration: 0.6 }}
+            className="flex flex-col sm:flex-row gap-4 items-center justify-center"
+          >
               {/* Button 1 — Primary: company registration */}
               <Link href="/register/company">
                 <Button
                   size="lg"
-                  className="w-full sm:w-auto bg-secondary hover:bg-secondary/90 text-primary font-bold h-14 px-10 text-lg shadow-lg shadow-secondary/30 rounded-2xl"
+                  className="w-full sm:w-auto bg-secondary hover:bg-secondary/90 text-primary font-black h-14 px-10 text-lg shadow-xl shadow-secondary/30 rounded-2xl"
                   data-testid="hero-btn-company"
                 >
                   {ar ? "سجّل منشأتك مجانًا" : "Register Your Facility Free"}
@@ -201,20 +213,20 @@ export default function Home() {
               </Link>
             </motion.div>
 
+            {/* Trust badges */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.9, duration: 0.6 }}
-              className="mt-10 flex flex-wrap gap-6 items-center"
+              transition={{ delay: 0.85, duration: 0.6 }}
+              className="mt-10 flex flex-wrap gap-5 items-center justify-center"
             >
               {trustItems.map((item, i) => (
-                <div key={i} className="flex items-center gap-2 text-slate-300 text-sm">
-                  <CheckCircle2 size={16} className="text-secondary flex-shrink-0" />
+                <div key={i} className="flex items-center gap-2 text-slate-300 text-sm bg-white/5 border border-white/10 rounded-full px-4 py-2">
+                  <CheckCircle2 size={15} className="text-secondary flex-shrink-0" />
                   {item}
                 </div>
               ))}
             </motion.div>
-          </div>
         </div>
       </section>
 
