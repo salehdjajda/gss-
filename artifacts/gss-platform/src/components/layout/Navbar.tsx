@@ -47,7 +47,7 @@ export function Navbar() {
         <div className="flex justify-between h-[68px] items-center gap-4">
 
           {/* Logo */}
-          <Link href="/" className="flex-shrink-0" data-testid="link-logo">
+          <Link href="/" className="flex-shrink-0" data-testid="link-logo" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
             <div className="overflow-hidden" style={{ height: "42px", width: "210px" }}>
               <img src={logoImg} alt="GSS" style={{ height: "136px", width: "auto", marginTop: "-47px" }} />
             </div>
@@ -59,6 +59,7 @@ export function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
+                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
                 className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
                   location === link.href
                     ? "text-primary bg-primary/8 font-semibold"
@@ -179,7 +180,7 @@ export function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={() => { setIsMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: "smooth" }); }}
                   className={`flex items-center px-4 py-3 rounded-xl text-base font-medium transition-colors ${
                     location === link.href ? "text-primary bg-primary/8 font-semibold" : "text-gray-700 hover:text-primary hover:bg-gray-50"
                   } ${link.href === "/individuals" ? "text-secondary" : ""}`}
