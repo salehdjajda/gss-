@@ -84,16 +84,6 @@ export function Navbar() {
               {lang === "ar" ? "EN" : "عر"}
             </button>
 
-            {/* Staff Login */}
-            <Link
-              href="/login"
-              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-gray-400 hover:text-primary hover:bg-gray-50 transition-colors"
-              title="دخول الفريق الداخلي"
-            >
-              <ShieldCheck size={15} />
-              <span className="hidden xl:inline">{lang === "ar" ? "دخول الفريق" : "Team Login"}</span>
-            </Link>
-
             {/* Individual Account Badge (when logged in) */}
             {isLoggedIn && account && (
               <Link href="/dashboard/individual"
@@ -142,13 +132,14 @@ export function Navbar() {
               </AnimatePresence>
             </div>
 
-            {/* Primary CTA */}
-            <Link href="/register/company">
+            {/* Primary CTA — Team Login */}
+            <Link href="/login">
               <Button
-                className="bg-secondary hover:bg-secondary/90 text-primary font-bold px-5 h-10 text-sm rounded-xl shadow-sm"
-                data-testid="button-register-nav"
+                className="bg-secondary hover:bg-secondary/90 text-primary font-bold px-5 h-10 text-sm rounded-xl shadow-sm flex items-center gap-2"
+                data-testid="button-team-login-nav"
               >
-                {t("nav_registerCompany")}
+                <ShieldCheck size={16} />
+                {lang === "ar" ? "دخول الفريق" : "Team Login"}
               </Button>
             </Link>
           </div>
@@ -161,9 +152,10 @@ export function Navbar() {
             >
               {lang === "ar" ? "EN" : "عر"}
             </button>
-            <Link href="/register/company">
-              <Button size="sm" className="bg-secondary hover:bg-secondary/90 text-primary font-bold text-xs px-4 h-9 rounded-xl" data-testid="button-register-nav-mobile">
-                {t("nav_registerCompany")}
+            <Link href="/login">
+              <Button size="sm" className="bg-secondary hover:bg-secondary/90 text-primary font-bold text-xs px-4 h-9 rounded-xl flex items-center gap-1.5" data-testid="button-team-login-nav-mobile">
+                <ShieldCheck size={13} />
+                {lang === "ar" ? "دخول الفريق" : "Team Login"}
               </Button>
             </Link>
             <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-gray-600 hover:text-primary p-2" data-testid="button-mobile-menu">
