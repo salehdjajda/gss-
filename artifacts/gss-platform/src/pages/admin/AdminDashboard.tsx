@@ -7,7 +7,7 @@ import {
   CheckCircle2, Clock, AlertCircle, XCircle, ChevronLeft,
   TrendingUp, Phone, Mail, Calendar, Eye, Filter, Download,
   RefreshCw, ChevronDown, MessageSquare, ShieldCheck, UserPlus,
-  Shield, UserX, KeyRound, UserCog, StickyNote, Send, X,
+  Shield, UserX, KeyRound, UserCog, StickyNote, Send, X, Menu,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -399,21 +399,53 @@ export default function AdminDashboard() {
       Object.values(r).some(v => String(v ?? "").toLowerCase().includes(search.toLowerCase()))
     );
 
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-gray-50 flex" dir="rtl">
-      {/* Sidebar */}
-      <aside className={`${sidebarOpen ? "w-64" : "w-16"} bg-slate-900 flex flex-col transition-all duration-300 flex-shrink-0 min-h-screen`}>
+
+      {/* Mobile backdrop */}
+      {mobileSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          onClick={() => setMobileSidebarOpen(false)}
+        />
+      )}
+
+      {/* Sidebar — fixed overlay on mobile, static on desktop */}
+      <aside
+        className={`
+          fixed top-0 bottom-0 right-0 z-50 bg-slate-900 flex flex-col min-h-screen
+          transition-transform duration-300 ease-in-out
+          ${mobileSidebarOpen ? "translate-x-0" : "translate-x-full"}
+          md:relative md:translate-x-0 md:z-auto
+          ${sidebarOpen ? "w-64" : "md:w-16"} w-72
+        `}
+      >
         <div className="p-4 border-b border-slate-800 flex items-center justify-between">
-          {sidebarOpen && (
+          {(sidebarOpen || mobileSidebarOpen) && (
             <div className="overflow-hidden" style={{ height: "38px", width: "175px" }}>
               <img src={logoImg} alt="GSS" style={{ height: "115px", width: "auto", marginTop: "-40px", mixBlendMode: "screen", filter: "invert(1) hue-rotate(180deg) brightness(1.15) contrast(1.1)" }} />
             </div>
           )}
-          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="text-slate-400 hover:text-white p-1 rounded">
-            <ChevronLeft size={18} className={`transition-transform ${sidebarOpen ? "" : "rotate-180"}`} />
-          </button>
+          <div className="flex items-center gap-2">
+            {/* Desktop collapse toggle */}
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="hidden md:flex text-slate-400 hover:text-white p-1 rounded"
+            >
+              <ChevronLeft size={18} className={`transition-transform ${sidebarOpen ? "" : "rotate-180"}`} />
+            </button>
+            {/* Mobile close button */}
+            <button
+              onClick={() => setMobileSidebarOpen(false)}
+              className="md:hidden text-slate-400 hover:text-white p-1 rounded"
+            >
+              <X size={18} />
+            </button>
+          </div>
         </div>
-        {sidebarOpen && (
+        {(sidebarOpen || mobileSidebarOpen) && (
           <div className="px-4 py-2 border-b border-slate-800">
             <p className="text-xs text-slate-500 font-medium">لوحة التحكم الإدارية</p>
           </div>
@@ -427,14 +459,14 @@ export default function AdminDashboard() {
             return (
               <button
                 key={key}
-                onClick={() => setActiveTab(key as TabKey)}
+                onClick={() => { setActiveTab(key as TabKey); setMobileSidebarOpen(false); }}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors ${activeTab === key ? "bg-primary text-white font-semibold" : "text-slate-400 hover:text-white hover:bg-slate-800"}`}
               >
                 <Icon size={18} className="flex-shrink-0" />
-                {sidebarOpen && (
+                {(sidebarOpen || mobileSidebarOpen) && (
                   <span className="flex-1 text-right">{label}</span>
                 )}
-                {sidebarOpen && count !== undefined && count > 0 && (
+                {(sidebarOpen || mobileSidebarOpen) && count !== undefined && count > 0 && (
                   <span className={`text-xs font-bold px-1.5 py-0.5 rounded-full ${activeTab === key ? "bg-white/20 text-white" : "bg-slate-700 text-slate-300"}`}>
                     {count}
                   </span>
@@ -444,7 +476,7 @@ export default function AdminDashboard() {
           })}
         </nav>
         <div className="p-3 border-t border-slate-800 space-y-1">
-          {sidebarOpen && user && (
+          {(sidebarOpen || mobileSidebarOpen) && user && (
             <div className="px-3 py-2 rounded-lg bg-slate-800/60 mb-2">
               <p className="text-xs font-semibold text-white truncate">{user.name}</p>
               <p className="text-xs text-slate-400 truncate" dir="ltr">{user.email}</p>
@@ -455,31 +487,40 @@ export default function AdminDashboard() {
           )}
           <button onClick={handleLogout} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-400 hover:text-red-400 hover:bg-slate-800 transition-colors">
             <LogOut size={18} className="flex-shrink-0" />
-            {sidebarOpen && <span>تسجيل الخروج</span>}
+            {(sidebarOpen || mobileSidebarOpen) && <span>تسجيل الخروج</span>}
           </button>
         </div>
       </aside>
 
       {/* Main */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between flex-shrink-0">
-          <div>
-            <h1 className="text-lg font-bold text-gray-900">{TABS.find(t => t.key === activeTab)?.label}</h1>
-            <p className="text-xs text-gray-400 mt-0.5">{new Date().toLocaleDateString("ar-SA", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</p>
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+        <header className="bg-white border-b border-gray-200 px-4 md:px-6 py-3 md:py-4 flex items-center justify-between flex-shrink-0 gap-3">
+          <div className="flex items-center gap-3 min-w-0">
+            {/* Mobile hamburger */}
+            <button
+              onClick={() => setMobileSidebarOpen(true)}
+              className="md:hidden p-2 text-gray-500 hover:text-gray-800 hover:bg-gray-100 rounded-lg flex-shrink-0"
+            >
+              <Menu size={20} />
+            </button>
+            <div className="min-w-0">
+              <h1 className="text-base md:text-lg font-bold text-gray-900 truncate">{TABS.find(t => t.key === activeTab)?.label}</h1>
+              <p className="text-xs text-gray-400 mt-0.5 hidden sm:block">{new Date().toLocaleDateString("ar-SA", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</p>
+            </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 flex-shrink-0">
             <button className="relative p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100">
-              <Bell size={20} />
+              <Bell size={18} />
               {(stats.contacts ?? 0) > 0 && <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full" />}
             </button>
-            <div className="flex items-center gap-2 bg-primary/10 rounded-full px-4 py-1.5">
-              <div className="w-7 h-7 bg-primary rounded-full flex items-center justify-center text-white text-xs font-bold">G</div>
-              <span className="text-sm font-semibold text-primary">مدير النظام</span>
+            <div className="flex items-center gap-2 bg-primary/10 rounded-full px-3 py-1.5">
+              <div className="w-6 h-6 md:w-7 md:h-7 bg-primary rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0">G</div>
+              <span className="text-sm font-semibold text-primary hidden sm:block">مدير النظام</span>
             </div>
           </div>
         </header>
 
-        <main className="flex-1 overflow-y-auto p-6">
+        <main className="flex-1 overflow-y-auto p-3 md:p-6">
 
           {/* OVERVIEW */}
           {activeTab === "overview" && (
@@ -491,12 +532,13 @@ export default function AdminDashboard() {
                   { label: "مستشارون", value: stats.consultants ?? 0, icon: UserCheck, color: "bg-green-50 text-green-600", tab: "consultants" as TabKey },
                   { label: "رسائل ودعم", value: stats.contacts ?? 0, icon: MessageSquare, color: "bg-amber-50 text-amber-600", tab: "contacts" as TabKey },
                 ].map(stat => (
-                  <button key={stat.label} onClick={() => setActiveTab(stat.tab)} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 text-right hover:border-primary/40 transition-colors">
-                    <div className={`w-11 h-11 ${stat.color} rounded-xl flex items-center justify-center mb-4`}>
-                      <stat.icon size={22} />
+                  <button key={stat.label} onClick={() => setActiveTab(stat.tab)} className="bg-white rounded-2xl p-4 md:p-6 shadow-sm border border-gray-100 text-right hover:border-primary/40 transition-colors">
+                    <div className={`w-9 h-9 md:w-11 md:h-11 ${stat.color} rounded-xl flex items-center justify-center mb-3 md:mb-4`}>
+                      <stat.icon size={18} className="md:hidden" />
+                      <stat.icon size={22} className="hidden md:block" />
                     </div>
-                    <p className="text-3xl font-bold text-gray-900 mb-1">{stat.value}</p>
-                    <p className="text-sm text-gray-500">{stat.label}</p>
+                    <p className="text-2xl md:text-3xl font-bold text-gray-900 mb-1">{stat.value}</p>
+                    <p className="text-xs md:text-sm text-gray-500">{stat.label}</p>
                   </button>
                 ))}
               </div>
