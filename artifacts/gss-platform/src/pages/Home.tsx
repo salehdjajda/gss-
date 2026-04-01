@@ -103,7 +103,7 @@ export default function Home() {
   ];
 
   const trustItems = ar
-    ? ["نقطة تشغيل واحدة لجميع الخدمات", "رسوم واضحة وشفافة", "بدء مرن حسب الطلب"]
+    ? ["نقطة تشغيل واحدة لجميع الخدمات", "رسوم واضحة وشفافة", "بدء سريع حسب الطلب"]
     : ["Single operational point for all services", "Clear and transparent fees", "Flexible on-demand start"];
 
   return (
@@ -187,34 +187,26 @@ export default function Home() {
               transition={{ delay: 0.5, duration: 0.6 }}
               className="flex flex-col sm:flex-row gap-4 items-start"
             >
+              {/* Button 1 — Primary: company registration */}
               <Link href="/register/company">
                 <Button
                   size="lg"
                   className="w-full sm:w-auto bg-secondary hover:bg-secondary/90 text-primary font-bold h-14 px-10 text-lg shadow-lg shadow-secondary/30 rounded-2xl"
                   data-testid="hero-btn-company"
                 >
-                  {ar ? "سجّل منشأتك مجاناً" : "Register Your Facility Free"}
+                  {ar ? "سجّل منشأتك مجانًا" : "Register Your Facility Free"}
                   <ArrowLeft className="mr-2" size={20} />
                 </Button>
               </Link>
-              <Link href="/register/company">
+              {/* Button 2 — Secondary: individual registration */}
+              <Link href="/register/individual">
                 <Button
                   size="lg"
                   variant="outline"
-                  className="w-full sm:w-auto h-14 px-8 text-lg text-white border-white/40 hover:bg-white/10 rounded-2xl backdrop-blur-sm"
-                  data-testid="hero-btn-demo"
+                  className="w-full sm:w-auto h-14 px-8 text-lg font-bold text-sky-300 border-sky-400/60 hover:bg-sky-400/10 hover:text-sky-200 hover:border-sky-300 rounded-2xl backdrop-blur-sm transition-colors"
+                  data-testid="hero-btn-individual"
                 >
-                  {ar ? "طلب عرض تشغيلي لمنشأتك" : "Request Operational Demo"}
-                </Button>
-              </Link>
-              <Link href="/companies">
-                <Button
-                  size="lg"
-                  variant="ghost"
-                  className="w-full sm:w-auto h-14 px-6 text-base text-slate-300 hover:text-white hover:bg-white/5 rounded-2xl"
-                  data-testid="hero-btn-learn"
-                >
-                  {ar ? "كيف تدعم GSS تشغيل منشأتكم" : "How GSS Supports Your Operations"}
+                  {ar ? "سجّل كفرد واطلب خدمتك" : "Register as Individual"}
                 </Button>
               </Link>
             </motion.div>
