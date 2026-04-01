@@ -1,18 +1,19 @@
 import { useState, useEffect, useCallback } from "react";
 import { useLocation } from "wouter";
-import { useAdminAuth } from "@/contexts/AdminAuthContext";
+import { useAuth, getAuthToken } from "@/contexts/AuthContext";
 import {
   LayoutDashboard, Building2, Users, ClipboardList, Wrench,
   FileBarChart2, Truck, UserCheck, LogOut, Bell, Search,
   CheckCircle2, Clock, AlertCircle, XCircle, ChevronLeft,
   TrendingUp, Phone, Mail, Calendar, Eye, Filter, Download,
-  RefreshCw, ChevronDown, MessageSquare,
+  RefreshCw, ChevronDown, MessageSquare, ShieldCheck, UserPlus,
+  Shield, UserX, KeyRound,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import logoImg from "@assets/image_1774909317242.png";
 
-type TabKey = "overview" | "companies" | "vendors" | "consultants" | "contacts" | "services" | "reports";
+type TabKey = "overview" | "companies" | "vendors" | "consultants" | "contacts" | "services" | "reports" | "users";
 
 const TABS = [
   { key: "overview",     label: "نظرة عامة",     icon: LayoutDashboard },
@@ -22,6 +23,7 @@ const TABS = [
   { key: "contacts",     label: "الدعم والرسائل",  icon: MessageSquare },
   { key: "services",     label: "الخدمات",         icon: Wrench },
   { key: "reports",      label: "التقارير",         icon: FileBarChart2 },
+  { key: "users",        label: "المستخدمون",      icon: ShieldCheck },
 ] as const;
 
 const STATUS_OPTIONS = [
@@ -46,8 +48,13 @@ function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("ar-SA", { year: "numeric", month: "short", day: "numeric" });
 }
 
+function authHeaders(): HeadersInit {
+  const token = getAuthToken();
+  return token ? { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } : { "Content-Type": "application/json" };
+}
+
 async function apiGet(path: string) {
-  const r = await fetch(`/api${path}`);
+  const r = await fetch(`/api${path}`, { headers: authHeaders() });
   if (!r.ok) throw new Error(`HTTP ${r.status}`);
   return r.json();
 }
@@ -55,7 +62,7 @@ async function apiGet(path: string) {
 async function apiPatch(path: string, body: object) {
   const r = await fetch(`/api${path}`, {
     method: "PATCH",
-    headers: { "Content-Type": "application/json" },
+    headers: authHeaders(),
     body: JSON.stringify(body),
   });
   if (!r.ok) throw new Error(`HTTP ${r.status}`);
@@ -147,7 +154,7 @@ function LoadingState() {
 }
 
 export default function AdminDashboard() {
-  const { logout } = useAdminAuth();
+  const { logout, user } = useAuth();
   const [, setLocation] = useLocation();
   const [activeTab, setActiveTab] = useState<TabKey>("overview");
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -158,7 +165,10 @@ export default function AdminDashboard() {
   const [vendors, setVendors] = useState<any[]>([]);
   const [consultants, setConsultants] = useState<any[]>([]);
   const [contacts, setContacts] = useState<any[]>([]);
+  const [sysUsers, setSysUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState<Record<string, boolean>>({});
+  const [newUserForm, setNewUserForm] = useState({ name: "", email: "", password: "", role: "staff" as "admin"|"staff"|"user", show: false });
+  const [newUserError, setNewUserError] = useState("");
 
   const fetchData = useCallback(async (tab: TabKey) => {
     setLoading(prev => ({ ...prev, [tab]: true }));
@@ -174,6 +184,8 @@ export default function AdminDashboard() {
         setConsultants(await apiGet("/admin/consultants"));
       } else if (tab === "contacts") {
         setContacts(await apiGet("/admin/contacts"));
+      } else if (tab === "users") {
+        setSysUsers(await apiGet("/admin/users"));
       }
     } catch (e) {
       console.error("Admin fetch error", e);
@@ -187,7 +199,7 @@ export default function AdminDashboard() {
     apiGet("/admin/stats").then(setStats).catch(() => {});
   }, []);
 
-  const handleLogout = () => { logout(); setLocation("/admin"); };
+  const handleLogout = () => { logout(); setLocation("/login"); };
 
   const updateCompanyStatus = async (id: number, status: string) => {
     await apiPatch(`/admin/companies/${id}/status`, { status });
@@ -204,6 +216,31 @@ export default function AdminDashboard() {
   const updateContactStatus = async (id: number, status: string) => {
     await apiPatch(`/admin/contacts/${id}/status`, { status });
     setContacts(prev => prev.map(c => c.id === id ? { ...c, status } : c));
+  };
+
+  const toggleUserActive = async (id: number, isActive: boolean) => {
+    await apiPatch(`/admin/users/${id}`, { isActive });
+    setSysUsers(prev => prev.map(u => u.id === id ? { ...u, isActive } : u));
+  };
+
+  const changeUserRole = async (id: number, role: string) => {
+    await apiPatch(`/admin/users/${id}`, { role });
+    setSysUsers(prev => prev.map(u => u.id === id ? { ...u, role } : u));
+  };
+
+  const createUser = async () => {
+    setNewUserError("");
+    try {
+      const res = await fetch("/api/admin/users", {
+        method: "POST",
+        headers: authHeaders(),
+        body: JSON.stringify({ name: newUserForm.name, email: newUserForm.email, password: newUserForm.password, role: newUserForm.role }),
+      });
+      const data = await res.json();
+      if (!res.ok) { setNewUserError(data.error || "خطأ في إنشاء الحساب"); return; }
+      setNewUserForm({ name: "", email: "", password: "", role: "staff", show: false });
+      fetchData("users");
+    } catch { setNewUserError("خطأ في الاتصال بالخادم"); }
   };
 
   const filtered = <T extends Record<string, any>>(rows: T[]) =>
@@ -255,7 +292,16 @@ export default function AdminDashboard() {
             );
           })}
         </nav>
-        <div className="p-3 border-t border-slate-800">
+        <div className="p-3 border-t border-slate-800 space-y-1">
+          {sidebarOpen && user && (
+            <div className="px-3 py-2 rounded-lg bg-slate-800/60 mb-2">
+              <p className="text-xs font-semibold text-white truncate">{user.name}</p>
+              <p className="text-xs text-slate-400 truncate" dir="ltr">{user.email}</p>
+              <span className={`text-xs font-bold px-1.5 py-0.5 rounded mt-1 inline-block ${user.role === "admin" ? "bg-red-900/50 text-red-300" : user.role === "staff" ? "bg-amber-900/50 text-amber-300" : "bg-blue-900/50 text-blue-300"}`}>
+                {user.role === "admin" ? "Admin" : user.role === "staff" ? "Staff" : "User"}
+              </span>
+            </div>
+          )}
           <button onClick={handleLogout} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-400 hover:text-red-400 hover:bg-slate-800 transition-colors">
             <LogOut size={18} className="flex-shrink-0" />
             {sidebarOpen && <span>تسجيل الخروج</span>}
@@ -547,6 +593,159 @@ export default function AdminDashboard() {
                     </div>
                   </div>
                 ))}
+              </div>
+            </div>
+          )}
+
+          {/* USERS MANAGEMENT */}
+          {activeTab === "users" && (
+            <div className="space-y-5">
+              <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h2 className="text-xl font-bold text-gray-900">إدارة المستخدمين والصلاحيات</h2>
+                    <p className="text-sm text-gray-500 mt-0.5">إجمالي: {sysUsers.length} مستخدم</p>
+                  </div>
+                  <Button
+                    size="sm"
+                    className="gap-2 text-xs"
+                    onClick={() => setNewUserForm(f => ({ ...f, show: !f.show }))}
+                  >
+                    <UserPlus size={13} />
+                    إضافة مستخدم
+                  </Button>
+                </div>
+
+                {/* Add User Form */}
+                {newUserForm.show && (
+                  <div className="bg-blue-50 border border-blue-100 rounded-xl p-5 mb-6">
+                    <h3 className="font-semibold text-gray-800 mb-4 text-sm">إنشاء حساب جديد</h3>
+                    <div className="grid grid-cols-2 gap-3 mb-3">
+                      <div>
+                        <label className="text-xs font-medium text-gray-600 mb-1 block">الاسم</label>
+                        <Input
+                          placeholder="الاسم الكامل"
+                          value={newUserForm.name}
+                          onChange={e => setNewUserForm(f => ({ ...f, name: e.target.value }))}
+                          className="h-9 text-sm"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs font-medium text-gray-600 mb-1 block">البريد الإلكتروني</label>
+                        <Input
+                          type="email"
+                          placeholder="email@gss.sa"
+                          value={newUserForm.email}
+                          onChange={e => setNewUserForm(f => ({ ...f, email: e.target.value }))}
+                          className="h-9 text-sm"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs font-medium text-gray-600 mb-1 block">كلمة المرور (8+ أحرف)</label>
+                        <Input
+                          type="password"
+                          placeholder="••••••••"
+                          value={newUserForm.password}
+                          onChange={e => setNewUserForm(f => ({ ...f, password: e.target.value }))}
+                          className="h-9 text-sm"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs font-medium text-gray-600 mb-1 block">الصلاحية</label>
+                        <select
+                          value={newUserForm.role}
+                          onChange={e => setNewUserForm(f => ({ ...f, role: e.target.value as any }))}
+                          className="w-full h-9 border border-gray-300 rounded-lg px-3 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        >
+                          <option value="admin">مدير (Admin)</option>
+                          <option value="staff">موظف (Staff)</option>
+                          <option value="user">مستخدم (User)</option>
+                        </select>
+                      </div>
+                    </div>
+                    {newUserError && (
+                      <p className="text-red-600 text-xs mb-3">{newUserError}</p>
+                    )}
+                    <div className="flex gap-2">
+                      <Button size="sm" className="text-xs gap-1.5" onClick={createUser}>
+                        <UserPlus size={12} />
+                        إنشاء الحساب
+                      </Button>
+                      <Button size="sm" variant="outline" className="text-xs" onClick={() => setNewUserForm(f => ({ ...f, show: false }))}>
+                        إلغاء
+                      </Button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Users Table */}
+                {loading.users ? <LoadingState /> : sysUsers.length === 0 ? (
+                  <EmptyState label="لا يوجد مستخدمون حتى الآن" />
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="border-b border-gray-100">
+                          <th className="text-right font-semibold text-gray-500 pb-3 pr-0">الاسم</th>
+                          <th className="text-right font-semibold text-gray-500 pb-3">البريد الإلكتروني</th>
+                          <th className="text-right font-semibold text-gray-500 pb-3">الصلاحية</th>
+                          <th className="text-right font-semibold text-gray-500 pb-3">الحالة</th>
+                          <th className="text-right font-semibold text-gray-500 pb-3">آخر دخول</th>
+                          <th className="text-right font-semibold text-gray-500 pb-3">إجراءات</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-50">
+                        {sysUsers.map(u => (
+                          <tr key={u.id} className="hover:bg-gray-50/50">
+                            <td className="py-3 pr-0 font-medium text-gray-900">{u.name}</td>
+                            <td className="py-3 text-gray-500 font-mono text-xs" dir="ltr">{u.email}</td>
+                            <td className="py-3">
+                              <select
+                                value={u.role}
+                                onChange={e => changeUserRole(u.id, e.target.value)}
+                                disabled={u.id === user?.id}
+                                className="border border-gray-200 rounded-lg px-2 py-1 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none disabled:opacity-50"
+                              >
+                                <option value="admin">🔴 Admin</option>
+                                <option value="staff">🟡 Staff</option>
+                                <option value="user">🟢 User</option>
+                              </select>
+                            </td>
+                            <td className="py-3">
+                              <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${u.isActive ? "bg-green-100 text-green-700" : "bg-red-100 text-red-600"}`}>
+                                {u.isActive ? "نشط" : "موقوف"}
+                              </span>
+                            </td>
+                            <td className="py-3 text-xs text-gray-400">
+                              {u.lastLoginAt ? formatDate(u.lastLoginAt) : "لم يدخل بعد"}
+                            </td>
+                            <td className="py-3">
+                              {u.id !== user?.id && (
+                                <button
+                                  onClick={() => toggleUserActive(u.id, !u.isActive)}
+                                  className={`text-xs px-2 py-1 rounded-lg flex items-center gap-1 transition ${u.isActive ? "text-red-600 hover:bg-red-50" : "text-green-600 hover:bg-green-50"}`}
+                                >
+                                  {u.isActive ? <><UserX size={11} />إيقاف</> : <><UserCheck size={11} />تفعيل</>}
+                                </button>
+                              )}
+                              {u.id === user?.id && <span className="text-xs text-gray-400">أنت</span>}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+
+              <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start gap-3">
+                <Shield size={16} className="text-amber-600 mt-0.5 flex-shrink-0" />
+                <div>
+                  <p className="text-sm font-semibold text-amber-800">تذكير أمني</p>
+                  <p className="text-xs text-amber-700 mt-1">
+                    صلاحية Admin تُمكّن الوصول الكامل لجميع البيانات والإعدادات. امنح هذه الصلاحية فقط للأشخاص الموثوقين. الموظفون (Staff) يمكنهم مشاهدة البيانات وتحديث الحالات فقط.
+                  </p>
+                </div>
               </div>
             </div>
           )}

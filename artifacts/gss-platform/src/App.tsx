@@ -18,7 +18,11 @@ function ScrollToTop() {
 // Context
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { IndividualAuthProvider } from "@/contexts/IndividualAuthContext";
-import { AdminAuthProvider, useAdminAuth } from "@/contexts/AdminAuthContext";
+import { AuthProvider } from "@/contexts/AuthContext";
+
+// Auth Components
+import LoginPage from "@/pages/auth/LoginPage";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 // Page Imports
 import Home from "@/pages/Home";
@@ -50,29 +54,36 @@ import IndividualDashboard from "@/pages/dashboard/IndividualDashboard";
 import RequestService from "@/pages/individuals/RequestService";
 
 // Admin
-import AdminLogin from "@/pages/admin/AdminLogin";
 import AdminDashboard from "@/pages/admin/AdminDashboard";
 
 const queryClient = new QueryClient();
 
-function AdminGuard() {
-  const { isAdminAuthenticated } = useAdminAuth();
-  const [, setLocation] = useLocation();
-  useEffect(() => {
-    if (!isAdminAuthenticated) setLocation("/admin");
-  }, [isAdminAuthenticated]);
-  if (!isAdminAuthenticated) return null;
-  return <AdminDashboard />;
+function UnauthorizedPage() {
+  return (
+    <div dir="rtl" className="min-h-screen flex items-center justify-center bg-[#0B1E3D]">
+      <div className="text-center text-white">
+        <div className="text-6xl font-bold mb-4 text-red-400">403</div>
+        <h1 className="text-2xl font-bold mb-2">غير مصرح لك بالوصول</h1>
+        <p className="text-blue-300 mb-6">ليس لديك صلاحية للوصول لهذه الصفحة</p>
+        <a href="/" className="bg-white text-[#0B1E3D] px-6 py-2 rounded-lg font-semibold hover:bg-blue-50 transition">
+          العودة للرئيسية
+        </a>
+      </div>
+    </div>
+  );
 }
 
 function MainLayout() {
   const [location] = useLocation();
   const isAdminRoute = location.startsWith("/admin");
+  const isAuthRoute = location.startsWith("/login") || location.startsWith("/unauthorized");
+
+  const hideChrome = isAdminRoute || isAuthRoute;
 
   return (
-    <div className={isAdminRoute ? "" : "flex flex-col min-h-[100dvh]"}>
-      {!isAdminRoute && <Navbar />}
-      <main className={isAdminRoute ? "" : "flex-1 bg-background text-foreground"}>
+    <div className={hideChrome ? "" : "flex flex-col min-h-[100dvh]"}>
+      {!hideChrome && <Navbar />}
+      <main className={hideChrome ? "" : "flex-1 bg-background text-foreground"}>
         <Switch>
           <Route path="/" component={Home} />
           <Route path="/companies" component={Companies} />
@@ -97,17 +108,25 @@ function MainLayout() {
           <Route path="/dashboard/individual" component={IndividualDashboard} />
           <Route path="/request/service" component={RequestService} />
 
-          {/* Admin Routes */}
-          <Route path="/admin" component={AdminLogin} />
-          <Route path="/admin/dashboard" component={AdminGuard} />
+          {/* Auth Routes */}
+          <Route path="/login" component={LoginPage} />
+          <Route path="/admin" component={LoginPage} />
+          <Route path="/unauthorized" component={UnauthorizedPage} />
+
+          {/* Protected Admin Routes */}
+          <Route path="/admin/dashboard">
+            <ProtectedRoute requiredRole={["admin", "staff"]}>
+              <AdminDashboard />
+            </ProtectedRoute>
+          </Route>
 
           <Route component={NotFound} />
         </Switch>
       </main>
-      {!isAdminRoute && <Footer />}
+      {!hideChrome && <Footer />}
 
       {/* Floating WhatsApp Button */}
-      {!isAdminRoute && (
+      {!hideChrome && (
         <a
           href="https://wa.me/966595980004"
           target="_blank"
@@ -141,14 +160,14 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <LanguageProvider>
         <IndividualAuthProvider>
-          <AdminAuthProvider>
+          <AuthProvider>
             <TooltipProvider>
               <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
                 <Router />
               </WouterRouter>
               <Toaster />
             </TooltipProvider>
-          </AdminAuthProvider>
+          </AuthProvider>
         </IndividualAuthProvider>
       </LanguageProvider>
     </QueryClientProvider>

@@ -9,6 +9,13 @@
 
 ### Key Features
 - **Full bilingual support** (AR/EN) across all pages — toggled via `gss_lang` localStorage key (defaults to `"ar"`), RTL/LTR managed via HTML attribute.
+- **Secure JWT Auth** — Full server-side auth system with roles (admin/staff/user), bcryptjs password hashing, JWT tokens (8h expiry), rate limiting (10 req/15min). Token stored in `gss_auth_token` localStorage.
+  - Login: `POST /api/auth/login` → returns JWT + user
+  - Verify: `GET /api/auth/me` (protected)
+  - Admin user management: `GET/POST/PATCH /api/admin/users` (admin only)
+  - All `/api/admin/*` routes require valid JWT (admin or staff role)
+  - Initial admin: `admin@gss.sa` / `GSS@Admin2025`
+- **Role-based routing**: admin → `/admin/dashboard`, 403 page at `/unauthorized`
 - **Individual Auth** — localStorage-based auth (keys: `gss_individual_accounts`, `gss_individual_session`, `gss_individual_requests`). Account numbers: `GSS-IND-XXXXX`.
 - **Company Registration** — 8-step form: Facility Info → Documents → Delegates → Services → Branches → Vendors → Operations → Declarations.
 - **Bilingual pattern**: `const ar = lang === "ar"` then `ar ? "Arabic text" : "English text"`.
