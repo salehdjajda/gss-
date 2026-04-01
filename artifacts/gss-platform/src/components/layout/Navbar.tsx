@@ -1,5 +1,4 @@
 import { Link, useLocation } from "wouter";
-import { Button } from "@/components/ui/button";
 import { Menu, X, ChevronDown, Globe, ShieldCheck, LogIn, Building2, User, Wrench, Users } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -154,15 +153,16 @@ export function Navbar() {
 
             {/* Login dropdown */}
             <div className="relative" ref={loginRef}>
-              <Button
+              <button
+                type="button"
                 onClick={() => setIsLoginOpen(!isLoginOpen)}
-                className="bg-secondary hover:bg-secondary/90 text-primary font-bold px-5 h-10 text-sm rounded-xl shadow-sm flex items-center gap-2"
+                className="bg-secondary hover:bg-secondary/90 text-primary font-bold px-5 h-10 text-sm rounded-xl shadow-sm flex items-center gap-2 transition-colors"
                 data-testid="button-login-dropdown"
               >
                 <LogIn size={16} />
                 {lang === "ar" ? "دخول" : "Login"}
                 <ChevronDown size={14} className={`transition-transform duration-200 ${isLoginOpen ? "rotate-180" : ""}`} />
-              </Button>
+              </button>
               <AnimatePresence>
                 {isLoginOpen && (
                   <motion.div
@@ -208,15 +208,15 @@ export function Navbar() {
             >
               {lang === "ar" ? "EN" : "عر"}
             </button>
-            <Button
-              size="sm"
-              onClick={() => { setIsMobileMenuOpen(true); }}
-              className="bg-secondary hover:bg-secondary/90 text-primary font-bold text-xs px-4 h-9 rounded-xl flex items-center gap-1.5"
+            <button
+              type="button"
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="bg-secondary hover:bg-secondary/90 text-primary font-bold text-xs px-4 h-9 rounded-xl flex items-center gap-1.5 transition-colors"
               data-testid="button-login-mobile"
             >
               <LogIn size={13} />
               {lang === "ar" ? "دخول" : "Login"}
-            </Button>
+            </button>
             <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-gray-600 hover:text-primary p-2" data-testid="button-mobile-menu">
               {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
