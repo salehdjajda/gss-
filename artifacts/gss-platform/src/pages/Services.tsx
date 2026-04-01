@@ -543,8 +543,8 @@ export default function Services() {
           </h1>
           <p className="text-xl text-white/80 max-w-3xl mx-auto leading-relaxed mb-10">
             {ar
-              ? "تعمل منصة GSS كمدير عمليات خارجي يتولى تنظيم ومتابعة الخدمات التشغيلية للمنشآت عبر نقطة اتصال واحدة، والتنسيق مع الموردين المعتمدين حتى إغلاق الطلب وفق متطلبات المنشأة."
-              : "GSS acts as an external operations manager organizing and monitoring operational services for facilities through a single point of contact, coordinating with certified vendors until the request is closed."}
+              ? "تعمل منصة GSS كعمليات خارجية تتولى تنظيم ومتابعة الخدمات التشغيلية للمنشآت عبر نقطة اتصال واحدة، والتنسيق مع الموردين المعتمدين حتى إغلاق الطلب وفق متطلبات المنشأة."
+              : "GSS acts as external operations organizing and monitoring operational services for facilities through a single point of contact, coordinating with certified vendors until the request is closed."}
           </p>
 
           {/* Intro above search */}
