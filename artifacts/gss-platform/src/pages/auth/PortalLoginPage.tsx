@@ -294,9 +294,13 @@ function LoginForm({ portalType }: { portalType: PortalType }) {
   );
 }
 
-export default function PortalLoginPage({ params }: { params?: { type?: string } }) {
+export default function PortalLoginPage() {
   const { lang, isRTL } = useLanguage();
-  const [selectedType, setSelectedType] = useState<PortalType | null>((params?.type as PortalType) || null);
+  const urlType = new URLSearchParams(window.location.search).get("type") as PortalType | null;
+  const validTypes: PortalType[] = ["company", "vendor", "consultant", "individual"];
+  const [selectedType, setSelectedType] = useState<PortalType | null>(
+    urlType && validTypes.includes(urlType) ? urlType : null
+  );
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col" dir={isRTL ? "rtl" : "ltr"}>

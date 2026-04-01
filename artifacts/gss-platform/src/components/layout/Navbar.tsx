@@ -45,18 +45,12 @@ export function Navbar() {
     { href: "/register/consultant", label: t("nav_joinPartner"), icon: "🤝" },
   ];
 
-  const loginOptions = lang === "ar" ? [
-    { href: "/portal/login",  label: "المنشآت والشركات",  icon: Building2,   color: "text-blue-600",   bg: "bg-blue-50" },
-    { href: "/portal/login",  label: "الأفراد",           icon: User,        color: "text-green-600",  bg: "bg-green-50" },
-    { href: "/portal/login",  label: "الموردون",          icon: Wrench,      color: "text-orange-600", bg: "bg-orange-50" },
-    { href: "/portal/login",  label: "المستشارون",        icon: Users,       color: "text-purple-600", bg: "bg-purple-50" },
-    { href: "/login",         label: "إدارة المنصة",      icon: ShieldCheck, color: "text-red-600",    bg: "bg-red-50" },
-  ] : [
-    { href: "/portal/login",  label: "Facilities & Companies", icon: Building2,   color: "text-blue-600",   bg: "bg-blue-50" },
-    { href: "/portal/login",  label: "Individuals",            icon: User,        color: "text-green-600",  bg: "bg-green-50" },
-    { href: "/portal/login",  label: "Vendors",                icon: Wrench,      color: "text-orange-600", bg: "bg-orange-50" },
-    { href: "/portal/login",  label: "Consultants",            icon: Users,       color: "text-purple-600", bg: "bg-purple-50" },
-    { href: "/login",         label: "Platform Admin",         icon: ShieldCheck, color: "text-red-600",    bg: "bg-red-50" },
+  const loginOptions = [
+    { href: "/portal/login?type=company",    labelAr: "المنشآت والشركات",  labelEn: "Facilities",      icon: Building2,   color: "text-blue-600",   bg: "bg-blue-50" },
+    { href: "/portal/login?type=individual", labelAr: "الأفراد",           labelEn: "Individuals",     icon: User,        color: "text-green-600",  bg: "bg-green-50" },
+    { href: "/portal/login?type=vendor",     labelAr: "الموردون",          labelEn: "Vendors",         icon: Wrench,      color: "text-orange-600", bg: "bg-orange-50" },
+    { href: "/portal/login?type=consultant", labelAr: "المستشارون",        labelEn: "Consultants",     icon: Users,       color: "text-purple-600", bg: "bg-purple-50" },
+    { href: "/login",                        labelAr: "إدارة المنصة",      labelEn: "Platform Admin",  icon: ShieldCheck, color: "text-red-600",    bg: "bg-red-50" },
   ];
 
   return (
@@ -189,7 +183,7 @@ export function Navbar() {
                           <div className={`w-8 h-8 rounded-lg ${opt.bg} flex items-center justify-center flex-shrink-0`}>
                             <Icon size={15} className={opt.color} />
                           </div>
-                          <span className="font-medium">{opt.label}</span>
+                          <span className="font-medium">{lang === "ar" ? opt.labelAr : opt.labelEn}</span>
                         </Link>
                       );
                     })}
@@ -208,15 +202,15 @@ export function Navbar() {
             >
               {lang === "ar" ? "EN" : "عر"}
             </button>
-            <button
-              type="button"
-              onClick={() => setIsMobileMenuOpen(true)}
+            <Link
+              href="/portal/login"
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
               className="bg-secondary hover:bg-secondary/90 text-primary font-bold text-xs px-4 h-9 rounded-xl flex items-center gap-1.5 transition-colors"
               data-testid="button-login-mobile"
             >
               <LogIn size={13} />
               {lang === "ar" ? "دخول" : "Login"}
-            </button>
+            </Link>
             <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-gray-600 hover:text-primary p-2" data-testid="button-mobile-menu">
               {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
@@ -262,27 +256,6 @@ export function Navbar() {
                   {jl.label}
                 </Link>
               ))}
-
-              <div className="border-t border-gray-100 my-3" />
-              <p className="text-xs text-gray-400 font-bold px-4 pb-1">
-                {lang === "ar" ? "دخول الحساب" : "Account Login"}
-              </p>
-              {loginOptions.map((opt) => {
-                const Icon = opt.icon;
-                return (
-                  <Link
-                    key={opt.href}
-                    href={opt.href}
-                    onClick={() => { setIsMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: "smooth" }); }}
-                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-600 hover:text-primary hover:bg-gray-50 transition-colors"
-                  >
-                    <div className={`w-7 h-7 rounded-lg ${opt.bg} flex items-center justify-center`}>
-                      <Icon size={13} className={opt.color} />
-                    </div>
-                    {opt.label}
-                  </Link>
-                );
-              })}
             </div>
           </motion.div>
         )}
