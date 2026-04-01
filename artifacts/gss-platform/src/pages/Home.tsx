@@ -149,13 +149,13 @@ export default function Home() {
                 <>
                   منصة إدارة الخدمات
                   <br />
-                  <span className="text-secondary">التشغيلية لمنشأتكم</span>
+                  <span className="text-secondary">التشغيلية للمنشآت والأفراد</span>
                 </>
               ) : (
                 <>
                   Operational Services Management
                   <br />
-                  <span className="text-secondary">Platform for Your Facility</span>
+                  <span className="text-secondary">Platform for Facilities &amp; Individuals</span>
                 </>
               )}
             </motion.h1>
