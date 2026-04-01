@@ -16,7 +16,7 @@ export default function Pricing() {
     { icon: "✅", text: "متابعة تنفيذ الخدمة حتى إغلاق الطلب" },
     { icon: "🛠",  text: "التأكد من جودة التنفيذ قبل اعتماد الإغلاق" },
     { icon: "📊", text: "إمكانية طلب خدمات متعددة حسب الحاجة" },
-    { icon: "📁", text: "توثيق جميع الطلبات داخل حساب المنشأة" },
+    { icon: "📁", text: "توثيق جميع الطلبات داخل حسابك لمراجعتها في أي وقت" },
   ] : [
     { icon: "📩", text: "Receive and organize operational requests through a single point of contact" },
     { icon: "🔧", text: "Coordinate with the right vendors for each request" },
@@ -24,19 +24,19 @@ export default function Pricing() {
     { icon: "✅", text: "Follow up on service execution until request closure" },
     { icon: "🛠",  text: "Verify execution quality before approving closure" },
     { icon: "📊", text: "Request multiple services as needed" },
-    { icon: "📁", text: "Document all requests within your company account" },
+    { icon: "📁", text: "Document all requests in your account for review anytime" },
   ];
 
   const onDemandWhen = isAr ? [
-    "إذا كانت الطلبات التشغيلية غير منتظمة",
-    "إذا كان لديكم فريق داخلي يتابع جزءًا من الأعمال",
-    "إذا كنتم تحتاجون دعمًا تشغيليًا عند الحاجة فقط",
-    "إذا كنتم ترغبون بتجربة المنصة قبل إضافة مزايا إضافية",
+    "إذا كنت فرداً يحتاج خدمة تشغيلية عند الحاجة فقط",
+    "إذا كانت طلباتك التشغيلية غير منتظمة أو موسمية",
+    "إذا أردت تجربة المنصة قبل الالتزام بأي باقة",
+    "إذا كانت منشأتك لديها فريق داخلي يتابع جزءًا من الأعمال",
   ] : [
-    "If operational requests are irregular",
-    "If you have an internal team handling part of the operations",
-    "If you need operational support only on demand",
-    "If you want to try the platform before adding extra features",
+    "If you're an individual who needs a service occasionally",
+    "If your operational requests are irregular or seasonal",
+    "If you want to try the platform before committing to a package",
+    "If your facility has an internal team handling part of the work",
   ];
 
   // ── Tier plans ────────────────────────────────────────────────────────────
@@ -234,10 +234,15 @@ export default function Pricing() {
                     </li>
                   ))}
                 </ul>
-                <div className="mt-8">
+                <div className="mt-8 space-y-3">
+                  <Link href="/register/individual">
+                    <Button variant="outline" className="w-full font-bold border-primary text-primary hover:bg-primary hover:text-white">
+                      {isAr ? "سجّل كفرد" : "Register as Individual"}
+                    </Button>
+                  </Link>
                   <Link href="/register/company">
                     <Button className="w-full font-bold">
-                      {isAr ? "ابدأ بدون اشتراك" : "Start Without Subscription"}
+                      {isAr ? "سجّل كمنشأة" : "Register as Facility"}
                     </Button>
                   </Link>
                 </div>
