@@ -170,18 +170,6 @@ export default function Home() {
             </h2>
           </motion.div>
 
-          {/* Subtitle */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.6 }}
-            className="text-base sm:text-lg md:text-xl text-slate-300 mb-12 leading-relaxed max-w-2xl"
-          >
-            {ar
-              ? "نقطة تشغيل واحدة لجميع خدماتكم — تنظيم الطلبات، متابعة الموردين، وتحليل المصروفات بكفاءة عالية"
-              : "One operational point for all your services — organize requests, track vendors, and analyze expenses efficiently"}
-          </motion.p>
-
           {/* CTA Buttons */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
