@@ -41,8 +41,8 @@ export function Navbar() {
   ];
 
   const joinLinks = [
-    { href: "/register/vendor",     label: t("nav_joinVendor"),  icon: "🔧" },
-    { href: "/register/consultant", label: t("nav_joinPartner"), icon: "🤝" },
+    { href: "/vendors",   label: t("nav_joinVendor"),  icon: "🔧" },
+    { href: "/partners",  label: t("nav_joinPartner"), icon: "🤝" },
   ];
 
   const loginOptions = [
