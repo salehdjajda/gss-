@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef, Fragment } from "react";
 import { useLocation } from "wouter";
 import { useAuth, getAuthToken } from "@/contexts/AuthContext";
 import {
@@ -7,7 +7,7 @@ import {
   CheckCircle2, Clock, AlertCircle, XCircle, ChevronLeft,
   TrendingUp, Phone, Mail, Calendar, Eye, Filter, Download,
   RefreshCw, ChevronDown, MessageSquare, ShieldCheck, UserPlus,
-  Shield, UserX, KeyRound,
+  Shield, UserX, KeyRound, UserCog, StickyNote, Send, X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -153,8 +153,142 @@ function LoadingState() {
   );
 }
 
+/** Assignment dropdown — admin assigns a record to a staff member */
+function AssignDropdown({
+  entityType, entityId, currentAssignedId, currentAssignedName,
+  staffList, isAdmin, onAssigned,
+}: {
+  entityType: string; entityId: number;
+  currentAssignedId?: number | null; currentAssignedName?: string | null;
+  staffList: any[]; isAdmin: boolean;
+  onAssigned: (id: number, assignedTo: number | null, name: string | null) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [saving, setSaving] = useState(false);
+
+  async function assign(staffId: number | null, staffName: string | null) {
+    setSaving(true);
+    setOpen(false);
+    const r = await fetch(`/api/admin/assign/${entityType}/${entityId}`, {
+      method: "PATCH",
+      headers: authHeaders(),
+      body: JSON.stringify({ assignedTo: staffId }),
+    });
+    setSaving(false);
+    if (r.ok) onAssigned(entityId, staffId, staffName);
+  }
+
+  if (!isAdmin) {
+    return currentAssignedName ? (
+      <span className="flex items-center gap-1 text-xs text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full font-medium">
+        <UserCog size={11} />{currentAssignedName}
+      </span>
+    ) : <span className="text-xs text-gray-300">—</span>;
+  }
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setOpen(!open)}
+        disabled={saving}
+        className={`flex items-center gap-1.5 text-xs px-2 py-1 rounded-full border transition ${currentAssignedId ? "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100" : "bg-gray-50 text-gray-500 border-gray-200 hover:bg-gray-100"}`}
+      >
+        <UserCog size={11} />
+        {saving ? "جاري..." : currentAssignedName || "إسناد"}
+        <ChevronDown size={10} />
+      </button>
+      {open && (
+        <div className="absolute top-full mt-1 right-0 bg-white border border-gray-200 rounded-xl shadow-xl z-30 py-1 min-w-[170px]">
+          <button
+            onClick={() => assign(null, null)}
+            className="w-full text-right px-3 py-2 text-xs text-gray-400 hover:bg-gray-50"
+          >
+            ❌ إلغاء الإسناد
+          </button>
+          {staffList.map(s => (
+            <button
+              key={s.id}
+              onClick={() => assign(s.id, s.name)}
+              className={`w-full text-right px-3 py-2 text-xs hover:bg-blue-50 hover:text-blue-700 ${currentAssignedId === s.id ? "font-bold text-blue-700 bg-blue-50/60" : "text-gray-700"}`}
+            >
+              {s.name} <span className="text-gray-400">({s.role})</span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** Inline notes panel for a specific record */
+function NotesPanel({ entityType, entityId, onClose }: { entityType: string; entityId: number; onClose: () => void }) {
+  const [notes, setNotes] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [newNote, setNewNote] = useState("");
+  const [sending, setSending] = useState(false);
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    fetch(`/api/admin/notes/${entityType}/${entityId}`, { headers: authHeaders() })
+      .then(r => r.json()).then(data => { setNotes(data); setLoading(false); });
+  }, [entityType, entityId]);
+
+  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [notes]);
+
+  async function sendNote() {
+    if (!newNote.trim()) return;
+    setSending(true);
+    const r = await fetch(`/api/admin/notes/${entityType}/${entityId}`, {
+      method: "POST", headers: authHeaders(), body: JSON.stringify({ note: newNote.trim() }),
+    });
+    const data = await r.json();
+    setSending(false);
+    if (r.ok) { setNotes(prev => [...prev, data]); setNewNote(""); }
+  }
+
+  return (
+    <div className="mt-3 bg-slate-50 border border-slate-200 rounded-xl p-4">
+      <div className="flex items-center justify-between mb-3">
+        <h4 className="text-xs font-bold text-gray-700 flex items-center gap-1.5"><StickyNote size={13} /> الملاحظات الداخلية</h4>
+        <button onClick={onClose} className="text-gray-400 hover:text-gray-600"><X size={14} /></button>
+      </div>
+      <div className="max-h-48 overflow-y-auto space-y-2 mb-3">
+        {loading && <p className="text-xs text-gray-400 text-center py-4">جاري التحميل...</p>}
+        {!loading && notes.length === 0 && <p className="text-xs text-gray-400 text-center py-4">لا توجد ملاحظات بعد</p>}
+        {notes.map(n => (
+          <div key={n.id} className="bg-white border border-gray-100 rounded-lg p-2.5">
+            <div className="flex items-center gap-2 mb-1">
+              <span className={`text-xs font-bold px-1.5 py-0.5 rounded ${n.userRole === "admin" ? "bg-red-100 text-red-600" : "bg-blue-100 text-blue-600"}`}>{n.userName}</span>
+              <span className="text-xs text-gray-400">{new Date(n.createdAt).toLocaleDateString("ar-SA", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}</span>
+            </div>
+            <p className="text-xs text-gray-700 leading-relaxed">{n.note}</p>
+          </div>
+        ))}
+        <div ref={bottomRef} />
+      </div>
+      <div className="flex gap-2">
+        <input
+          value={newNote}
+          onChange={e => setNewNote(e.target.value)}
+          onKeyDown={e => e.key === "Enter" && !e.shiftKey && sendNote()}
+          placeholder="أضف ملاحظة..."
+          className="flex-1 border border-gray-200 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <button
+          onClick={sendNote}
+          disabled={sending || !newNote.trim()}
+          className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-3 py-1.5 rounded-lg text-xs flex items-center gap-1"
+        >
+          <Send size={11} />
+          إرسال
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function AdminDashboard() {
-  const { logout, user } = useAuth();
+  const { logout, user, isAdmin } = useAuth();
   const [, setLocation] = useLocation();
   const [activeTab, setActiveTab] = useState<TabKey>("overview");
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -166,9 +300,12 @@ export default function AdminDashboard() {
   const [consultants, setConsultants] = useState<any[]>([]);
   const [contacts, setContacts] = useState<any[]>([]);
   const [sysUsers, setSysUsers] = useState<any[]>([]);
+  const [staffList, setStaffList] = useState<any[]>([]);
   const [loading, setLoading] = useState<Record<string, boolean>>({});
   const [newUserForm, setNewUserForm] = useState({ name: "", email: "", password: "", role: "staff" as "admin"|"staff"|"user", show: false });
   const [newUserError, setNewUserError] = useState("");
+  // Notes panel state: which record is expanded
+  const [openNotes, setOpenNotes] = useState<{ type: string; id: number } | null>(null);
 
   const fetchData = useCallback(async (tab: TabKey) => {
     setLoading(prev => ({ ...prev, [tab]: true }));
@@ -197,6 +334,7 @@ export default function AdminDashboard() {
   useEffect(() => { fetchData(activeTab); }, [activeTab, fetchData]);
   useEffect(() => {
     apiGet("/admin/stats").then(setStats).catch(() => {});
+    apiGet("/admin/staff-list").then(setStaffList).catch(() => {});
   }, []);
 
   const handleLogout = () => { logout(); setLocation("/login"); };
@@ -217,6 +355,19 @@ export default function AdminDashboard() {
     await apiPatch(`/admin/contacts/${id}/status`, { status });
     setContacts(prev => prev.map(c => c.id === id ? { ...c, status } : c));
   };
+
+  // Assignment helpers
+  const onCompanyAssigned = (id: number, assignedTo: number | null, name: string | null) =>
+    setCompanies(prev => prev.map(c => c.id === id ? { ...c, assignedTo, assignedToName: name } : c));
+  const onVendorAssigned = (id: number, assignedTo: number | null, name: string | null) =>
+    setVendors(prev => prev.map(v => v.id === id ? { ...v, assignedTo, assignedToName: name } : v));
+  const onConsultantAssigned = (id: number, assignedTo: number | null, name: string | null) =>
+    setConsultants(prev => prev.map(c => c.id === id ? { ...c, assignedTo, assignedToName: name } : c));
+  const onContactAssigned = (id: number, assignedTo: number | null, name: string | null) =>
+    setContacts(prev => prev.map(c => c.id === id ? { ...c, assignedTo, assignedToName: name } : c));
+
+  const toggleNotes = (type: string, id: number) =>
+    setOpenNotes(prev => prev?.type === type && prev?.id === id ? null : { type, id });
 
   const toggleUserActive = async (id: number, isActive: boolean) => {
     await apiPatch(`/admin/users/${id}`, { isActive });
@@ -407,24 +558,41 @@ export default function AdminDashboard() {
                         <th className="py-3 px-3 font-semibold text-gray-600">المسؤول</th>
                         <th className="py-3 px-3 font-semibold text-gray-600">الجوال</th>
                         <th className="py-3 px-3 font-semibold text-gray-600">الباقة</th>
+                        <th className="py-3 px-3 font-semibold text-gray-600">الموظف</th>
                         <th className="py-3 px-3 font-semibold text-gray-600">الحالة</th>
-                        <th className="py-3 px-3 font-semibold text-gray-600">تاريخ التسجيل</th>
+                        <th className="py-3 px-3 font-semibold text-gray-600">ملاحظات</th>
+                        <th className="py-3 px-3 font-semibold text-gray-600">التاريخ</th>
                       </tr>
                     </thead>
                     <tbody>
                       {filtered(companies).map((c: any) => (
-                        <tr key={c.id} className="border-b border-gray-50 hover:bg-gray-50">
-                          <td className="py-3 px-3 font-mono text-xs text-primary font-bold">{c.accountNumber || `#${c.id}`}</td>
-                          <td className="py-3 px-3 font-semibold text-gray-900">{c.companyName}</td>
-                          <td className="py-3 px-3 text-gray-600">{c.city}</td>
-                          <td className="py-3 px-3 text-gray-600">{c.contactName}</td>
-                          <td className="py-3 px-3 text-gray-600" dir="ltr">{c.phone}</td>
-                          <td className="py-3 px-3 text-gray-500 text-xs">{c.selectedPackage || "—"}</td>
-                          <td className="py-3 px-3">
-                            <StatusDropdown id={c.id} current={c.status} options={STATUS_OPTIONS} onUpdate={updateCompanyStatus} />
-                          </td>
-                          <td className="py-3 px-3 text-gray-400 text-xs">{formatDate(c.createdAt)}</td>
-                        </tr>
+                        <Fragment key={c.id}>
+                          <tr className="border-b border-gray-50 hover:bg-gray-50/80">
+                            <td className="py-3 px-3 font-mono text-xs text-primary font-bold">{c.accountNumber || `#${c.id}`}</td>
+                            <td className="py-3 px-3 font-semibold text-gray-900">{c.companyName}</td>
+                            <td className="py-3 px-3 text-gray-600">{c.city}</td>
+                            <td className="py-3 px-3 text-gray-600">{c.contactName}</td>
+                            <td className="py-3 px-3 text-gray-600" dir="ltr">{c.phone}</td>
+                            <td className="py-3 px-3 text-gray-500 text-xs">{c.selectedPackage || "—"}</td>
+                            <td className="py-3 px-3">
+                              <AssignDropdown entityType="company" entityId={c.id} currentAssignedId={c.assignedTo} currentAssignedName={c.assignedToName} staffList={staffList} isAdmin={isAdmin} onAssigned={onCompanyAssigned} />
+                            </td>
+                            <td className="py-3 px-3">
+                              <StatusDropdown id={c.id} current={c.status} options={STATUS_OPTIONS} onUpdate={updateCompanyStatus} />
+                            </td>
+                            <td className="py-3 px-3">
+                              <button onClick={() => toggleNotes("company", c.id)} className={`text-xs flex items-center gap-1 px-2 py-1 rounded-lg transition ${openNotes?.type === "company" && openNotes?.id === c.id ? "bg-amber-100 text-amber-700" : "text-gray-400 hover:text-amber-600 hover:bg-amber-50"}`}>
+                                <StickyNote size={12} /> ملاحظات
+                              </button>
+                            </td>
+                            <td className="py-3 px-3 text-gray-400 text-xs">{formatDate(c.createdAt)}</td>
+                          </tr>
+                          {openNotes?.type === "company" && openNotes?.id === c.id && (
+                            <tr><td colSpan={10} className="px-3 pb-3">
+                              <NotesPanel entityType="company" entityId={c.id} onClose={() => setOpenNotes(null)} />
+                            </td></tr>
+                          )}
+                        </Fragment>
                       ))}
                     </tbody>
                   </table>
@@ -447,25 +615,40 @@ export default function AdminDashboard() {
                         <th className="py-3 px-3 font-semibold text-gray-600">الاسم</th>
                         <th className="py-3 px-3 font-semibold text-gray-600">النوع</th>
                         <th className="py-3 px-3 font-semibold text-gray-600">الجوال</th>
-                        <th className="py-3 px-3 font-semibold text-gray-600">البريد</th>
                         <th className="py-3 px-3 font-semibold text-gray-600">نطاق الخدمة</th>
+                        <th className="py-3 px-3 font-semibold text-gray-600">الموظف</th>
                         <th className="py-3 px-3 font-semibold text-gray-600">الحالة</th>
-                        <th className="py-3 px-3 font-semibold text-gray-600">تاريخ التسجيل</th>
+                        <th className="py-3 px-3 font-semibold text-gray-600">ملاحظات</th>
+                        <th className="py-3 px-3 font-semibold text-gray-600">التاريخ</th>
                       </tr>
                     </thead>
                     <tbody>
                       {filtered(vendors).map((v: any) => (
-                        <tr key={v.id} className="border-b border-gray-50 hover:bg-gray-50">
-                          <td className="py-3 px-3 font-semibold text-gray-900">{v.name}</td>
-                          <td className="py-3 px-3 text-gray-600">{v.vendorType}</td>
-                          <td className="py-3 px-3 text-gray-600" dir="ltr">{v.phone}</td>
-                          <td className="py-3 px-3 text-gray-500 text-xs">{v.email}</td>
-                          <td className="py-3 px-3 text-gray-500 text-xs">{v.serviceScope}</td>
-                          <td className="py-3 px-3">
-                            <StatusDropdown id={v.id} current={v.status} options={STATUS_OPTIONS} onUpdate={updateVendorStatus} />
-                          </td>
-                          <td className="py-3 px-3 text-gray-400 text-xs">{formatDate(v.createdAt)}</td>
-                        </tr>
+                        <Fragment key={v.id}>
+                          <tr className="border-b border-gray-50 hover:bg-gray-50/80">
+                            <td className="py-3 px-3 font-semibold text-gray-900">{v.name}</td>
+                            <td className="py-3 px-3 text-gray-600">{v.vendorType}</td>
+                            <td className="py-3 px-3 text-gray-600" dir="ltr">{v.phone}</td>
+                            <td className="py-3 px-3 text-gray-500 text-xs">{v.serviceScope}</td>
+                            <td className="py-3 px-3">
+                              <AssignDropdown entityType="vendor" entityId={v.id} currentAssignedId={v.assignedTo} currentAssignedName={v.assignedToName} staffList={staffList} isAdmin={isAdmin} onAssigned={onVendorAssigned} />
+                            </td>
+                            <td className="py-3 px-3">
+                              <StatusDropdown id={v.id} current={v.status} options={STATUS_OPTIONS} onUpdate={updateVendorStatus} />
+                            </td>
+                            <td className="py-3 px-3">
+                              <button onClick={() => toggleNotes("vendor", v.id)} className={`text-xs flex items-center gap-1 px-2 py-1 rounded-lg transition ${openNotes?.type === "vendor" && openNotes?.id === v.id ? "bg-amber-100 text-amber-700" : "text-gray-400 hover:text-amber-600 hover:bg-amber-50"}`}>
+                                <StickyNote size={12} /> ملاحظات
+                              </button>
+                            </td>
+                            <td className="py-3 px-3 text-gray-400 text-xs">{formatDate(v.createdAt)}</td>
+                          </tr>
+                          {openNotes?.type === "vendor" && openNotes?.id === v.id && (
+                            <tr><td colSpan={8} className="px-3 pb-3">
+                              <NotesPanel entityType="vendor" entityId={v.id} onClose={() => setOpenNotes(null)} />
+                            </td></tr>
+                          )}
+                        </Fragment>
                       ))}
                     </tbody>
                   </table>
@@ -489,24 +672,41 @@ export default function AdminDashboard() {
                         <th className="py-3 px-3 font-semibold text-gray-600">المدينة</th>
                         <th className="py-3 px-3 font-semibold text-gray-600">الجوال</th>
                         <th className="py-3 px-3 font-semibold text-gray-600">مجال الخبرة</th>
-                        <th className="py-3 px-3 font-semibold text-gray-600">سنوات الخبرة</th>
+                        <th className="py-3 px-3 font-semibold text-gray-600">سنوات</th>
+                        <th className="py-3 px-3 font-semibold text-gray-600">الموظف</th>
                         <th className="py-3 px-3 font-semibold text-gray-600">الحالة</th>
-                        <th className="py-3 px-3 font-semibold text-gray-600">تاريخ التسجيل</th>
+                        <th className="py-3 px-3 font-semibold text-gray-600">ملاحظات</th>
+                        <th className="py-3 px-3 font-semibold text-gray-600">التاريخ</th>
                       </tr>
                     </thead>
                     <tbody>
                       {filtered(consultants).map((c: any) => (
-                        <tr key={c.id} className="border-b border-gray-50 hover:bg-gray-50">
-                          <td className="py-3 px-3 font-semibold text-gray-900">{c.name}</td>
-                          <td className="py-3 px-3 text-gray-600">{c.city}</td>
-                          <td className="py-3 px-3 text-gray-600" dir="ltr">{c.phone}</td>
-                          <td className="py-3 px-3 text-gray-500 text-xs">{c.expertiseArea}</td>
-                          <td className="py-3 px-3 text-gray-500 text-center">{c.yearsOfExperience ?? "—"}</td>
-                          <td className="py-3 px-3">
-                            <StatusDropdown id={c.id} current={c.status} options={STATUS_OPTIONS} onUpdate={updateConsultantStatus} />
-                          </td>
-                          <td className="py-3 px-3 text-gray-400 text-xs">{formatDate(c.createdAt)}</td>
-                        </tr>
+                        <Fragment key={c.id}>
+                          <tr className="border-b border-gray-50 hover:bg-gray-50/80">
+                            <td className="py-3 px-3 font-semibold text-gray-900">{c.name}</td>
+                            <td className="py-3 px-3 text-gray-600">{c.city}</td>
+                            <td className="py-3 px-3 text-gray-600" dir="ltr">{c.phone}</td>
+                            <td className="py-3 px-3 text-gray-500 text-xs">{c.expertiseArea}</td>
+                            <td className="py-3 px-3 text-gray-500 text-center">{c.yearsOfExperience ?? "—"}</td>
+                            <td className="py-3 px-3">
+                              <AssignDropdown entityType="consultant" entityId={c.id} currentAssignedId={c.assignedTo} currentAssignedName={c.assignedToName} staffList={staffList} isAdmin={isAdmin} onAssigned={onConsultantAssigned} />
+                            </td>
+                            <td className="py-3 px-3">
+                              <StatusDropdown id={c.id} current={c.status} options={STATUS_OPTIONS} onUpdate={updateConsultantStatus} />
+                            </td>
+                            <td className="py-3 px-3">
+                              <button onClick={() => toggleNotes("consultant", c.id)} className={`text-xs flex items-center gap-1 px-2 py-1 rounded-lg transition ${openNotes?.type === "consultant" && openNotes?.id === c.id ? "bg-amber-100 text-amber-700" : "text-gray-400 hover:text-amber-600 hover:bg-amber-50"}`}>
+                                <StickyNote size={12} /> ملاحظات
+                              </button>
+                            </td>
+                            <td className="py-3 px-3 text-gray-400 text-xs">{formatDate(c.createdAt)}</td>
+                          </tr>
+                          {openNotes?.type === "consultant" && openNotes?.id === c.id && (
+                            <tr><td colSpan={9} className="px-3 pb-3">
+                              <NotesPanel entityType="consultant" entityId={c.id} onClose={() => setOpenNotes(null)} />
+                            </td></tr>
+                          )}
+                        </Fragment>
                       ))}
                     </tbody>
                   </table>
@@ -529,9 +729,10 @@ export default function AdminDashboard() {
                       <div key={c.id} className="border border-gray-100 rounded-xl p-5 hover:border-primary/30 transition-colors">
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex-1">
-                            <div className="flex items-center gap-3 mb-2">
+                            <div className="flex items-center gap-3 mb-2 flex-wrap">
                               <span className="font-bold text-gray-900">{c.name}</span>
                               <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${badge.color}`}>{badge.label}</span>
+                              <AssignDropdown entityType="contact" entityId={c.id} currentAssignedId={c.assignedTo} currentAssignedName={c.assignedToName} staffList={staffList} isAdmin={isAdmin} onAssigned={onContactAssigned} />
                             </div>
                             <p className="text-xs text-gray-500 mb-1">
                               <span className="font-medium">الموضوع:</span> {c.subject || "—"}
@@ -547,7 +748,7 @@ export default function AdminDashboard() {
                             <StatusDropdown id={c.id} current={c.status} options={CONTACT_STATUS_OPTIONS} onUpdate={updateContactStatus} />
                           </div>
                         </div>
-                        <div className="mt-4 flex gap-2 pt-3 border-t border-gray-50">
+                        <div className="mt-4 flex gap-2 pt-3 border-t border-gray-50 flex-wrap">
                           <a href={`mailto:${c.email}?subject=رد على استفسارك - GSS Platform`} className="text-xs bg-blue-50 hover:bg-blue-100 text-blue-700 px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition">
                             <Mail size={12} />
                             رد بالبريد
@@ -558,7 +759,13 @@ export default function AdminDashboard() {
                               واتساب
                             </a>
                           )}
+                          <button onClick={() => toggleNotes("contact", c.id)} className={`text-xs flex items-center gap-1 px-3 py-1.5 rounded-lg transition ${openNotes?.type === "contact" && openNotes?.id === c.id ? "bg-amber-100 text-amber-700" : "bg-gray-50 text-gray-400 hover:bg-amber-50 hover:text-amber-600"}`}>
+                            <StickyNote size={12} /> ملاحظات
+                          </button>
                         </div>
+                        {openNotes?.type === "contact" && openNotes?.id === c.id && (
+                          <NotesPanel entityType="contact" entityId={c.id} onClose={() => setOpenNotes(null)} />
+                        )}
                       </div>
                     );
                   })}

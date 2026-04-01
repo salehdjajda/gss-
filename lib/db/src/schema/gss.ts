@@ -16,6 +16,19 @@ export const usersTable = pgTable("users", {
 export type User = typeof usersTable.$inferSelect;
 export type InsertUser = typeof usersTable.$inferInsert;
 
+// ── Ticket Notes (staff/admin notes on any request) ────────────────────────
+export const ticketNotesTable = pgTable("ticket_notes", {
+  id: serial("id").primaryKey(),
+  entityType: text("entity_type").notNull(), // 'company' | 'vendor' | 'consultant' | 'contact' | 'service'
+  entityId: integer("entity_id").notNull(),
+  userId: integer("user_id").notNull(),      // who wrote the note
+  note: text("note").notNull(),
+  isInternal: boolean("is_internal").notNull().default(true), // internal = staff only, false = visible to client
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+export type TicketNote = typeof ticketNotesTable.$inferSelect;
+export type InsertTicketNote = typeof ticketNotesTable.$inferInsert;
+
 // ──────────────────────────────────────────────────────────────────────────
 export const companyRegistrationsTable = pgTable("company_registrations", {
   id: serial("id").primaryKey(),
@@ -40,6 +53,7 @@ export const companyRegistrationsTable = pgTable("company_registrations", {
   selectedPackage: text("selected_package"),
   status: text("status").notNull().default("pending"),
   adminNotes: text("admin_notes"),
+  assignedTo: integer("assigned_to"),       // FK to users.id (staff member)
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -58,6 +72,7 @@ export const vendorRegistrationsTable = pgTable("vendor_registrations", {
   financialModelAccepted: boolean("financial_model_accepted").default(false),
   status: text("status").notNull().default("pending"),
   adminNotes: text("admin_notes"),
+  assignedTo: integer("assigned_to"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -77,6 +92,7 @@ export const consultantRegistrationsTable = pgTable("consultant_registrations", 
   revenueModelAccepted: boolean("revenue_model_accepted").default(false),
   status: text("status").notNull().default("pending"),
   adminNotes: text("admin_notes"),
+  assignedTo: integer("assigned_to"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -93,6 +109,7 @@ export const contactMessagesTable = pgTable("contact_messages", {
   message: text("message").notNull(),
   status: text("status").notNull().default("new"),
   adminNotes: text("admin_notes"),
+  assignedTo: integer("assigned_to"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -108,6 +125,7 @@ export const serviceRequestsTable = pgTable("service_requests", {
   companyId: integer("company_id"),
   vendorId: integer("vendor_id"),
   notes: text("notes"),
+  assignedTo: integer("assigned_to"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
