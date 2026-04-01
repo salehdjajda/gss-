@@ -8,7 +8,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useSubmitContact } from "@workspace/api-client-react";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, Phone, MapPin, CalendarDays, Building2, Clock, FileText, ArrowLeft } from "lucide-react";
+import { Mail, Phone, MapPin, CalendarDays, Building2, Clock, FileText, ArrowLeft, AlertCircle, CheckCircle2 } from "lucide-react";
+import { Link } from "wouter";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const messageSchema = z.object({
@@ -152,27 +153,58 @@ export default function Contact() {
             </div>
 
             {/* Field Visit Card */}
-            <div className="bg-gradient-to-br from-primary/5 to-secondary/10 border border-primary/20 rounded-2xl p-7">
-              <div className="flex items-center gap-3 mb-3">
+            <div className="bg-gradient-to-br from-primary/5 to-primary/10 border border-primary/20 rounded-2xl p-7">
+              <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center flex-shrink-0">
                   <Building2 size={20} className="text-white" />
                 </div>
                 <h3 className="font-bold text-xl text-gray-900">
-                  {ar ? "اطلب زيارة ميدانية" : "Request a Field Visit"}
+                  {ar ? "اطلب اجتماعاً في منشأتك" : "Request a Visit to Your Facility"}
                 </h3>
               </div>
-              <p className="text-gray-600 text-sm leading-relaxed mb-5">
-                {ar
-                  ? "يمكن لفريق GSS زيارة منشأتك لتقييم الاحتياجات التشغيلية وتقديم عرض مخصص مباشرةً عندكم."
-                  : "The GSS team can visit your facility to assess operational needs and present a customized proposal on-site."}
-              </p>
+
+              {/* Purpose steps */}
+              <div className="space-y-2.5 mb-5">
+                {[
+                  ar ? "يزورك فريق GSS في منشأتك ويفهم طبيعة شغلك وحجم عملياتك" : "GSS team visits your facility to understand your operations",
+                  ar ? "نُحدّد معاً احتياجاتك التشغيلية الفعلية" : "We identify your actual operational needs together",
+                  ar ? "نُرسل لك لاحقاً تصوراً مخصصاً مع الباقة الأنسب لك وتكلفتها" : "We send you a tailored proposal with the right package and cost",
+                ].map((step, i) => (
+                  <div key={i} className="flex items-start gap-2.5">
+                    <CheckCircle2 size={15} className="text-primary flex-shrink-0 mt-0.5" />
+                    <p className="text-gray-700 text-sm leading-snug">{step}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Mandatory registration notice */}
+              <div className="bg-amber-50 border border-amber-200 rounded-xl p-3.5 mb-5 flex gap-2.5">
+                <AlertCircle size={16} className="text-amber-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-amber-800 text-xs font-bold mb-1">
+                    {ar ? "شرط إلزامي قبل الحجز" : "Required Before Booking"}
+                  </p>
+                  <p className="text-amber-700 text-xs leading-relaxed">
+                    {ar
+                      ? "يجب تسجيل منشأتك في المنصة أولاً. التسجيل يُمكّننا من الاطلاع على بيانات منشأتك مسبقاً لنستعد للاجتماع بشكل أفضل."
+                      : "Your facility must be registered on the platform first. Registration lets us review your data in advance for a more productive meeting."}
+                  </p>
+                  <Link
+                    href="/register/company"
+                    className="inline-flex items-center gap-1 text-amber-800 font-bold text-xs underline underline-offset-2 mt-1.5 hover:text-amber-900"
+                  >
+                    {ar ? "سجّل منشأتك الآن ←" : "Register your facility →"}
+                  </Link>
+                </div>
+              </div>
+
               <button
                 type="button"
                 onClick={scrollToMeeting}
                 className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white font-bold rounded-xl px-5 py-3 text-sm transition-colors"
               >
                 <CalendarDays size={16} />
-                {ar ? "حجز موعد زيارة ميدانية" : "Book a Field Visit"}
+                {ar ? "احجز موعد الاجتماع الميداني" : "Book a Field Meeting"}
                 <ArrowLeft size={15} className="opacity-70" />
               </button>
             </div>
@@ -293,13 +325,34 @@ export default function Contact() {
               <CalendarDays size={26} className="text-white" />
             </div>
             <h2 className="text-3xl font-bold text-gray-900 mb-3">
-              {ar ? "استمارة طلب الاجتماع الميداني" : "Field Meeting Request Form"}
+              {ar ? "احجز موعد اجتماع في منشأتك" : "Book a Meeting at Your Facility"}
             </h2>
             <p className="text-gray-500 text-base max-w-xl mx-auto leading-relaxed">
               {ar
-                ? "أملأ البيانات أدناه وسيتواصل معك فريق GSS لتأكيد موعد الزيارة الميدانية لمنشأتك."
-                : "Fill in the details below and the GSS team will contact you to confirm the field visit to your facility."}
+                ? "سيزورك فريق GSS ليفهم طبيعة عملك واحتياجاتك التشغيلية، ثم نُرسل لك تصوراً مخصصاً بالباقة والتكلفة الأنسب لك."
+                : "The GSS team will visit you to understand your work and operational needs, then send you a tailored proposal with the right package and cost."}
             </p>
+
+            {/* Registration prerequisite banner */}
+            <div className="mt-6 bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-start gap-3 text-right max-w-lg mx-auto">
+              <AlertCircle size={18} className="text-amber-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-amber-800 text-sm font-bold mb-1">
+                  {ar ? "شرط إلزامي قبل تعبئة الاستمارة" : "Required Before Filling the Form"}
+                </p>
+                <p className="text-amber-700 text-xs leading-relaxed">
+                  {ar
+                    ? "يجب أن تكون منشأتك مسجّلة في منصة GSS أولاً حتى نتمكن من الاطلاع على بياناتها والتحضير الجيد للاجتماع معك."
+                    : "Your facility must be registered on GSS platform first so we can review its data and prepare well for the meeting."}
+                </p>
+                <Link
+                  href="/register/company"
+                  className="inline-flex items-center gap-1 text-amber-800 font-bold text-xs underline underline-offset-2 mt-2 hover:text-amber-900"
+                >
+                  {ar ? "سجّل منشأتك الآن ←" : "Register your facility now →"}
+                </Link>
+              </div>
+            </div>
           </div>
 
           {/* Form */}
