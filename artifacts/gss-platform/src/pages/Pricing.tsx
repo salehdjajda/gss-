@@ -10,7 +10,7 @@ export default function Pricing() {
 
   // ── On-demand features ────────────────────────────────────────────────────
   const onDemandFeatures = isAr ? [
-    { icon: "📩", text: "استقبال وتنظيم الطلبات التشغيلية عبر نقطة اتصال واحدة" },
+    { icon: "📩", text: "استقبال وتنظيم الطلبات الإدارية والتشغيلية عبر نقطة اتصال واحدة" },
     { icon: "🔧", text: "التنسيق مع الموردين المناسبين لكل طلب" },
     { icon: "💰", text: "توفير عروض أسعار من شبكة موردين معتمدين" },
     { icon: "✅", text: "متابعة تنفيذ الخدمة حتى إغلاق الطلب" },
@@ -18,7 +18,7 @@ export default function Pricing() {
     { icon: "📊", text: "إمكانية طلب خدمات متعددة حسب الحاجة" },
     { icon: "📁", text: "توثيق جميع الطلبات داخل حسابك لمراجعتها في أي وقت" },
   ] : [
-    { icon: "📩", text: "Receive and organize operational requests through a single point of contact" },
+    { icon: "📩", text: "Receive and organize administrative and operational requests through a single point of contact" },
     { icon: "🔧", text: "Coordinate with the right vendors for each request" },
     { icon: "💰", text: "Provide quotes from our certified vendor network" },
     { icon: "✅", text: "Follow up on service execution until request closure" },
@@ -161,8 +161,8 @@ export default function Pricing() {
           </h1>
           <p className="text-white/80 text-lg leading-relaxed max-w-3xl mx-auto">
             {isAr
-              ? "تعتمد منصة GSS على نظام خدمة حسب الطلب مناسب للمنشآت والأفراد، مع باقات مزايا تشغيلية اختيارية مخصصة للمنشآت لمستوى أعلى من التنظيم والمتابعة."
-              : "GSS Platform operates on an on-demand model suitable for both facilities and individuals, with optional operational packages exclusively for facilities needing a higher level of organization and follow-up."}
+              ? "تعتمد منصة GSS على نظام خدمة حسب الطلب مناسب للمنشآت والأفراد، مع باقات مزايا إدارية وتشغيلية اختيارية مخصصة للمنشآت لمستوى أعلى من التنظيم والمتابعة."
+              : "GSS Platform operates on an on-demand model suitable for both facilities and individuals, with optional administrative and operational packages exclusively for facilities needing a higher level of organization and follow-up."}
           </p>
           <div className="flex flex-wrap justify-center gap-4 mt-6">
             <span className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-5 py-2 text-sm font-bold">
@@ -171,7 +171,7 @@ export default function Pricing() {
             </span>
             <span className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-5 py-2 text-sm font-bold">
               <span className="text-secondary">●</span>
-              {isAr ? "الباقات التشغيلية — للمنشآت فقط" : "Operational Packages — Facilities Only"}
+              {isAr ? "الباقات الإدارية والتشغيلية — للمنشآت فقط" : "Administrative & Operational Packages — Facilities Only"}
             </span>
           </div>
         </div>
@@ -180,6 +180,24 @@ export default function Pricing() {
       {/* ── ON-DEMAND SECTION ─────────────────────────────────────────────── */}
       <section className="py-20 bg-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+
+          {/* Section identity label */}
+          <div className="text-center mb-12">
+            <span className="inline-block bg-primary/8 border border-primary/15 text-primary font-bold text-sm px-5 py-2 rounded-full mb-4">
+              {isAr ? "ما نقدمه" : "What We Offer"}
+            </span>
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
+              {isAr
+                ? "الخدمات الإدارية والتشغيلية للأفراد والمنشآت"
+                : "Administrative & Operational Services for Individuals & Facilities"}
+            </h2>
+            <p className="text-gray-500 mt-3 max-w-2xl mx-auto text-sm leading-relaxed">
+              {isAr
+                ? "سواء كنت فرداً يحتاج خدمة بسيطة، أو منشأة تبحث عن إدارة متكاملة — المنصة تخدم الجميع."
+                : "Whether you're an individual needing a simple service or a facility seeking full management — the platform serves everyone."}
+            </p>
+          </div>
+
           <div className="grid lg:grid-cols-2 gap-12 items-start">
 
             {/* Left: Features */}

@@ -539,12 +539,12 @@ export default function Services() {
         <div className="absolute inset-0 bg-gradient-to-b from-primary/95 to-primary/90" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            {ar ? "الخدمات التشغيلية الشاملة" : "Comprehensive Operational Services"}
+            {ar ? "الخدمات الإدارية والتشغيلية الشاملة" : "Comprehensive Administrative & Operational Services"}
           </h1>
           <p className="text-xl text-white/80 max-w-3xl mx-auto leading-relaxed mb-10">
             {ar
-              ? "تعمل منصة GSS كعمليات خارجية تتولى تنظيم ومتابعة الخدمات التشغيلية للمنشآت والأفراد عبر نقطة اتصال واحدة، والتنسيق مع الموردين المعتمدين حتى إغلاق الطلب وفق متطلباتك."
-              : "GSS acts as external operations organizing and monitoring operational services for facilities through a single point of contact, coordinating with certified vendors until the request is closed."}
+              ? "تعمل منصة GSS كعمليات خارجية تتولى تنظيم ومتابعة الخدمات الإدارية والتشغيلية للمنشآت والأفراد عبر نقطة اتصال واحدة، والتنسيق مع الموردين المعتمدين حتى إغلاق الطلب وفق متطلباتك."
+              : "GSS acts as external operations organizing and monitoring administrative and operational services for facilities and individuals through a single point of contact, coordinating with certified vendors until the request is closed."}
           </p>
 
           {/* Intro above search */}

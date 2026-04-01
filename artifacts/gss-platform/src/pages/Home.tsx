@@ -154,7 +154,7 @@ export default function Home() {
             className="mb-2"
           >
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-tight tracking-tight">
-              {ar ? "منصة إدارة الخدمات التشغيلية" : "Operational Services"}
+              {ar ? "منصة الخدمات الإدارية والتشغيلية" : "Administrative & Operational Services"}
             </h1>
           </motion.div>
 
@@ -543,7 +543,7 @@ export default function Home() {
       <section className="bg-primary py-24 text-white text-center">
         <div className="max-w-4xl mx-auto px-4">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            {ar ? "ابدأ في تنظيم خدماتك التشغيلية — للمنشآت والأفراد" : "Start Organizing Your Operational Services — For Facilities & Individuals"}
+            {ar ? "ابدأ في تنظيم خدماتك الإدارية والتشغيلية — للمنشآت والأفراد" : "Start Organizing Your Administrative & Operational Services — For Facilities & Individuals"}
           </h2>
           <p className="text-xl text-primary-foreground/80 mb-10 leading-relaxed">
             {ar
