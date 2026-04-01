@@ -43,17 +43,17 @@ export default function Home() {
   ];
 
   const howSteps = ar ? [
-    { step: "1", title: "ترسل المنشأة الطلب عبر قناة تشغيل واحدة داخل المنصة", desc: "" },
-    { step: "2", title: "يتم تحليل الاحتياج التشغيلي قبل التنفيذ", desc: "" },
+    { step: "1", title: "ترسل طلبك (منشأة أو فرد) عبر نقطة اتصال واحدة داخل المنصة", desc: "" },
+    { step: "2", title: "يتم تحليل الاحتياج قبل التنفيذ", desc: "" },
     { step: "3", title: "اختيار المورد الأنسب وفق السعر والجودة", desc: "" },
     { step: "4", title: "متابعة التنفيذ حتى إغلاق الطلب", desc: "" },
-    { step: "5", title: "إصدار تقرير إنجاز تشغيلي يدعم اتخاذ القرار", desc: "" },
+    { step: "5", title: "إصدار تقرير إنجاز يدعم اتخاذ قراراتك", desc: "" },
   ] : [
-    { step: "1", title: "Facility submits the request via a single operational channel inside the platform", desc: "" },
-    { step: "2", title: "Operational need is analyzed before execution", desc: "" },
+    { step: "1", title: "You (facility or individual) submit your request via a single channel inside the platform", desc: "" },
+    { step: "2", title: "Your need is analyzed before execution begins", desc: "" },
     { step: "3", title: "Most suitable vendor selected based on price and quality", desc: "" },
     { step: "4", title: "Execution is monitored until the request is closed", desc: "" },
-    { step: "5", title: "An operational completion report is issued to support decision-making", desc: "" },
+    { step: "5", title: "A completion report is issued to support your decision-making", desc: "" },
   ];
 
   const vendorCriteria = ar ? [
@@ -295,8 +295,8 @@ export default function Home() {
             </h2>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto">
               {ar
-                ? "آلية عمل سلسة وموثوقة تضمن تنفيذ طلباتكم بأعلى جودة وأفضل سعر."
-                : "A smooth, reliable workflow that ensures your requests are executed at the highest quality and best price."}
+                ? "آلية عمل سلسة وموثوقة تضمن تنفيذ طلبك بأعلى جودة وأفضل سعر — سواء كنت منشأة أو فرداً."
+                : "A smooth, reliable workflow that ensures your requests are executed at the highest quality and best price — whether you're a facility or an individual."}
             </p>
           </div>
           <div className="max-w-3xl mx-auto">
@@ -368,8 +368,8 @@ export default function Home() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-primary mb-3">
               {ar
-                ? "مهما كان قطاعكم، GSS تدعم عملياتكم التشغيلية"
-                : "Whatever Your Sector, GSS Supports Your Operations"}
+                ? "مهما كان قطاعك، GSS تدعم خدماتك الإدارية والتشغيلية"
+                : "Whatever Your Sector, GSS Supports Your Administrative & Operational Services"}
             </h2>
             <p className="text-gray-500 text-lg max-w-2xl mx-auto">
               {ar

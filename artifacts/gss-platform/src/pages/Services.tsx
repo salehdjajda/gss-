@@ -878,11 +878,11 @@ export default function Services() {
           </h2>
           <p className="text-white/80 text-lg mb-8 max-w-2xl mx-auto">
             {ar
-              ? "سجّلوا الآن وسيتولى فريق GSS إدارة جميع خدماتكم التشغيلية عبر نقطة اتصال واحدة."
-              : "Register now and the GSS team will manage all your operational services through a single point of contact."}
+              ? "سجّل الآن — سواء كنت فرداً أو منشأة — وسيتولى فريق GSS تنظيم جميع خدماتك الإدارية والتشغيلية عبر نقطة اتصال واحدة."
+              : "Register now — whether you're an individual or a facility — and the GSS team will organize all your administrative and operational services through a single point of contact."}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/register/company">
+            <Link href="/register">
               <Button size="lg" className="h-14 px-10 text-lg font-bold bg-secondary hover:bg-secondary/90 text-primary" data-testid="cta-services-register">
                 {ar ? "سجّل الآن" : "Register Now"} <ArrowLeft className="mr-2" size={20} />
               </Button>

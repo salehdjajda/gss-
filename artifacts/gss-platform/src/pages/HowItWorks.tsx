@@ -104,11 +104,21 @@ export default function HowItWorks() {
       </section>
 
       <section className="py-10 text-center">
-        <Link href="/register/company">
-          <Button size="lg" className="h-14 px-10 text-lg font-bold">
-            {ar ? "ابدأ تجربتك الآن" : "Get Started Today"}
-          </Button>
-        </Link>
+        <p className="text-gray-500 mb-6 text-sm">
+          {ar ? "جاهز للبدء؟ اختر نوع حسابك وسجّل الآن." : "Ready to start? Choose your account type and register now."}
+        </p>
+        <div className="flex flex-wrap justify-center gap-4">
+          <Link href="/register/individual">
+            <Button size="lg" variant="outline" className="h-14 px-10 text-lg font-bold border-primary text-primary hover:bg-primary hover:text-white">
+              {ar ? "سجّل كفرد" : "Register as Individual"}
+            </Button>
+          </Link>
+          <Link href="/register/company">
+            <Button size="lg" className="h-14 px-10 text-lg font-bold">
+              {ar ? "سجّل كمنشأة" : "Register as Facility"}
+            </Button>
+          </Link>
+        </div>
       </section>
     </div>
   );
