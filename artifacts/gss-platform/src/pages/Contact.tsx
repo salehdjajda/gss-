@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,10 +8,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useSubmitContact } from "@workspace/api-client-react";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, Phone, MapPin, Video, CheckCircle2 } from "lucide-react";
+import { Mail, Phone, MapPin, CalendarDays, Building2, Clock, FileText, ArrowLeft } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-const formSchema = z.object({
+const messageSchema = z.object({
   name: z.string().min(2),
   email: z.string().email(),
   phone: z.string().optional(),
@@ -21,99 +21,81 @@ const formSchema = z.object({
   message: z.string().min(10),
 });
 
-const MEETING_PLATFORMS = [
-  {
-    id: "teams",
-    label: "Microsoft Teams",
-    labelAr: "Microsoft Teams",
-    icon: "🟦",
-    color: "border-blue-200 hover:border-blue-400 bg-blue-50",
-    activeColor: "border-blue-500 bg-blue-100",
-  },
-  {
-    id: "meet",
-    label: "Google Meet",
-    labelAr: "Google Meet",
-    icon: "🟩",
-    color: "border-green-200 hover:border-green-400 bg-green-50",
-    activeColor: "border-green-500 bg-green-100",
-  },
-  {
-    id: "zoom",
-    label: "Zoom",
-    labelAr: "Zoom",
-    icon: "🟦",
-    color: "border-sky-200 hover:border-sky-400 bg-sky-50",
-    activeColor: "border-sky-500 bg-sky-100",
-  },
-  {
-    id: "webex",
-    label: "Cisco Webex",
-    labelAr: "Cisco Webex",
-    icon: "🟧",
-    color: "border-orange-200 hover:border-orange-400 bg-orange-50",
-    activeColor: "border-orange-500 bg-orange-100",
-  },
-];
+const meetingSchema = z.object({
+  name: z.string().min(2, "الاسم مطلوب"),
+  phone: z.string().min(9, "رقم الجوال مطلوب"),
+  organizationName: z.string().min(2, "اسم المنشأة مطلوب"),
+  facilityAddress: z.string().min(5, "عنوان المنشأة مطلوب"),
+  preferredDate: z.string().min(1, "التاريخ مطلوب"),
+  preferredTime: z.string().min(1, "الوقت مطلوب"),
+  meetingPurpose: z.string().min(10, "يرجى توضيح الغرض من الاجتماع"),
+  additionalNotes: z.string().optional(),
+});
 
 export default function Contact() {
   const { lang } = useLanguage();
   const ar = lang === "ar";
   const { toast } = useToast();
   const contactMutation = useSubmitContact();
-  const [meetingOpen, setMeetingOpen] = useState(false);
-  const [selectedPlatform, setSelectedPlatform] = useState<string | null>(null);
+  const meetingFormRef = useRef<HTMLDivElement>(null);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const messageForm = useForm<z.infer<typeof messageSchema>>({
+    resolver: zodResolver(messageSchema),
     defaultValues: { name: "", email: "", phone: "", jobTitle: "", organizationName: "", subject: "", message: "" },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const meetingForm = useForm<z.infer<typeof meetingSchema>>({
+    resolver: zodResolver(meetingSchema),
+    defaultValues: {
+      name: "", phone: "", organizationName: "", facilityAddress: "",
+      preferredDate: "", preferredTime: "", meetingPurpose: "", additionalNotes: "",
+    },
+  });
+
+  const onMessageSubmit = (values: z.infer<typeof messageSchema>) => {
     contactMutation.mutate(
       { data: { name: values.name, email: values.email, phone: values.phone, subject: values.subject, message: values.message } },
       {
         onSuccess: () => {
-          toast({
-            title: ar ? "تم إرسال رسالتك بنجاح" : "Message sent successfully",
-            description: ar
-              ? "سيقوم فريقنا بالتواصل معك في أقرب وقت ممكن."
-              : "Our team will reach out to you as soon as possible.",
-          });
-          form.reset();
+          toast({ title: ar ? "تم إرسال رسالتك بنجاح" : "Message sent", description: ar ? "سيتواصل فريقنا معك قريباً." : "Our team will reach out soon." });
+          messageForm.reset();
         },
-        onError: () => {
-          toast({
-            variant: "destructive",
-            title: ar ? "حدث خطأ" : "Error",
-            description: ar
-              ? "لم نتمكن من إرسال رسالتك. يرجى المحاولة مرة أخرى."
-              : "We couldn't send your message. Please try again.",
-          });
-        },
+        onError: () => toast({ variant: "destructive", title: ar ? "حدث خطأ" : "Error", description: ar ? "لم نتمكن من إرسال رسالتك." : "Couldn't send message." }),
       }
     );
   };
 
-  const handlePlatformSelect = (platformId: string) => {
-    setSelectedPlatform(platformId);
+  const onMeetingSubmit = (values: z.infer<typeof meetingSchema>) => {
+    contactMutation.mutate(
+      {
+        data: {
+          name: values.name,
+          email: "meeting@request.gss",
+          phone: values.phone,
+          subject: `طلب اجتماع ميداني — ${values.organizationName}`,
+          message: `المنشأة: ${values.organizationName}\nالعنوان: ${values.facilityAddress}\nالتاريخ المفضل: ${values.preferredDate} — ${values.preferredTime}\nالغرض: ${values.meetingPurpose}\nملاحظات: ${values.additionalNotes || "—"}`,
+        }
+      },
+      {
+        onSuccess: () => {
+          toast({
+            title: ar ? "تم استلام طلب الاجتماع" : "Meeting Request Received",
+            description: ar ? "سيتواصل فريق GSS لتأكيد موعد الزيارة." : "GSS team will contact you to confirm the visit.",
+          });
+          meetingForm.reset();
+        },
+        onError: () => toast({ variant: "destructive", title: ar ? "حدث خطأ" : "Error", description: ar ? "لم نتمكن من استلام الطلب." : "Couldn't receive the request." }),
+      }
+    );
   };
 
-  const handleMeetingRequest = () => {
-    if (!selectedPlatform) return;
-    const platform = MEETING_PLATFORMS.find(p => p.id === selectedPlatform);
-    toast({
-      title: ar ? "تم استلام طلب الاجتماع" : "Meeting Request Received",
-      description: ar
-        ? `سيتواصل معكم فريق GSS لتحديد موعد الاجتماع عبر ${platform?.labelAr}.`
-        : `The GSS team will contact you to schedule the meeting via ${platform?.label}.`,
-    });
-    setMeetingOpen(false);
-    setSelectedPlatform(null);
+  const scrollToMeeting = () => {
+    meetingFormRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   return (
     <div className="pb-24">
+      {/* Hero */}
       <section className="bg-primary py-20 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
@@ -127,144 +109,90 @@ export default function Contact() {
         </div>
       </section>
 
-      <section className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid md:grid-cols-2 gap-16">
+      {/* Contact Info + Message Form */}
+      <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid md:grid-cols-2 gap-12 lg:gap-16">
 
-          {/* Left: Contact Info + Meeting */}
+          {/* Left: Contact Info + Visit Card */}
           <div>
             <h2 className="text-3xl font-bold text-gray-900 mb-8">
               {ar ? "معلومات التواصل" : "Contact Information"}
             </h2>
 
-            <div className="space-y-6 mb-12">
-              <div className="flex items-start">
-                <div className="w-12 h-12 bg-primary/10 text-primary rounded-xl flex items-center justify-center flex-shrink-0 ml-4">
-                  <Phone size={24} />
+            <div className="space-y-5 mb-10">
+              <div className="flex items-start gap-4">
+                <div className="w-11 h-11 bg-primary/10 text-primary rounded-xl flex items-center justify-center flex-shrink-0">
+                  <Phone size={20} />
                 </div>
                 <div>
-                  <h4 className="font-bold text-gray-900 mb-1">{ar ? "رقم الجوال" : "Mobile"}</h4>
+                  <h4 className="font-bold text-gray-900 mb-0.5">{ar ? "رقم الجوال" : "Mobile"}</h4>
                   <p className="text-gray-600" dir="ltr">+966 59 598 0004</p>
                 </div>
               </div>
 
-              <div className="flex items-start">
-                <div className="w-12 h-12 bg-primary/10 text-primary rounded-xl flex items-center justify-center flex-shrink-0 ml-4">
-                  <Mail size={24} />
+              <div className="flex items-start gap-4">
+                <div className="w-11 h-11 bg-primary/10 text-primary rounded-xl flex items-center justify-center flex-shrink-0">
+                  <Mail size={20} />
                 </div>
                 <div>
-                  <h4 className="font-bold text-gray-900 mb-1">{ar ? "البريد الإلكتروني" : "Email"}</h4>
+                  <h4 className="font-bold text-gray-900 mb-0.5">{ar ? "البريد الإلكتروني" : "Email"}</h4>
                   <p className="text-gray-600">info@gss-platform.sa</p>
                 </div>
               </div>
 
-              <div className="flex items-start">
-                <div className="w-12 h-12 bg-primary/10 text-primary rounded-xl flex items-center justify-center flex-shrink-0 ml-4">
-                  <MapPin size={24} />
+              <div className="flex items-start gap-4">
+                <div className="w-11 h-11 bg-primary/10 text-primary rounded-xl flex items-center justify-center flex-shrink-0">
+                  <MapPin size={20} />
                 </div>
                 <div>
-                  <h4 className="font-bold text-gray-900 mb-1">{ar ? "المكتب الرئيسي" : "Headquarters"}</h4>
+                  <h4 className="font-bold text-gray-900 mb-0.5">{ar ? "المكتب الرئيسي" : "Headquarters"}</h4>
                   <p className="text-gray-600">{ar ? "جدة، المملكة العربية السعودية" : "Jeddah, Saudi Arabia"}</p>
                 </div>
               </div>
             </div>
 
-            {/* Meeting Section */}
-            <div className="bg-slate-50 p-8 rounded-2xl border border-gray-100">
+            {/* Field Visit Card */}
+            <div className="bg-gradient-to-br from-primary/5 to-secondary/10 border border-primary/20 rounded-2xl p-7">
               <div className="flex items-center gap-3 mb-3">
-                <Video size={22} className="text-primary" />
-                <h3 className="font-bold text-xl">
-                  {ar ? "هل ترغب في تحديد اجتماع؟" : "Would you like to schedule a meeting?"}
+                <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center flex-shrink-0">
+                  <Building2 size={20} className="text-white" />
+                </div>
+                <h3 className="font-bold text-xl text-gray-900">
+                  {ar ? "اطلب زيارة ميدانية" : "Request a Field Visit"}
                 </h3>
               </div>
-              <p className="text-gray-600 mb-5 text-sm leading-relaxed">
+              <p className="text-gray-600 text-sm leading-relaxed mb-5">
                 {ar
-                  ? "يمكنك حجز موعد لاجتماع افتراضي مع أحد مستشارينا لمناقشة احتياجات منشأتك."
-                  : "You can book a virtual meeting with one of our consultants to discuss your facility's needs."}
+                  ? "يمكن لفريق GSS زيارة منشأتك لتقييم الاحتياجات التشغيلية وتقديم عرض مخصص مباشرةً عندكم."
+                  : "The GSS team can visit your facility to assess operational needs and present a customized proposal on-site."}
               </p>
-
-              {!meetingOpen ? (
-                <Button
-                  variant="outline"
-                  className="w-full border-primary text-primary hover:bg-primary hover:text-white"
-                  onClick={() => setMeetingOpen(true)}
-                >
-                  {ar ? "طلب اجتماع افتراضي" : "Request a Virtual Meeting"}
-                </Button>
-              ) : (
-                <div className="space-y-4">
-                  <p className="text-sm font-semibold text-gray-700">
-                    {ar ? "اختر منصة الاجتماع المفضلة لديكم:" : "Choose your preferred meeting platform:"}
-                  </p>
-                  <div className="grid grid-cols-2 gap-3">
-                    {MEETING_PLATFORMS.map((platform) => (
-                      <button
-                        key={platform.id}
-                        type="button"
-                        onClick={() => handlePlatformSelect(platform.id)}
-                        className={`rounded-xl border-2 p-4 text-sm font-semibold transition-all flex items-center gap-2 ${
-                          selectedPlatform === platform.id
-                            ? platform.activeColor + " shadow-sm"
-                            : platform.color
-                        }`}
-                      >
-                        <span className="text-lg">{platform.icon}</span>
-                        <span className="text-gray-800">{platform.label}</span>
-                        {selectedPlatform === platform.id && (
-                          <CheckCircle2 size={14} className="text-green-600 mr-auto flex-shrink-0" />
-                        )}
-                      </button>
-                    ))}
-                  </div>
-
-                  {selectedPlatform && (
-                    <p className="text-xs text-gray-500 leading-relaxed">
-                      {ar
-                        ? `✓ تم اختيار ${MEETING_PLATFORMS.find(p => p.id === selectedPlatform)?.labelAr}. سيتواصل معكم فريقنا لتأكيد الموعد.`
-                        : `✓ Selected ${MEETING_PLATFORMS.find(p => p.id === selectedPlatform)?.label}. Our team will contact you to confirm the time.`}
-                    </p>
-                  )}
-
-                  <div className="flex gap-2">
-                    <Button
-                      onClick={handleMeetingRequest}
-                      disabled={!selectedPlatform}
-                      className="flex-1 font-bold"
-                      size="sm"
-                    >
-                      {ar ? "تأكيد الطلب" : "Confirm Request"}
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => { setMeetingOpen(false); setSelectedPlatform(null); }}
-                      className="text-gray-500"
-                    >
-                      {ar ? "إلغاء" : "Cancel"}
-                    </Button>
-                  </div>
-                </div>
-              )}
+              <button
+                type="button"
+                onClick={scrollToMeeting}
+                className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white font-bold rounded-xl px-5 py-3 text-sm transition-colors"
+              >
+                <CalendarDays size={16} />
+                {ar ? "حجز موعد زيارة ميدانية" : "Book a Field Visit"}
+                <ArrowLeft size={15} className="opacity-70" />
+              </button>
             </div>
           </div>
 
-          {/* Right: Contact Form */}
-          <div className="bg-white p-8 md:p-10 rounded-3xl shadow-lg border border-gray-100">
+          {/* Right: Send Message Form */}
+          <div className="bg-white p-7 md:p-9 rounded-3xl shadow-lg border border-gray-100">
             <h3 className="text-2xl font-bold text-gray-900 mb-6">
               {ar ? "أرسل رسالة" : "Send a Message"}
             </h3>
 
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-
+            <Form {...messageForm}>
+              <form onSubmit={messageForm.handleSubmit(onMessageSubmit)} className="space-y-4">
                 <FormField
-                  control={form.control}
+                  control={messageForm.control}
                   name="name"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>{ar ? "الاسم الكامل" : "Full Name"} <span className="text-red-500">*</span></FormLabel>
-                      <FormControl>
-                        <Input placeholder={ar ? "أدخل اسمك" : "Enter your name"} {...field} />
-                      </FormControl>
+                      <FormControl><Input placeholder={ar ? "أدخل اسمك" : "Enter your name"} {...field} /></FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -272,27 +200,23 @@ export default function Contact() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <FormField
-                    control={form.control}
+                    control={messageForm.control}
                     name="jobTitle"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>{ar ? "المنصب الوظيفي" : "Job Title"}</FormLabel>
-                        <FormControl>
-                          <Input placeholder={ar ? "مثال: مدير العمليات" : "e.g. Operations Manager"} {...field} />
-                        </FormControl>
+                        <FormControl><Input placeholder={ar ? "مدير العمليات" : "Operations Manager"} {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
                   <FormField
-                    control={form.control}
+                    control={messageForm.control}
                     name="organizationName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{ar ? "اسم المنشأة / فرد" : "Company / Individual"}</FormLabel>
-                        <FormControl>
-                          <Input placeholder={ar ? "اسم الشركة أو 'فرد'" : "Company name or 'Individual'"} {...field} />
-                        </FormControl>
+                        <FormLabel>{ar ? "المنشأة" : "Organization"}</FormLabel>
+                        <FormControl><Input placeholder={ar ? "اسم الشركة" : "Company name"} {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -301,24 +225,116 @@ export default function Contact() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <FormField
-                    control={form.control}
+                    control={messageForm.control}
                     name="email"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>{ar ? "البريد الإلكتروني" : "Email"} <span className="text-red-500">*</span></FormLabel>
+                        <FormControl><Input placeholder="example@domain.com" {...field} /></FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={messageForm.control}
+                    name="phone"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{ar ? "رقم الجوال" : "Mobile"}</FormLabel>
+                        <FormControl><Input placeholder="05xxxxxxxx" {...field} /></FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <FormField
+                  control={messageForm.control}
+                  name="subject"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{ar ? "الموضوع" : "Subject"} <span className="text-red-500">*</span></FormLabel>
+                      <FormControl><Input placeholder={ar ? "سبب التواصل" : "Reason for contacting"} {...field} /></FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={messageForm.control}
+                  name="message"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{ar ? "الرسالة" : "Message"} <span className="text-red-500">*</span></FormLabel>
+                      <FormControl>
+                        <Textarea placeholder={ar ? "كيف يمكننا مساعدتك؟" : "How can we help you?"} className="min-h-[110px]" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <Button type="submit" className="w-full h-12 text-base font-bold" disabled={contactMutation.isPending}>
+                  {contactMutation.isPending ? (ar ? "جاري الإرسال..." : "Sending...") : (ar ? "إرسال الرسالة" : "Send Message")}
+                </Button>
+              </form>
+            </Form>
+          </div>
+        </div>
+      </section>
+
+      {/* Meeting Form Section */}
+      <section ref={meetingFormRef} className="bg-slate-50 border-t border-gray-200 py-20 scroll-mt-20">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+
+          {/* Header */}
+          <div className="text-center mb-10">
+            <div className="inline-flex items-center justify-center w-14 h-14 bg-primary rounded-2xl mb-5">
+              <CalendarDays size={26} className="text-white" />
+            </div>
+            <h2 className="text-3xl font-bold text-gray-900 mb-3">
+              {ar ? "استمارة طلب الاجتماع الميداني" : "Field Meeting Request Form"}
+            </h2>
+            <p className="text-gray-500 text-base max-w-xl mx-auto leading-relaxed">
+              {ar
+                ? "أملأ البيانات أدناه وسيتواصل معك فريق GSS لتأكيد موعد الزيارة الميدانية لمنشأتك."
+                : "Fill in the details below and the GSS team will contact you to confirm the field visit to your facility."}
+            </p>
+          </div>
+
+          {/* Form */}
+          <div className="bg-white rounded-3xl shadow-lg border border-gray-100 p-7 md:p-10">
+            <Form {...meetingForm}>
+              <form onSubmit={meetingForm.handleSubmit(onMeetingSubmit)} className="space-y-5">
+
+                {/* Row 1: Name + Phone */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <FormField
+                    control={meetingForm.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="flex items-center gap-1.5 text-sm font-bold text-gray-700">
+                          <span>{ar ? "الاسم الكامل" : "Full Name"}</span>
+                          <span className="text-red-500">*</span>
+                        </FormLabel>
                         <FormControl>
-                          <Input placeholder="example@domain.com" {...field} />
+                          <Input placeholder={ar ? "اسمك الكامل" : "Your full name"} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
                   <FormField
-                    control={form.control}
+                    control={meetingForm.control}
                     name="phone"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{ar ? "رقم الجوال" : "Mobile"}</FormLabel>
+                        <FormLabel className="flex items-center gap-1.5 text-sm font-bold text-gray-700">
+                          <Phone size={13} />
+                          <span>{ar ? "رقم الجوال" : "Mobile"}</span>
+                          <span className="text-red-500">*</span>
+                        </FormLabel>
                         <FormControl>
                           <Input placeholder="05xxxxxxxx" {...field} />
                         </FormControl>
@@ -328,30 +344,112 @@ export default function Contact() {
                   />
                 </div>
 
+                {/* Row 2: Organization Name */}
                 <FormField
-                  control={form.control}
-                  name="subject"
+                  control={meetingForm.control}
+                  name="organizationName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{ar ? "الموضوع" : "Subject"} <span className="text-red-500">*</span></FormLabel>
+                      <FormLabel className="flex items-center gap-1.5 text-sm font-bold text-gray-700">
+                        <Building2 size={13} />
+                        <span>{ar ? "اسم المنشأة / الشركة" : "Facility / Company Name"}</span>
+                        <span className="text-red-500">*</span>
+                      </FormLabel>
                       <FormControl>
-                        <Input placeholder={ar ? "سبب التواصل" : "Reason for contacting"} {...field} />
+                        <Input placeholder={ar ? "اسم شركتك أو منشأتك" : "Your company or facility name"} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
 
+                {/* Row 3: Address */}
                 <FormField
-                  control={form.control}
-                  name="message"
+                  control={meetingForm.control}
+                  name="facilityAddress"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{ar ? "الرسالة" : "Message"} <span className="text-red-500">*</span></FormLabel>
+                      <FormLabel className="flex items-center gap-1.5 text-sm font-bold text-gray-700">
+                        <MapPin size={13} />
+                        <span>{ar ? "عنوان المنشأة" : "Facility Address"}</span>
+                        <span className="text-red-500">*</span>
+                      </FormLabel>
+                      <FormControl>
+                        <Input placeholder={ar ? "الحي، الشارع، المدينة" : "Neighborhood, Street, City"} {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Row 4: Date + Time */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <FormField
+                    control={meetingForm.control}
+                    name="preferredDate"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="flex items-center gap-1.5 text-sm font-bold text-gray-700">
+                          <CalendarDays size={13} />
+                          <span>{ar ? "التاريخ المفضل للزيارة" : "Preferred Visit Date"}</span>
+                          <span className="text-red-500">*</span>
+                        </FormLabel>
+                        <FormControl>
+                          <Input type="date" {...field} min={new Date().toISOString().split("T")[0]} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={meetingForm.control}
+                    name="preferredTime"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="flex items-center gap-1.5 text-sm font-bold text-gray-700">
+                          <Clock size={13} />
+                          <span>{ar ? "الوقت المفضل" : "Preferred Time"}</span>
+                          <span className="text-red-500">*</span>
+                        </FormLabel>
+                        <FormControl>
+                          <select
+                            {...field}
+                            className="w-full h-10 border border-input rounded-md px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                          >
+                            <option value="">{ar ? "اختر الوقت..." : "Select time..."}</option>
+                            <option value="08:00-09:00">{ar ? "٨:٠٠ صباحاً — ٩:٠٠ صباحاً" : "8:00 AM – 9:00 AM"}</option>
+                            <option value="09:00-10:00">{ar ? "٩:٠٠ صباحاً — ١٠:٠٠ صباحاً" : "9:00 AM – 10:00 AM"}</option>
+                            <option value="10:00-11:00">{ar ? "١٠:٠٠ صباحاً — ١١:٠٠ صباحاً" : "10:00 AM – 11:00 AM"}</option>
+                            <option value="11:00-12:00">{ar ? "١١:٠٠ صباحاً — ١٢:٠٠ ظهراً" : "11:00 AM – 12:00 PM"}</option>
+                            <option value="13:00-14:00">{ar ? "١:٠٠ ظهراً — ٢:٠٠ عصراً" : "1:00 PM – 2:00 PM"}</option>
+                            <option value="14:00-15:00">{ar ? "٢:٠٠ عصراً — ٣:٠٠ عصراً" : "2:00 PM – 3:00 PM"}</option>
+                            <option value="15:00-16:00">{ar ? "٣:٠٠ عصراً — ٤:٠٠ عصراً" : "3:00 PM – 4:00 PM"}</option>
+                            <option value="16:00-17:00">{ar ? "٤:٠٠ عصراً — ٥:٠٠ عصراً" : "4:00 PM – 5:00 PM"}</option>
+                          </select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                {/* Row 5: Meeting Purpose */}
+                <FormField
+                  control={meetingForm.control}
+                  name="meetingPurpose"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-1.5 text-sm font-bold text-gray-700">
+                        <FileText size={13} />
+                        <span>{ar ? "الغرض من الاجتماع" : "Purpose of Meeting"}</span>
+                        <span className="text-red-500">*</span>
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder={ar ? "كيف يمكننا مساعدتك؟" : "How can we help you?"}
-                          className="min-h-[120px]"
+                          placeholder={ar
+                            ? "مثال: تقييم احتياجات التشغيل، مناقشة عقد الخدمات، الاستفسار عن الباقات..."
+                            : "e.g. Assess operational needs, discuss service agreement, inquire about packages..."}
+                          className="min-h-[100px]"
                           {...field}
                         />
                       </FormControl>
@@ -360,19 +458,49 @@ export default function Contact() {
                   )}
                 />
 
+                {/* Row 6: Additional Notes */}
+                <FormField
+                  control={meetingForm.control}
+                  name="additionalNotes"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-bold text-gray-700">
+                        {ar ? "ملاحظات إضافية (اختياري)" : "Additional Notes (optional)"}
+                      </FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder={ar
+                            ? "أي تفاصيل أخرى تودّ مشاركتها قبل الزيارة..."
+                            : "Any other details you'd like to share before the visit..."}
+                          className="min-h-[80px]"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Submit */}
                 <Button
                   type="submit"
-                  className="w-full h-12 text-lg font-bold"
+                  className="w-full h-13 text-base font-bold gap-2 mt-2"
                   disabled={contactMutation.isPending}
                 >
+                  <CalendarDays size={17} />
                   {contactMutation.isPending
                     ? (ar ? "جاري الإرسال..." : "Sending...")
-                    : (ar ? "إرسال الرسالة" : "Send Message")}
+                    : (ar ? "إرسال طلب الزيارة الميدانية" : "Submit Field Visit Request")}
                 </Button>
+
+                <p className="text-center text-xs text-gray-400 leading-relaxed pt-1">
+                  {ar
+                    ? "سيتواصل معك فريق GSS خلال 24 ساعة لتأكيد موعد الزيارة."
+                    : "GSS team will contact you within 24 hours to confirm the visit."}
+                </p>
               </form>
             </Form>
           </div>
-
         </div>
       </section>
     </div>
