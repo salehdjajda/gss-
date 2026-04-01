@@ -117,9 +117,9 @@ export default function Companies() {
               </span>
               <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-6">
                 {ar ? (
-                  <>منشأتك تحتاج<br /><span className="text-secondary">عمليات خارجية</span><br />لا موظف إضافي</>
+                  <>منشأتك تحتاج فريق<br /><span className="text-secondary">عمليات خارجية</span><br />لا موظف إضافي</>
                 ) : (
-                  <>Your Facility Needs<br /><span className="text-secondary">External Operations</span><br />Not More Employees</>
+                  <>Your Facility Needs an<br /><span className="text-secondary">External Operations Team</span><br />Not More Employees</>
                 )}
               </h1>
               <p className="text-white/80 text-lg leading-relaxed mb-10">
