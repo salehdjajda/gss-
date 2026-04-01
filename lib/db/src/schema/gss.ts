@@ -22,6 +22,9 @@ export const companyRegistrationsTable = pgTable("company_registrations", {
   currentVendors: text("current_vendors"),
   operationVolume: text("operation_volume"),
   collaborationModel: text("collaboration_model").notNull(),
+  selectedPackage: text("selected_package"),
+  status: text("status").notNull().default("pending"),
+  adminNotes: text("admin_notes"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -38,6 +41,8 @@ export const vendorRegistrationsTable = pgTable("vendor_registrations", {
   services: text("services"),
   serviceScope: text("service_scope").notNull(),
   financialModelAccepted: boolean("financial_model_accepted").default(false),
+  status: text("status").notNull().default("pending"),
+  adminNotes: text("admin_notes"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -55,6 +60,8 @@ export const consultantRegistrationsTable = pgTable("consultant_registrations", 
   contributionType: text("contribution_type"),
   yearsOfExperience: integer("years_of_experience"),
   revenueModelAccepted: boolean("revenue_model_accepted").default(false),
+  status: text("status").notNull().default("pending"),
+  adminNotes: text("admin_notes"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -69,6 +76,8 @@ export const contactMessagesTable = pgTable("contact_messages", {
   email: text("email").notNull(),
   subject: text("subject"),
   message: text("message").notNull(),
+  status: text("status").notNull().default("new"),
+  adminNotes: text("admin_notes"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
