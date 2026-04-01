@@ -139,16 +139,6 @@ export default function Home() {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full pt-16 pb-16 md:pt-24 lg:pt-28 lg:pb-28">
           <div className="max-w-3xl">
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 bg-secondary/20 border border-secondary/40 rounded-full px-5 py-2 text-secondary text-sm font-bold mb-8"
-            >
-              <span className="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
-              General Support Services — GSS
-            </motion.div>
-
             <motion.h1
               initial="hidden"
               animate="visible"
