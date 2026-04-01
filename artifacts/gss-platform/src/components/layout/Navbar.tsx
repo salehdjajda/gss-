@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Menu, X, ChevronDown, Globe, ShieldCheck } from "lucide-react";
+import { Menu, X, ChevronDown, Globe, ShieldCheck, LogIn, Building2, User, Wrench, Users } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import logoImg from "@assets/image_1774909317242.png";
@@ -13,12 +13,17 @@ export function Navbar() {
   const [location] = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isJoinOpen, setIsJoinOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
   const joinRef = useRef<HTMLDivElement>(null);
+  const loginRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (joinRef.current && !joinRef.current.contains(e.target as Node)) {
         setIsJoinOpen(false);
+      }
+      if (loginRef.current && !loginRef.current.contains(e.target as Node)) {
+        setIsLoginOpen(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
@@ -39,6 +44,20 @@ export function Navbar() {
   const joinLinks = [
     { href: "/register/vendor",     label: t("nav_joinVendor"),  icon: "🔧" },
     { href: "/register/consultant", label: t("nav_joinPartner"), icon: "🤝" },
+  ];
+
+  const loginOptions = lang === "ar" ? [
+    { href: "/dashboard/company",    label: "المنشآت والشركات",  icon: Building2, color: "text-blue-600",   bg: "bg-blue-50" },
+    { href: "/dashboard/individual", label: "الأفراد",           icon: User,      color: "text-green-600",  bg: "bg-green-50" },
+    { href: "/dashboard/vendor",     label: "الموردون",          icon: Wrench,    color: "text-orange-600", bg: "bg-orange-50" },
+    { href: "/dashboard/consultant", label: "المستشارون",        icon: Users,     color: "text-purple-600", bg: "bg-purple-50" },
+    { href: "/login",                label: "إدارة المنصة",      icon: ShieldCheck, color: "text-red-600",  bg: "bg-red-50" },
+  ] : [
+    { href: "/dashboard/company",    label: "Facilities & Companies", icon: Building2,  color: "text-blue-600",   bg: "bg-blue-50" },
+    { href: "/dashboard/individual", label: "Individuals",            icon: User,       color: "text-green-600",  bg: "bg-green-50" },
+    { href: "/dashboard/vendor",     label: "Vendors",                icon: Wrench,     color: "text-orange-600", bg: "bg-orange-50" },
+    { href: "/dashboard/consultant", label: "Consultants",            icon: Users,      color: "text-purple-600", bg: "bg-purple-50" },
+    { href: "/login",                label: "Platform Admin",         icon: ShieldCheck, color: "text-red-600",   bg: "bg-red-50" },
   ];
 
   return (
@@ -133,19 +152,55 @@ export function Navbar() {
               </AnimatePresence>
             </div>
 
-            {/* Primary CTA — Team Login */}
-            <Link href="/login">
+            {/* Login dropdown */}
+            <div className="relative" ref={loginRef}>
               <Button
+                onClick={() => setIsLoginOpen(!isLoginOpen)}
                 className="bg-secondary hover:bg-secondary/90 text-primary font-bold px-5 h-10 text-sm rounded-xl shadow-sm flex items-center gap-2"
-                data-testid="button-team-login-nav"
+                data-testid="button-login-dropdown"
               >
-                <ShieldCheck size={16} />
-                {lang === "ar" ? "دخول الفريق" : "Team Login"}
+                <LogIn size={16} />
+                {lang === "ar" ? "دخول" : "Login"}
+                <ChevronDown size={14} className={`transition-transform duration-200 ${isLoginOpen ? "rotate-180" : ""}`} />
               </Button>
-            </Link>
+              <AnimatePresence>
+                {isLoginOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 6, scale: 0.97 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 6, scale: 0.97 }}
+                    transition={{ duration: 0.15 }}
+                    className={`absolute top-full mt-2 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50 ${lang === "ar" ? "right-0" : "right-0"}`}
+                  >
+                    <div className="px-4 pt-3 pb-1">
+                      <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">
+                        {lang === "ar" ? "اختر نوع الحساب" : "Select Account Type"}
+                      </p>
+                    </div>
+                    {loginOptions.map((opt) => {
+                      const Icon = opt.icon;
+                      return (
+                        <Link
+                          key={opt.href}
+                          href={opt.href}
+                          onClick={() => { setIsLoginOpen(false); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                          className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                        >
+                          <div className={`w-8 h-8 rounded-lg ${opt.bg} flex items-center justify-center flex-shrink-0`}>
+                            <Icon size={15} className={opt.color} />
+                          </div>
+                          <span className="font-medium">{opt.label}</span>
+                        </Link>
+                      );
+                    })}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
           </div>
 
-          {/* Mobile: Lang + CTA + Hamburger */}
+          {/* Mobile: Lang + Login Button + Hamburger */}
           <div className="lg:hidden flex items-center gap-2">
             <button
               onClick={() => setLang(lang === "ar" ? "en" : "ar")}
@@ -153,12 +208,15 @@ export function Navbar() {
             >
               {lang === "ar" ? "EN" : "عر"}
             </button>
-            <Link href="/login">
-              <Button size="sm" className="bg-secondary hover:bg-secondary/90 text-primary font-bold text-xs px-4 h-9 rounded-xl flex items-center gap-1.5" data-testid="button-team-login-nav-mobile">
-                <ShieldCheck size={13} />
-                {lang === "ar" ? "دخول الفريق" : "Team Login"}
-              </Button>
-            </Link>
+            <Button
+              size="sm"
+              onClick={() => { setIsMobileMenuOpen(true); }}
+              className="bg-secondary hover:bg-secondary/90 text-primary font-bold text-xs px-4 h-9 rounded-xl flex items-center gap-1.5"
+              data-testid="button-login-mobile"
+            >
+              <LogIn size={13} />
+              {lang === "ar" ? "دخول" : "Login"}
+            </Button>
             <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-gray-600 hover:text-primary p-2" data-testid="button-mobile-menu">
               {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
@@ -189,6 +247,7 @@ export function Navbar() {
                   {link.label}
                 </Link>
               ))}
+
               <div className="border-t border-gray-100 my-3" />
               <p className="text-xs text-gray-400 font-medium px-4 pb-1">{t("nav_joinPlatform")}</p>
               {joinLinks.map((jl) => (
@@ -203,15 +262,27 @@ export function Navbar() {
                   {jl.label}
                 </Link>
               ))}
+
               <div className="border-t border-gray-100 my-3" />
-              <Link
-                href="/login"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-400 hover:text-primary hover:bg-gray-50 transition-colors"
-              >
-                <ShieldCheck size={16} />
-                {lang === "ar" ? "دخول الفريق الداخلي" : "Team Login"}
-              </Link>
+              <p className="text-xs text-gray-400 font-bold px-4 pb-1">
+                {lang === "ar" ? "دخول الحساب" : "Account Login"}
+              </p>
+              {loginOptions.map((opt) => {
+                const Icon = opt.icon;
+                return (
+                  <Link
+                    key={opt.href}
+                    href={opt.href}
+                    onClick={() => { setIsMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-600 hover:text-primary hover:bg-gray-50 transition-colors"
+                  >
+                    <div className={`w-7 h-7 rounded-lg ${opt.bg} flex items-center justify-center`}>
+                      <Icon size={13} className={opt.color} />
+                    </div>
+                    {opt.label}
+                  </Link>
+                );
+              })}
             </div>
           </motion.div>
         )}
