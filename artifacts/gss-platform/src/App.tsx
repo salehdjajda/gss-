@@ -19,9 +19,11 @@ function ScrollToTop() {
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { IndividualAuthProvider } from "@/contexts/IndividualAuthContext";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { CompanyAuth, VendorAuth, ConsultantAuth } from "@/contexts/AccountAuthContext";
 
 // Auth Components
 import LoginPage from "@/pages/auth/LoginPage";
+import PortalLoginPage from "@/pages/auth/PortalLoginPage";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
 // Page Imports
@@ -76,7 +78,7 @@ function UnauthorizedPage() {
 function MainLayout() {
   const [location] = useLocation();
   const isAdminRoute = location.startsWith("/admin");
-  const isAuthRoute = location.startsWith("/login") || location.startsWith("/unauthorized");
+  const isAuthRoute = location.startsWith("/login") || location.startsWith("/unauthorized") || location.startsWith("/portal/login");
 
   const hideChrome = isAdminRoute || isAuthRoute;
 
@@ -109,6 +111,7 @@ function MainLayout() {
           <Route path="/request/service" component={RequestService} />
 
           {/* Auth Routes */}
+          <Route path="/portal/login" component={PortalLoginPage} />
           <Route path="/login" component={LoginPage} />
           <Route path="/admin" component={LoginPage} />
           <Route path="/unauthorized" component={UnauthorizedPage} />
@@ -160,14 +163,20 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <LanguageProvider>
         <IndividualAuthProvider>
-          <AuthProvider>
-            <TooltipProvider>
-              <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-                <Router />
-              </WouterRouter>
-              <Toaster />
-            </TooltipProvider>
-          </AuthProvider>
+          <CompanyAuth.Provider>
+            <VendorAuth.Provider>
+              <ConsultantAuth.Provider>
+                <AuthProvider>
+                  <TooltipProvider>
+                    <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
+                      <Router />
+                    </WouterRouter>
+                    <Toaster />
+                  </TooltipProvider>
+                </AuthProvider>
+              </ConsultantAuth.Provider>
+            </VendorAuth.Provider>
+          </CompanyAuth.Provider>
         </IndividualAuthProvider>
       </LanguageProvider>
     </QueryClientProvider>

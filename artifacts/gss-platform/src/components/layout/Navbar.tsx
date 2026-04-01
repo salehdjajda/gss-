@@ -46,17 +46,17 @@ export function Navbar() {
   ];
 
   const loginOptions = lang === "ar" ? [
-    { href: "/dashboard/company",    label: "المنشآت والشركات",  icon: Building2, color: "text-blue-600",   bg: "bg-blue-50" },
-    { href: "/dashboard/individual", label: "الأفراد",           icon: User,      color: "text-green-600",  bg: "bg-green-50" },
-    { href: "/dashboard/vendor",     label: "الموردون",          icon: Wrench,    color: "text-orange-600", bg: "bg-orange-50" },
-    { href: "/dashboard/consultant", label: "المستشارون",        icon: Users,     color: "text-purple-600", bg: "bg-purple-50" },
-    { href: "/login",                label: "إدارة المنصة",      icon: ShieldCheck, color: "text-red-600",  bg: "bg-red-50" },
+    { href: "/portal/login",  label: "المنشآت والشركات",  icon: Building2,   color: "text-blue-600",   bg: "bg-blue-50" },
+    { href: "/portal/login",  label: "الأفراد",           icon: User,        color: "text-green-600",  bg: "bg-green-50" },
+    { href: "/portal/login",  label: "الموردون",          icon: Wrench,      color: "text-orange-600", bg: "bg-orange-50" },
+    { href: "/portal/login",  label: "المستشارون",        icon: Users,       color: "text-purple-600", bg: "bg-purple-50" },
+    { href: "/login",         label: "إدارة المنصة",      icon: ShieldCheck, color: "text-red-600",    bg: "bg-red-50" },
   ] : [
-    { href: "/dashboard/company",    label: "Facilities & Companies", icon: Building2,  color: "text-blue-600",   bg: "bg-blue-50" },
-    { href: "/dashboard/individual", label: "Individuals",            icon: User,       color: "text-green-600",  bg: "bg-green-50" },
-    { href: "/dashboard/vendor",     label: "Vendors",                icon: Wrench,     color: "text-orange-600", bg: "bg-orange-50" },
-    { href: "/dashboard/consultant", label: "Consultants",            icon: Users,      color: "text-purple-600", bg: "bg-purple-50" },
-    { href: "/login",                label: "Platform Admin",         icon: ShieldCheck, color: "text-red-600",   bg: "bg-red-50" },
+    { href: "/portal/login",  label: "Facilities & Companies", icon: Building2,   color: "text-blue-600",   bg: "bg-blue-50" },
+    { href: "/portal/login",  label: "Individuals",            icon: User,        color: "text-green-600",  bg: "bg-green-50" },
+    { href: "/portal/login",  label: "Vendors",                icon: Wrench,      color: "text-orange-600", bg: "bg-orange-50" },
+    { href: "/portal/login",  label: "Consultants",            icon: Users,       color: "text-purple-600", bg: "bg-purple-50" },
+    { href: "/login",         label: "Platform Admin",         icon: ShieldCheck, color: "text-red-600",    bg: "bg-red-50" },
   ];
 
   return (
