@@ -53,9 +53,13 @@ export function Footer() {
 
         <div className="border-t border-slate-800 mt-12 pt-6 flex flex-col md:flex-row items-center justify-between text-sm text-slate-500 gap-3">
           <p>© {new Date().getFullYear()} {t("footer_rights")}</p>
-          <div className="flex gap-4">
+          <div className="flex gap-4 items-center">
             <span className="hover:text-white cursor-pointer transition-colors">{t("footer_privacy")}</span>
             <span className="hover:text-white cursor-pointer transition-colors">{t("footer_terms")}</span>
+            <Link href="/login" className="flex items-center gap-1.5 text-slate-600 hover:text-slate-300 transition-colors border-r border-slate-700 pr-4">
+              <span>🔐</span>
+              <span>دخول الفريق الداخلي</span>
+            </Link>
           </div>
         </div>
       </div>

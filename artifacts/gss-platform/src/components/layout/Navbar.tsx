@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Menu, X, ChevronDown, Globe } from "lucide-react";
+import { Menu, X, ChevronDown, Globe, ShieldCheck } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import logoImg from "@assets/image_1774909317242.png";
@@ -83,6 +83,16 @@ export function Navbar() {
               <Globe size={15} />
               {lang === "ar" ? "EN" : "عر"}
             </button>
+
+            {/* Staff Login */}
+            <Link
+              href="/login"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-gray-400 hover:text-primary hover:bg-gray-50 transition-colors"
+              title="دخول الفريق الداخلي"
+            >
+              <ShieldCheck size={15} />
+              <span className="hidden xl:inline">{lang === "ar" ? "دخول الفريق" : "Team Login"}</span>
+            </Link>
 
             {/* Individual Account Badge (when logged in) */}
             {isLoggedIn && account && (
@@ -200,6 +210,15 @@ export function Navbar() {
                   {jl.label}
                 </Link>
               ))}
+              <div className="border-t border-gray-100 my-3" />
+              <Link
+                href="/login"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-400 hover:text-primary hover:bg-gray-50 transition-colors"
+              >
+                <ShieldCheck size={16} />
+                {lang === "ar" ? "دخول الفريق الداخلي" : "Team Login"}
+              </Link>
             </div>
           </motion.div>
         )}
