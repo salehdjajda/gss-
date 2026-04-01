@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useLocation } from "wouter";
+import { useVendorAuth } from "@/contexts/AccountAuthContext";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -53,10 +54,12 @@ const TOTAL_STEPS = 4;
 export default function RegisterVendor() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const vendorAuth = useVendorAuth();
   const registerMutation = useRegisterVendor();
   const [phase, setPhase] = useState<"intro" | "form" | "success">("intro");
   const [step, setStep] = useState(1);
   const [attachment, setAttachment] = useState<File | null>(null);
+  const [savedPhone, setSavedPhone] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<FormData>({
@@ -78,7 +81,15 @@ export default function RegisterVendor() {
   const onSubmit = (data: FormData) => {
     registerMutation.mutate(
       { data: { name: data.name, vendorType: data.vendorType, phone: data.phone, email: data.email, serviceScope: data.serviceScope, services: data.services } },
-      { onSuccess: () => setPhase("success"), onError: () => toast({ variant: "destructive", title: "حدث خطأ", description: "لم نتمكن من إتمام التسجيل، يرجى المحاولة مرة أخرى." }) }
+      {
+        onSuccess: () => {
+          const defaultPassword = data.phone.slice(-4);
+          vendorAuth.register({ name: data.name, phone: data.phone, password: defaultPassword, city: data.city });
+          setSavedPhone(data.phone);
+          setPhase("success");
+        },
+        onError: () => toast({ variant: "destructive", title: "حدث خطأ", description: "لم نتمكن من إتمام التسجيل، يرجى المحاولة مرة أخرى." })
+      }
     );
   };
 
@@ -153,6 +164,16 @@ export default function RegisterVendor() {
               <li className="flex items-start gap-2"><CheckCircle2 size={14} className="mt-0.5 flex-shrink-0" /> ستبدأ في استقبال الطلبات التشغيلية المباشرة</li>
             </ul>
           </div>
+          {savedPhone && (
+            <div className="bg-green-50 border border-green-200 rounded-xl p-5 mb-6 text-right">
+              <p className="text-green-800 font-bold text-sm mb-2">بيانات الدخول لحسابك</p>
+              <div className="space-y-1 text-sm text-green-700">
+                <p>رقم الجوال: <span className="font-mono font-bold">{savedPhone}</span></p>
+                <p>كلمة المرور الافتراضية: <span className="font-mono font-bold text-lg tracking-widest">{savedPhone.slice(-4)}</span></p>
+                <p className="text-xs text-green-600 mt-2">يمكنك تسجيل الدخول من صفحة <a href="/portal/login?type=vendor" className="underline font-bold">دخول الموردين</a></p>
+              </div>
+            </div>
+          )}
           <Button size="lg" className="h-12 px-10 font-bold" onClick={() => setLocation("/dashboard/vendor")} data-testid="btn-go-vendor-dashboard">
             الانتقال إلى لوحة التحكم
           </Button>

@@ -3,6 +3,7 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useLocation } from "wouter";
+import { useCompanyAuth } from "@/contexts/AccountAuthContext";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -127,10 +128,12 @@ export default function RegisterCompany() {
   const ar = lang === "ar";
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const companyAuth = useCompanyAuth();
   const registerMutation = useRegisterCompany();
   const [phase, setPhase] = useState<"intro" | "form" | "success">("intro");
   const [step, setStep] = useState(1);
   const [accountNumber, setAccountNumber] = useState<string>("");
+  const [savedPhone, setSavedPhone] = useState("");
   const [files, setFiles] = useState<FileState>({
     cr: null, nationalAddress: null, logo: null, companyProfile: null, branchLocations: null
   });
@@ -188,7 +191,14 @@ export default function RegisterCompany() {
         }
       },
       {
-        onSuccess: (res) => { setAccountNumber(res?.accountNumber ?? ""); setPhase("success"); },
+        onSuccess: (res) => {
+          setAccountNumber(res?.accountNumber ?? "");
+          const delegatePhone = data.delegates[0]?.phone ?? "";
+          const defaultPassword = delegatePhone.slice(-4);
+          companyAuth.register({ name: data.companyName, phone: delegatePhone, password: defaultPassword, city: data.city });
+          setSavedPhone(delegatePhone);
+          setPhase("success");
+        },
         onError: () => toast({ variant: "destructive", title: "حدث خطأ", description: "لم نتمكن من إتمام التسجيل، يرجى المحاولة مرة أخرى." })
       }
     );
@@ -316,6 +326,19 @@ export default function RegisterCompany() {
               <li className="flex items-start gap-2"><CheckCircle2 size={14} className="mt-0.5 flex-shrink-0 text-amber-600" /> {ar ? `سيتم تفعيل حسابكم وبدء الخدمة برقم ${accountNumber || "حسابكم"}` : `Your account will be activated and service started under account ${accountNumber || "your account"}`}</li>
             </ul>
           </div>
+          {savedPhone && (
+            <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-6 text-right">
+              <p className="text-blue-800 font-bold text-sm mb-2">{ar ? "بيانات الدخول للمفوّض الرئيسي" : "Primary Delegate Login Credentials"}</p>
+              <div className="space-y-1 text-sm text-blue-700">
+                <p>{ar ? "رقم الجوال:" : "Phone:"} <span className="font-mono font-bold">{savedPhone}</span></p>
+                <p>{ar ? "كلمة المرور الافتراضية:" : "Default Password:"} <span className="font-mono font-bold text-lg tracking-widest">{savedPhone.slice(-4)}</span></p>
+                <p className="text-xs text-blue-600 mt-2">
+                  {ar ? "يمكنك تسجيل الدخول من صفحة " : "Sign in from "} 
+                  <a href="/portal/login?type=company" className="underline font-bold">{ar ? "دخول المنشآت" : "Facility Login"}</a>
+                </p>
+              </div>
+            </div>
+          )}
           <Button size="lg" className="h-12 px-10 font-bold" onClick={() => setLocation("/")} data-testid="btn-go-home">
             {ar ? "العودة للرئيسية" : "Back to Home"}
           </Button>

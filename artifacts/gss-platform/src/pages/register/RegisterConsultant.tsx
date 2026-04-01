@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useLocation } from "wouter";
+import { useConsultantAuth } from "@/contexts/AccountAuthContext";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -45,10 +46,12 @@ const TOTAL_STEPS = 3;
 export default function RegisterConsultant() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const consultantAuth = useConsultantAuth();
   const registerMutation = useRegisterConsultant();
   const [phase, setPhase] = useState<"intro" | "form" | "success">("intro");
   const [step, setStep] = useState(1);
   const [attachment, setAttachment] = useState<File | null>(null);
+  const [savedPhone, setSavedPhone] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<FormData>({
@@ -69,7 +72,15 @@ export default function RegisterConsultant() {
   const onSubmit = (data: FormData) => {
     registerMutation.mutate(
       { data: { name: data.name, phone: data.phone, email: data.email, city: data.city, expertiseArea: data.expertiseArea } },
-      { onSuccess: () => setPhase("success"), onError: () => toast({ variant: "destructive", title: "حدث خطأ", description: "لم نتمكن من إتمام التسجيل، يرجى المحاولة مرة أخرى." }) }
+      {
+        onSuccess: () => {
+          const defaultPassword = data.phone.slice(-4);
+          consultantAuth.register({ name: data.name, phone: data.phone, password: defaultPassword, city: data.city });
+          setSavedPhone(data.phone);
+          setPhase("success");
+        },
+        onError: () => toast({ variant: "destructive", title: "حدث خطأ", description: "لم نتمكن من إتمام التسجيل، يرجى المحاولة مرة أخرى." })
+      }
     );
   };
 
@@ -124,6 +135,16 @@ export default function RegisterConsultant() {
               <li className="flex items-start gap-2"><CheckCircle2 size={14} className="mt-0.5 text-secondary flex-shrink-0" /> ستبدأ في تلقي فرص التعاون والإحالات</li>
             </ul>
           </div>
+          {savedPhone && (
+            <div className="bg-secondary/10 border border-secondary/20 rounded-xl p-5 mb-6 text-right">
+              <p className="text-primary font-bold text-sm mb-2">بيانات الدخول لحسابك</p>
+              <div className="space-y-1 text-sm text-gray-700">
+                <p>رقم الجوال: <span className="font-mono font-bold">{savedPhone}</span></p>
+                <p>كلمة المرور الافتراضية: <span className="font-mono font-bold text-lg tracking-widest">{savedPhone.slice(-4)}</span></p>
+                <p className="text-xs text-gray-500 mt-2">يمكنك تسجيل الدخول من صفحة <a href="/portal/login?type=consultant" className="underline font-bold text-primary">دخول المستشارين</a></p>
+              </div>
+            </div>
+          )}
           <Button size="lg" className="h-12 px-10 font-bold" onClick={() => setLocation("/dashboard/consultant")} data-testid="btn-go-consultant-dashboard">
             الانتقال إلى لوحة التحكم
           </Button>
