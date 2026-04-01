@@ -325,34 +325,13 @@ export default function Contact() {
               <CalendarDays size={26} className="text-white" />
             </div>
             <h2 className="text-3xl font-bold text-gray-900 mb-3">
-              {ar ? "احجز موعد اجتماع في منشأتك" : "Book a Meeting at Your Facility"}
+              {ar ? "استمارة طلب الاجتماع الميداني" : "Field Meeting Request Form"}
             </h2>
             <p className="text-gray-500 text-base max-w-xl mx-auto leading-relaxed">
               {ar
-                ? "سيزورك فريق GSS ليفهم طبيعة عملك واحتياجاتك التشغيلية، ثم نُرسل لك تصوراً مخصصاً بالباقة والتكلفة الأنسب لك."
-                : "The GSS team will visit you to understand your work and operational needs, then send you a tailored proposal with the right package and cost."}
+                ? "أكمل البيانات أدناه وسيتواصل معك فريق GSS لتأكيد الموعد."
+                : "Fill in the details below and the GSS team will contact you to confirm the appointment."}
             </p>
-
-            {/* Registration prerequisite banner */}
-            <div className="mt-6 bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-start gap-3 text-right max-w-lg mx-auto">
-              <AlertCircle size={18} className="text-amber-600 flex-shrink-0 mt-0.5" />
-              <div>
-                <p className="text-amber-800 text-sm font-bold mb-1">
-                  {ar ? "شرط إلزامي قبل تعبئة الاستمارة" : "Required Before Filling the Form"}
-                </p>
-                <p className="text-amber-700 text-xs leading-relaxed">
-                  {ar
-                    ? "يجب أن تكون منشأتك مسجّلة في منصة GSS أولاً حتى نتمكن من الاطلاع على بياناتها والتحضير الجيد للاجتماع معك."
-                    : "Your facility must be registered on GSS platform first so we can review its data and prepare well for the meeting."}
-                </p>
-                <Link
-                  href="/register/company"
-                  className="inline-flex items-center gap-1 text-amber-800 font-bold text-xs underline underline-offset-2 mt-2 hover:text-amber-900"
-                >
-                  {ar ? "سجّل منشأتك الآن ←" : "Register your facility now →"}
-                </Link>
-              </div>
-            </div>
           </div>
 
           {/* Form */}
