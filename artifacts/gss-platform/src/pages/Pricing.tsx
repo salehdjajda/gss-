@@ -46,8 +46,8 @@ export default function Pricing() {
       title: isAr ? "باقة المتابعة الأساسية" : "Basic Follow-Up Package",
       badge: null,
       desc: isAr
-        ? "مناسبة للأفراد والمنشآت ذات الطلبات المحدودة"
-        : "Suitable for small businesses or those with limited requests",
+        ? "للمنشآت الصغيرة أو ذات الطلبات التشغيلية المحدودة"
+        : "For small facilities or those with limited operational requests",
       icon: Briefcase,
       features: isAr ? [
         "تنظيم ومتابعة الطلبات التشغيلية",
@@ -71,8 +71,8 @@ export default function Pricing() {
       title: isAr ? "باقة المتابعة المتقدمة" : "Advanced Follow-Up Package",
       badge: isAr ? "⭐ الأكثر اختيارًا" : "⭐ Most Popular",
       desc: isAr
-        ? "مناسبة للمنشآت المتوسطة أو الأفراد ذوي الطلبات المتكررة"
-        : "Suitable for medium businesses or multi-location companies",
+        ? "للمنشآت المتوسطة أو متعددة المواقع"
+        : "For medium facilities or multi-location businesses",
       icon: Star,
       features: isAr ? [
         "جميع مزايا المستوى الأول",
@@ -161,14 +161,19 @@ export default function Pricing() {
           </h1>
           <p className="text-white/80 text-lg leading-relaxed max-w-3xl mx-auto">
             {isAr
-              ? "تعتمد منصة GSS على نظام خدمة حسب الطلب كأساس للعمل، مع إمكانية إضافة باقات مزايا تشغيلية اختيارية تمنحك — سواء كنت منشأة أو فرداً — مستوى أعلى من المتابعة والتنظيم والدعم التشغيلي."
-              : "GSS Platform is built on an on-demand service model, with optional operational feature packages that give your business a higher level of follow-up, organization, and operational support based on its size."}
+              ? "تعتمد منصة GSS على نظام خدمة حسب الطلب مناسب للمنشآت والأفراد، مع باقات مزايا تشغيلية اختيارية مخصصة للمنشآت لمستوى أعلى من التنظيم والمتابعة."
+              : "GSS Platform operates on an on-demand model suitable for both facilities and individuals, with optional operational packages exclusively for facilities needing a higher level of organization and follow-up."}
           </p>
-          <p className="text-secondary font-bold mt-4 text-sm">
-            {isAr
-              ? "يمكنكم البدء مباشرة بالخدمة دون اشتراك، وإضافة المزايا التشغيلية لاحقًا حسب الحاجة."
-              : "You can start directly without a subscription and add operational features later as needed."}
-          </p>
+          <div className="flex flex-wrap justify-center gap-4 mt-6">
+            <span className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-5 py-2 text-sm font-bold">
+              <span className="text-secondary">●</span>
+              {isAr ? "حسب الطلب — للمنشآت والأفراد" : "On-Demand — For Facilities & Individuals"}
+            </span>
+            <span className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-5 py-2 text-sm font-bold">
+              <span className="text-secondary">●</span>
+              {isAr ? "الباقات التشغيلية — للمنشآت فقط" : "Operational Packages — Facilities Only"}
+            </span>
+          </div>
         </div>
       </section>
 
@@ -179,7 +184,7 @@ export default function Pricing() {
 
             {/* Left: Features */}
             <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-              <div className="flex items-center gap-3 mb-6">
+              <div className="flex items-center gap-3 mb-3">
                 <div className="w-10 h-10 bg-primary/10 rounded-2xl flex items-center justify-center">
                   <Zap size={20} className="text-primary" />
                 </div>
@@ -190,10 +195,14 @@ export default function Pricing() {
                   </h2>
                 </div>
               </div>
+              <span className="inline-flex items-center gap-1.5 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold rounded-full px-3 py-1 mb-4">
+                <span>✓</span>
+                {isAr ? "متاح للمنشآت والأفراد" : "Available for Facilities & Individuals"}
+              </span>
               <p className="text-gray-500 text-sm leading-relaxed mb-6">
                 {isAr
-                  ? "يمكنك الاستفادة من خدمات منصة GSS دون الالتزام بأي باقة تشغيلية إضافية — سواء كنت منشأة أو فرداً."
-                  : "Your business can benefit from GSS Platform services without committing to any additional operational package."}
+                  ? "يمكنك الاستفادة من خدمات منصة GSS دون الالتزام بأي باقة تشغيلية — سواء كنت منشأة أو فرداً. فقط اطلب الخدمة وسنتولى التنفيذ."
+                  : "You can benefit from GSS Platform services without committing to any operational package — whether you're a facility or an individual. Just request the service and we'll handle execution."}
               </p>
               <ul className="space-y-3 mb-8">
                 {onDemandFeatures.map((f, i) => (
@@ -242,13 +251,17 @@ export default function Pricing() {
       <section className="py-20 bg-gray-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
+            <span className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 text-primary text-xs font-bold rounded-full px-4 py-1.5 mb-5">
+              <Building2 size={13} />
+              {isAr ? "مخصصة للمنشآت فقط" : "For Facilities Only"}
+            </span>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               {isAr ? "باقات المزايا التشغيلية (اختيارية)" : "Operational Feature Packages (Optional)"}
             </h2>
             <p className="text-gray-500 max-w-2xl mx-auto">
               {isAr
-                ? "توفر هذه الباقات مستوى أعلى من التنظيم والمتابعة والتقارير حسب احتياجاتك — سواء كنت منشأة أو فرداً."
-                : "These packages provide a higher level of organization, follow-up, and reporting based on your business size."}
+                ? "هذه الباقات مخصصة للمنشآت التي تحتاج مستوى أعلى من التنظيم والمتابعة وإعداد التقارير. الأفراد يستفيدون من نظام حسب الطلب أعلاه."
+                : "These packages are exclusively for facilities requiring a higher level of organization, follow-up, and reporting. Individuals use the on-demand model above."}
             </p>
           </div>
 
