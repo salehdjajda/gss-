@@ -337,7 +337,7 @@ export default function AdminDashboard() {
     apiGet("/admin/staff-list").then(setStaffList).catch(() => {});
   }, []);
 
-  const handleLogout = () => { logout(); setLocation("/login"); };
+  const handleLogout = () => { logout(); setLocation("/"); };
 
   const updateCompanyStatus = async (id: number, status: string) => {
     await apiPatch(`/admin/companies/${id}/status`, { status });
