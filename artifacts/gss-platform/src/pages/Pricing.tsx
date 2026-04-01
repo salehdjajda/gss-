@@ -46,7 +46,7 @@ export default function Pricing() {
       title: isAr ? "باقة المتابعة الأساسية" : "Basic Follow-Up Package",
       badge: null,
       desc: isAr
-        ? "مناسبة للمنشآت الصغيرة أو ذات الطلبات المحدودة"
+        ? "مناسبة للأفراد والمنشآت ذات الطلبات المحدودة"
         : "Suitable for small businesses or those with limited requests",
       icon: Briefcase,
       features: isAr ? [
@@ -71,7 +71,7 @@ export default function Pricing() {
       title: isAr ? "باقة المتابعة المتقدمة" : "Advanced Follow-Up Package",
       badge: isAr ? "⭐ الأكثر اختيارًا" : "⭐ Most Popular",
       desc: isAr
-        ? "مناسبة للمنشآت المتوسطة أو متعددة المواقع"
+        ? "مناسبة للمنشآت المتوسطة أو الأفراد ذوي الطلبات المتكررة"
         : "Suitable for medium businesses or multi-location companies",
       icon: Star,
       features: isAr ? [
@@ -161,7 +161,7 @@ export default function Pricing() {
           </h1>
           <p className="text-white/80 text-lg leading-relaxed max-w-3xl mx-auto">
             {isAr
-              ? "تعتمد منصة GSS على نظام خدمة حسب الطلب كأساس للعمل، مع إمكانية إضافة باقات مزايا تشغيلية اختيارية تمنح منشأتكم مستوى أعلى من المتابعة والتنظيم والدعم التشغيلي حسب حجم أعمالها."
+              ? "تعتمد منصة GSS على نظام خدمة حسب الطلب كأساس للعمل، مع إمكانية إضافة باقات مزايا تشغيلية اختيارية تمنحك — سواء كنت منشأة أو فرداً — مستوى أعلى من المتابعة والتنظيم والدعم التشغيلي."
               : "GSS Platform is built on an on-demand service model, with optional operational feature packages that give your business a higher level of follow-up, organization, and operational support based on its size."}
           </p>
           <p className="text-secondary font-bold mt-4 text-sm">
@@ -192,7 +192,7 @@ export default function Pricing() {
               </div>
               <p className="text-gray-500 text-sm leading-relaxed mb-6">
                 {isAr
-                  ? "يمكن لمنشأتكم الاستفادة من خدمات منصة GSS دون الالتزام بأي باقة تشغيلية إضافية."
+                  ? "يمكنك الاستفادة من خدمات منصة GSS دون الالتزام بأي باقة تشغيلية إضافية — سواء كنت منشأة أو فرداً."
                   : "Your business can benefit from GSS Platform services without committing to any additional operational package."}
               </p>
               <ul className="space-y-3 mb-8">
@@ -247,7 +247,7 @@ export default function Pricing() {
             </h2>
             <p className="text-gray-500 max-w-2xl mx-auto">
               {isAr
-                ? "توفر هذه الباقات مستوى أعلى من التنظيم والمتابعة والتقارير حسب حجم منشأتكم."
+                ? "توفر هذه الباقات مستوى أعلى من التنظيم والمتابعة والتقارير حسب احتياجاتك — سواء كنت منشأة أو فرداً."
                 : "These packages provide a higher level of organization, follow-up, and reporting based on your business size."}
             </p>
           </div>
@@ -356,7 +356,7 @@ export default function Pricing() {
               </Link>
               <Link href="/register/company">
                 <Button size="lg" variant="outline" className="w-full h-11 font-bold text-white border-white hover:bg-white/10">
-                  {isAr ? "سجّل منشأتك أولاً" : "Register Your Company First"}
+                  {isAr ? "سجّل أولاً" : "Register First"}
                 </Button>
               </Link>
             </div>

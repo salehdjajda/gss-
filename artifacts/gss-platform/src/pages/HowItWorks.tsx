@@ -11,12 +11,12 @@ export default function HowItWorks() {
     {
       num: "01",
       title: "إرسال الطلب",
-      desc: "عبر لوحة تحكم المنشأة، يتم إرسال طلب الخدمة (صيانة، نظافة، IT، إلخ) مع توضيح التفاصيل والموقع وتحديد مستوى الأهمية."
+      desc: "عبر لوحة التحكم الخاصة بك (منشأة أو فرد)، أرسل طلب الخدمة (صيانة، نظافة، IT، إلخ) مع توضيح التفاصيل والموقع وتحديد مستوى الأهمية."
     },
     {
       num: "02",
       title: "تحليل الاحتياج",
-      desc: "يقوم فريق العمليات في GSS بمراجعة الطلب وفهم المتطلبات التقنية والمادية، وقد يتم التواصل للاستيضاح إن لزم الأمر."
+      desc: "يقوم فريق العمليات في GSS بمراجعة الطلب وفهم المتطلبات التقنية والمادية، وقد يتم التواصل معك للاستيضاح إن لزم الأمر."
     },
     {
       num: "03",
@@ -26,23 +26,23 @@ export default function HowItWorks() {
     {
       num: "04",
       title: "متابعة التنفيذ",
-      desc: "يشرف فريقنا على التنفيذ خطوة بخطوة، نضمن التزام المورد بالوقت والجودة، ونبقي المنشأة على اطلاع بحالة الطلب حية."
+      desc: "يشرف فريقنا على التنفيذ خطوة بخطوة، نضمن التزام المورد بالوقت والجودة، ونبقيك على اطلاع دائم بحالة طلبك."
     },
     {
       num: "05",
       title: "الإغلاق والتقارير",
-      desc: "بعد التأكد من رضا العميل وإنجاز العمل، يُغلق الطلب وتُصدر تقارير أداء دورية توضح المصروفات وتفاصيل العمليات المنجزة."
+      desc: "بعد التأكد من رضاك وإنجاز العمل، يُغلق الطلب وتُصدر تقارير أداء دورية توضح المصروفات وتفاصيل العمليات المنجزة."
     }
   ] : [
     {
       num: "01",
       title: "Submit Request",
-      desc: "Through the facility dashboard, submit a service request (maintenance, cleaning, IT, etc.) with details, location, and priority level."
+      desc: "Through your dashboard (facility or individual), submit a service request (maintenance, cleaning, IT, etc.) with details, location, and priority level."
     },
     {
       num: "02",
       title: "Needs Analysis",
-      desc: "GSS operations team reviews the request and understands technical and material requirements, reaching out for clarification if needed."
+      desc: "GSS operations team reviews the request and understands technical and material requirements, reaching out to you for clarification if needed."
     },
     {
       num: "03",
@@ -52,12 +52,12 @@ export default function HowItWorks() {
     {
       num: "04",
       title: "Execution Monitoring",
-      desc: "Our team oversees execution step by step, ensuring vendor compliance with time and quality standards, keeping the facility updated on request status."
+      desc: "Our team oversees execution step by step, ensuring vendor compliance with time and quality standards, keeping you updated on your request status."
     },
     {
       num: "05",
       title: "Closure & Reports",
-      desc: "After confirming client satisfaction and work completion, the request is closed and periodic performance reports are issued showing expenditures and operation details."
+      desc: "After confirming your satisfaction and work completion, the request is closed and periodic performance reports are issued showing expenditures and operation details."
     }
   ];
 
@@ -70,8 +70,8 @@ export default function HowItWorks() {
           </h1>
           <p className="text-xl text-primary-foreground/80 max-w-3xl mx-auto leading-relaxed">
             {ar
-              ? "صممنا سير العمل ليكون شفافاً، موثوقاً، ويضمن التدخل البشري الخبير في كل مرحلة."
-              : "We designed our workflow to be transparent, reliable, and ensure expert human involvement at every stage."}
+              ? "صممنا سير العمل ليكون شفافاً وموثوقاً — سواء كنت منشأة أو فرداً، ويضمن التدخل البشري الخبير في كل مرحلة."
+              : "We designed our workflow to be transparent and reliable — whether you're a facility or an individual — with expert human involvement at every stage."}
           </p>
         </div>
       </section>

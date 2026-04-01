@@ -229,8 +229,8 @@ export default function Home() {
             </span>
             <h2 className="text-3xl md:text-4xl font-bold mb-4 leading-snug">
               {ar
-                ? "كيف يمكن تعزيز كفاءة إدارة الخدمات التشغيلية في منشأتكم؟"
-                : "How Can Operational Service Management Efficiency Be Enhanced in Your Facility?"}
+                ? "كيف تساعدك منصة GSS في إدارة خدماتك التشغيلية؟"
+                : "How Does GSS Help You Manage Your Operational Services?"}
             </h2>
           </div>
 
@@ -246,13 +246,13 @@ export default function Home() {
             <motion.div variants={fadeInUp}>
               <p className="text-slate-300 text-lg leading-relaxed mb-8">
                 {ar
-                  ? "حتى المنشآت الأكثر تنظيمًا تحتاج إلى مستوى أعلى من التنسيق بين الموردين، وتحكم أوضح في المصروفات التشغيلية، ورؤية مركزية تدعم اتخاذ القرار عبر الفروع والمرافق المختلفة."
-                  : "Even the most organized facilities need a higher level of vendor coordination, clearer control over operational expenses, and a centralized view that supports decision-making across branches and facilities."}
+                  ? "سواء كنت منشأة أو فرداً، تحتاج إلى مستوى أعلى من التنسيق في الخدمات التشغيلية، وتحكم أوضح في المصروفات، ورؤية واضحة لكل ما تم تنفيذه."
+                  : "Whether you're a facility or an individual, you need a higher level of coordination in operational services, clearer expense control, and full visibility into everything executed."}
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
                 <Link href="/register/company">
                   <Button size="lg" className="h-12 px-7 font-bold bg-secondary text-primary hover:bg-secondary/90" data-testid="link-challenge-register">
-                    {ar ? "سجّل منشأتك" : "Register Your Facility"} <ArrowLeft className="mr-2" size={16} />
+                    {ar ? "سجّل الآن" : "Register Now"} <ArrowLeft className="mr-2" size={16} />
                   </Button>
                 </Link>
                 <Link href="/companies">
@@ -267,8 +267,8 @@ export default function Home() {
             <motion.div variants={fadeInUp} className="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-7">
               <p className="text-secondary font-bold text-base mb-5">
                 {ar
-                  ? "تدعم منصة GSS منشأتكم في تحسين هذه الجوانب من خلال:"
-                  : "GSS supports your facility in improving these aspects through:"}
+                  ? "سواء كنت منشأة أو فرداً، تدعمك GSS في هذه الجوانب من خلال:"
+                  : "Whether you're a facility or an individual, GSS supports you in these areas through:"}
               </p>
               <ul className="space-y-4">
                 {gssSupportPoints.map((point, i) => (
@@ -396,19 +396,19 @@ export default function Home() {
             <div>
               <p className="font-bold text-gray-900 text-lg mb-1">
                 {ar
-                  ? "لا يهم حجم منشأتك — صغيرة أو كبيرة، نبدأ معكم من اليوم الأول"
-                  : "Size doesn't matter — small or large, we start with you from day one"}
+                  ? "سواء كنت منشأة أو فرداً — نبدأ معك من اليوم الأول"
+                  : "Whether you're a facility or an individual — we start with you from day one"}
               </p>
               <p className="text-gray-500 text-sm">
                 {ar
-                  ? "سجّل منشأتك وسيتواصل معك فريقنا لتقديم التسعيرة المناسبة لاحتياجاتكم."
-                  : "Register your facility and our team will reach out to provide a quote tailored to your needs."}
+                  ? "سجّل وسيتواصل معك فريقنا لتقديم الحل المناسب لاحتياجاتك."
+                  : "Register and our team will reach out to provide the right solution for your needs."}
               </p>
             </div>
             <div className="flex gap-3 shrink-0">
               <Link href="/register/company">
                 <Button className="font-bold px-6 bg-primary hover:bg-primary/90">
-                  {ar ? "سجّل منشأتك الآن" : "Register Now"}
+                  {ar ? "سجّل الآن" : "Register Now"}
                   <ArrowLeft className="mr-2" size={16} />
                 </Button>
               </Link>
@@ -543,12 +543,12 @@ export default function Home() {
       <section className="bg-primary py-24 text-white text-center">
         <div className="max-w-4xl mx-auto px-4">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            {ar ? "ابدأ بتنظيم خدمات منشأتكم التشغيلية" : "Start Organizing Your Facility's Operational Services"}
+            {ar ? "ابدأ في تنظيم خدماتك التشغيلية — للمنشآت والأفراد" : "Start Organizing Your Operational Services — For Facilities & Individuals"}
           </h2>
           <p className="text-xl text-primary-foreground/80 mb-10 leading-relaxed">
             {ar
-              ? "عبر نقطة تشغيل واحدة، مع نموذج تشغيل مرن حسب الطلب وإمكانية إضافة مزايا تشغيلية متقدمة حسب احتياجاتكم."
-              : "Through a single operational point, with a flexible on-demand model and the ability to add advanced operational features based on your needs."}
+              ? "عبر نقطة تشغيل واحدة، بنموذج مرن حسب الطلب يناسبك سواء كنت منشأة أو فرداً، مع إمكانية إضافة مزايا تشغيلية متقدمة حسب احتياجاتك."
+              : "Through a single operational point, with a flexible on-demand model suitable for facilities and individuals alike, with the ability to add advanced features based on your needs."}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/register/company">
@@ -557,7 +557,7 @@ export default function Home() {
                 className="bg-secondary hover:bg-secondary/90 text-primary font-bold h-14 px-10 text-lg"
                 data-testid="cta-register-company"
               >
-                {ar ? "سجل منشأتك الآن" : "Register Your Facility Now"}
+                {ar ? "سجّل الآن" : "Register Now"}
                 <ArrowLeft className="mr-2" size={20} />
               </Button>
             </Link>

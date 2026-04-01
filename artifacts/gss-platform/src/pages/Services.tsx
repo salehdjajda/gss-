@@ -543,14 +543,14 @@ export default function Services() {
           </h1>
           <p className="text-xl text-white/80 max-w-3xl mx-auto leading-relaxed mb-10">
             {ar
-              ? "تعمل منصة GSS كعمليات خارجية تتولى تنظيم ومتابعة الخدمات التشغيلية للمنشآت عبر نقطة اتصال واحدة، والتنسيق مع الموردين المعتمدين حتى إغلاق الطلب وفق متطلبات المنشأة."
+              ? "تعمل منصة GSS كعمليات خارجية تتولى تنظيم ومتابعة الخدمات التشغيلية للمنشآت والأفراد عبر نقطة اتصال واحدة، والتنسيق مع الموردين المعتمدين حتى إغلاق الطلب وفق متطلباتك."
               : "GSS acts as external operations organizing and monitoring operational services for facilities through a single point of contact, coordinating with certified vendors until the request is closed."}
           </p>
 
           {/* Intro above search */}
           <p className="text-white/70 text-sm max-w-2xl mx-auto mb-4 leading-relaxed">
             {ar
-              ? "يمكنكم طلب أي خدمة تشغيلية أو فنية عبر منصة GSS، حيث يتولى فريق التشغيل تنظيم الطلب والتنسيق مع الموردين المعتمدين ومتابعة التنفيذ حتى إغلاق الخدمة وفق متطلبات منشأتكم."
+              ? "يمكنك طلب أي خدمة تشغيلية أو فنية عبر منصة GSS، حيث يتولى فريق التشغيل تنظيم الطلب والتنسيق مع الموردين المعتمدين ومتابعة التنفيذ حتى إغلاق الخدمة وفق متطلباتك — سواء كنت منشأة أو فرداً."
               : "You can request any operational or technical service through GSS. Our operations team organizes the request, coordinates with certified vendors, and follows up until the service is closed as per your facility's requirements."}
           </p>
 
@@ -853,7 +853,7 @@ export default function Services() {
               <Textarea
                 value={customForm.description}
                 onChange={e => setCustomForm(p => ({ ...p, description: e.target.value }))}
-                placeholder={ar ? "صف باختصار ما تحتاجه منشأتكم، وسيتواصل معك فريق GSS لدراسة الطلب وتقديم حل مناسب..." : "Briefly describe what your facility needs, and the GSS team will get in touch to study and resolve your request..."}
+                placeholder={ar ? "صف باختصار ما تحتاجه (منشأة أو فرد)، وسيتواصل معك فريق GSS لدراسة الطلب وتقديم حل مناسب..." : "Briefly describe what you need (facility or individual), and the GSS team will get in touch to study and provide a suitable solution..."}
                 rows={4}
                 required
               />
@@ -874,7 +874,7 @@ export default function Services() {
       <section className="py-16 bg-primary text-white text-center">
         <div className="max-w-4xl mx-auto px-4">
           <h2 className="text-3xl font-bold mb-4">
-            {ar ? "هل أنتم مستعدون لتبسيط تشغيل منشأتكم؟" : "Ready to Simplify Your Facility's Operations?"}
+            {ar ? "هل أنت مستعد للبدء مع GSS؟" : "Ready to Get Started with GSS?"}
           </h2>
           <p className="text-white/80 text-lg mb-8 max-w-2xl mx-auto">
             {ar
@@ -884,7 +884,7 @@ export default function Services() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/register/company">
               <Button size="lg" className="h-14 px-10 text-lg font-bold bg-secondary hover:bg-secondary/90 text-primary" data-testid="cta-services-register">
-                {ar ? "سجّل منشأتك الآن" : "Register Your Facility Now"} <ArrowLeft className="mr-2" size={20} />
+                {ar ? "سجّل الآن" : "Register Now"} <ArrowLeft className="mr-2" size={20} />
               </Button>
             </Link>
             <Link href="/contact">
