@@ -25,6 +25,7 @@ const SPECIALIZED = [
     image: "https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=600&auto=format&fit=crop&q=80",
     desc: "تركيب وصيانة أجهزة التكييف والتبريد بجميع أنواعها",
     color: "from-sky-500 to-blue-600",
+    items: ["تركيب مكيفات سبليت وكاسيت", "صيانة وإصلاح أعطال التكييف", "تنظيف الفلاتر والوحدات", "خدمات التبريد التجاري", "أنظمة التكييف المركزي"],
   },
   {
     label: "كهرباء",
@@ -32,6 +33,7 @@ const SPECIALIZED = [
     image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&auto=format&fit=crop&q=80",
     desc: "تمديدات وصيانة الأعمال الكهربائية والإنارة",
     color: "from-yellow-400 to-amber-600",
+    items: ["تمديدات كهربائية", "صيانة لوحات الكهرباء", "تركيب الإنارة", "معالجة الأعطال الكهربائية", "تمديدات التيار الخفيف"],
   },
   {
     label: "سباكة",
@@ -39,13 +41,15 @@ const SPECIALIZED = [
     image: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=600&auto=format&fit=crop&q=80",
     desc: "أعمال السباكة والعزل المائي وصيانة شبكات المياه",
     color: "from-cyan-500 to-teal-600",
+    items: ["صيانة شبكات المياه", "إصلاح أعطال السباكة", "تركيب الأدوات الصحية", "أعمال العزل المائي", "صيانة خزانات المياه"],
   },
   {
     label: "أجهزة منزلية",
     icon: Monitor,
     image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&auto=format&fit=crop&q=80",
-    desc: "تنسيق صيانة وتوريد وتركيب الأجهزة المنزلية بمختلف أنواعها من خلال موردين معتمدين — الثلاجات والغسالات والأفران وغيرها.",
+    desc: "تنسيق صيانة وتوريد وتركيب الأجهزة المنزلية بمختلف أنواعها",
     color: "from-purple-500 to-indigo-600",
+    items: ["صيانة الثلاجات والفريزرات", "صيانة الغسالات وغسالات الصحون", "صيانة الأفران والميكروويف", "توريد وتركيب الأجهزة", "أجهزة المطبخ الكهربائية"],
   },
   {
     label: "أرضيات",
@@ -53,6 +57,7 @@ const SPECIALIZED = [
     image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&auto=format&fit=crop&q=80",
     desc: "تركيب وصيانة جميع أنواع الأرضيات والبلاط والباركيه الخشبي",
     color: "from-stone-500 to-slate-600",
+    items: ["تركيب البلاط والسيراميك", "تركيب الباركيه الخشبي", "تركيب الرخام والجرانيت", "صيانة وتلميع الأرضيات", "تركيب السجاد"],
   },
   {
     label: "دهانات",
@@ -60,6 +65,7 @@ const SPECIALIZED = [
     image: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=600&auto=format&fit=crop&q=80",
     desc: "دهانات داخلية وخارجية بمعايير تشطيب احترافية",
     color: "from-orange-400 to-red-500",
+    items: ["دهانات داخلية للجدران والأسقف", "دهانات خارجية للمباني", "دهانات إيبوكسي للأرضيات", "معالجة الرطوبة والتشققات", "دهانات الواجهات والأسطح"],
   },
   {
     label: "نجارة",
@@ -67,6 +73,7 @@ const SPECIALIZED = [
     image: "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=600&auto=format&fit=crop&q=80",
     desc: "أعمال النجارة والتركيبات الخشبية وتجهيز المكاتب والمطابخ",
     color: "from-amber-600 to-yellow-700",
+    items: ["تركيب الأبواب الخشبية", "تجهيز المطابخ الخشبية", "تركيب الخزائن المدمجة", "صيانة الأثاث وإصلاحه", "تجهيز وتركيب المكاتب"],
   },
   {
     label: "جبس",
@@ -74,6 +81,7 @@ const SPECIALIZED = [
     image: "https://images.unsplash.com/photo-1571504211935-1c936b327411?w=600&auto=format&fit=crop&q=80",
     desc: "تركيب وتشكيل الجبس والديكورات الجبسية ولياسة الجدران",
     color: "from-pink-400 to-rose-500",
+    items: ["تركيب ألواح الجبسبورد", "ديكورات الجبس والأسقف", "لياسة الجدران والأسقف", "أسقف مستعارة", "تشطيبات جبسية احترافية"],
   },
   {
     label: "عزل",
@@ -81,6 +89,7 @@ const SPECIALIZED = [
     image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&auto=format&fit=crop&q=80",
     desc: "أعمال العزل الحراري والمائي للأسطح والجدران والأرضيات",
     color: "from-slate-500 to-gray-700",
+    items: ["عزل حراري للأسطح والجدران", "عزل مائي للحمامات والمطابخ", "عزل مائي للأسطح الخارجية", "معالجة تسربات المياه", "أنظمة الحماية من الرطوبة"],
   },
   {
     label: "تنظيف",
@@ -88,6 +97,7 @@ const SPECIALIZED = [
     image: "https://images.unsplash.com/photo-1563453392212-326f5e854473?w=600&auto=format&fit=crop&q=80",
     desc: "تنظيف يومي وعميق للمنشآت والفروع بمواد معتمدة",
     color: "from-violet-500 to-purple-700",
+    items: ["تنظيف يومي للمكاتب والمنشآت", "تنظيف عميق دوري", "تنظيف الواجهات الزجاجية", "تعقيم وتطهير الأسطح", "تنظيف ما بعد التشطيب"],
   },
   {
     label: "مكافحة حشرات",
@@ -95,41 +105,47 @@ const SPECIALIZED = [
     image: "https://images.unsplash.com/photo-1530126483408-aa533e55bdb2?w=600&auto=format&fit=crop&q=80",
     desc: "رش وقاية دورية ومكافحة الحشرات والقوارض",
     color: "from-lime-500 to-green-700",
+    items: ["رش حشرات", "مكافحة النمل الأبيض", "مكافحة القوارض", "تعقيم المنازل", "تعقيم المنشآت"],
   },
   {
     label: "كاميرات وأنظمة أمنية",
     icon: Camera,
     image: "https://images.unsplash.com/photo-1557597774-9d273605dfa9?w=600&auto=format&fit=crop&q=80",
-    desc: "تنظيم توريد وتركيب وصيانة أنظمة المراقبة والتحكم الأمني وأجهزة البصمة",
+    desc: "تنظيم توريد وتركيب وصيانة أنظمة المراقبة والتحكم الأمني",
     color: "from-slate-600 to-gray-800",
+    items: ["كاميرات المراقبة", "أنظمة التسجيل", "أنظمة التحكم بالدخول", "أجهزة البصمة والحضور", "أنظمة الإنذار"],
   },
   {
     label: "شبكات وتقنية",
     icon: Wifi,
     image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&auto=format&fit=crop&q=80",
-    desc: "تنسيق تجهيز وصيانة البنية التقنية للمواقع والمكاتب — شبكات وإنترنت وسيرفرات",
+    desc: "تنسيق تجهيز وصيانة البنية التقنية للمواقع والمكاتب",
     color: "from-blue-500 to-indigo-700",
+    items: ["الشبكات الداخلية LAN", "نقاط الإنترنت والواي فاي", "تمديدات الشبكات", "الراوترات والسويتشات", "السيرفرات الصغيرة"],
   },
   {
     label: "اتصالات",
     icon: Phone,
     image: "https://images.unsplash.com/photo-1516321497487-e288fb19713f?w=600&auto=format&fit=crop&q=80",
-    desc: "تنظيم خدمات الهاتف والإنترنت والسنترالات التشغيلية والتنسيق مع مزودي الخدمة",
+    desc: "تنظيم خدمات الهاتف والإنترنت والسنترالات التشغيلية",
     color: "from-cyan-600 to-blue-700",
+    items: ["السنترالات الهاتفية", "الهواتف المكتبية", "خدمات الإنترنت التجارية", "إدارة الفواتير التقنية", "دوائر البيانات"],
   },
   {
     label: "أبواب أوتوماتيكية",
     icon: DoorOpen,
     image: "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&auto=format&fit=crop&q=80",
-    desc: "تنسيق تركيب وصيانة الأبواب الزجاجية والبوابات الكهربائية وأبواب الرول",
+    desc: "تنسيق تركيب وصيانة الأبواب الذكية والبوابات الكهربائية",
     color: "from-gray-500 to-slate-700",
+    items: ["الأبواب الزجاجية الأوتوماتيكية", "أبواب الرول للمستودعات", "البوابات الكهربائية", "بوابات مواقف السيارات", "أنظمة التحكم بالمداخل"],
   },
   {
     label: "مصاعد",
     icon: ArrowUpDown,
     image: "https://images.unsplash.com/photo-1567452839976-89f0ef04e77b?w=600&auto=format&fit=crop&q=80",
-    desc: "تنظيم صيانة وفحص وتشغيل أنظمة المصاعد والسلالم الكهربائية",
+    desc: "تنظيم صيانة وفحص وتشغيل أنظمة المصاعد",
     color: "from-neutral-500 to-stone-700",
+    items: ["الصيانة الدورية للمصاعد", "الفحص الفني والسلامة", "إصلاح أعطال المصاعد", "صيانة السلالم الكهربائية", "تحديثات تشغيلية"],
   },
   {
     label: "مسابح",
@@ -137,55 +153,63 @@ const SPECIALIZED = [
     image: "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?w=600&auto=format&fit=crop&q=80",
     desc: "تنظيف وصيانة وتشغيل أحواض السباحة",
     color: "from-teal-400 to-cyan-600",
+    items: ["تنظيف وتعقيم المسابح", "صيانة مضخات المياه", "صيانة أنظمة الفلترة", "معالجة مياه السباحة كيميائياً", "إصلاح أعطال التجهيزات"],
   },
   {
     label: "حدائق",
     icon: Leaf,
     image: "https://images.unsplash.com/photo-1558904541-efa843a96f01?w=600&auto=format&fit=crop&q=80",
-    desc: "تنسيق تنسيق المناظر الطبيعية والزراعة والعشب الصناعي وصيانة الحدائق",
+    desc: "تنسيق المناظر الطبيعية والزراعة والعشب الصناعي",
     color: "from-green-500 to-emerald-700",
+    items: ["تنسيق المناظر الطبيعية", "تركيب العشب الصناعي", "زراعة النباتات والأشجار", "أنظمة الري الأوتوماتيكي", "صيانة الحدائق الدورية"],
   },
   {
     label: "مظلات وسواتر",
     icon: ParkingSquare,
     image: "https://images.unsplash.com/photo-1614854262340-ab1ca7d079c7?w=600&auto=format&fit=crop&q=80",
-    desc: "تصنيع وتركيب وصيانة المظلات والسواتر ومظلات مواقف السيارات",
+    desc: "تصنيع وتركيب وصيانة المظلات والسواتر",
     color: "from-indigo-500 to-blue-700",
+    items: ["مظلات مواقف السيارات", "سواتر الخصوصية", "مظلات الحدائق والمسابح", "بيوت الشعر والخيام", "هياكل التظليل الكبيرة"],
   },
   {
     label: "واجهات ولوحات",
     icon: Layers,
     image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&auto=format&fit=crop&q=80",
-    desc: "تركيب اللوحات التجارية والإعلانية وواجهات المحلات والمباني",
+    desc: "تركيب اللوحات التجارية والإعلانية وواجهات المباني",
     color: "from-rose-500 to-pink-700",
+    items: ["لوحات المحلات التجارية", "واجهات الألمنيوم والكمبوزيت", "اللوحات الإعلانية الخارجية", "الشاشات الرقمية الخارجية", "واجهات الزجاج الهيكلي"],
   },
   {
     label: "معدات تجارية",
     icon: Utensils,
     image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&auto=format&fit=crop&q=80",
-    desc: "تنسيق توريد وتركيب وصيانة معدات المطابخ التجارية والمطاعم والمقاهي",
+    desc: "تنسيق توريد وتركيب وصيانة معدات الأنشطة التجارية",
     color: "from-amber-500 to-orange-700",
+    items: ["معدات المطابخ التجارية", "أجهزة المقاهي والمطاعم", "ثلاجات العرض التجارية", "أنظمة نقاط البيع POS", "الشاشات الرقمية الداخلية"],
   },
   {
     label: "أنظمة تشغيل المباني",
     icon: Building2,
     image: "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&auto=format&fit=crop&q=80",
-    desc: "تنظيم تجهيز وصيانة أنظمة BMS وأنظمة الإنذار والتحكم المركزي للمباني",
+    desc: "تجهيز وصيانة الأنظمة التشغيلية للمباني الكبيرة",
     color: "from-blue-600 to-indigo-800",
+    items: ["أنظمة إدارة المباني BMS", "أنظمة التحكم المركزي", "أنظمة الإنذار والسلامة", "أنظمة التشغيل الذكي", "أتمتة المنشآت"],
   },
   {
     label: "طاقة احتياطية",
     icon: BatteryCharging,
     image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=600&auto=format&fit=crop&q=80",
-    desc: "تنسيق توريد وتركيب وصيانة المولدات وأنظمة UPS والطاقة الاحتياطية",
+    desc: "توريد وتركيب وصيانة أنظمة الطاقة الاحتياطية",
     color: "from-yellow-500 to-amber-700",
+    items: ["تركيب المولدات وصيانتها", "أنظمة UPS للحماية", "البطاريات الصناعية", "أنظمة الطاقة الشمسية الاحتياطية", "صيانة منظومات الطاقة"],
   },
   {
     label: "مواقف ذكية",
     icon: Car,
     image: "https://images.unsplash.com/photo-1470224114660-3f6686c562eb?w=600&auto=format&fit=crop&q=80",
-    desc: "تنسيق تركيب وتشغيل أنظمة إدارة مواقف السيارات الذكية للمجمعات والمنشآت",
+    desc: "تركيب وتشغيل أنظمة إدارة مواقف السيارات الذكية",
     color: "from-slate-600 to-blue-800",
+    items: ["بوابات الدخول الذكية", "أنظمة التذاكر الإلكترونية", "أنظمة العدادات", "لوحات التوجيه الذكي", "أنظمة الدفع الإلكتروني"],
   },
 ];
 
@@ -810,25 +834,40 @@ export default function Services() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: i * 0.05 }}
-                className="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all cursor-pointer"
+                className="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all cursor-pointer"
               >
                 {/* Background Image */}
-                <div className="h-40 relative">
+                <div className="h-44 relative">
                   <img
                     src={item.image}
                     alt={item.label}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className={`absolute inset-0 bg-gradient-to-t ${item.color} opacity-75 group-hover:opacity-85 transition-opacity`} />
-                  {/* Icon */}
-                  <div className="absolute top-3 right-3 w-9 h-9 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
+                  <div className={`absolute inset-0 bg-gradient-to-t ${item.color} opacity-75 group-hover:opacity-95 transition-opacity duration-300`} />
+
+                  {/* Icon — visible when not hovering */}
+                  <div className="absolute top-3 right-3 w-9 h-9 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center group-hover:opacity-0 transition-opacity duration-200">
                     <item.icon size={18} className="text-white" />
+                  </div>
+
+                  {/* Items list — visible on hover */}
+                  <div className="absolute inset-0 flex flex-col justify-center px-3 py-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <p className="text-white font-bold text-xs mb-2 text-center border-b border-white/30 pb-1.5">
+                      {ar ? item.label : (SPECIALIZED_EN[item.label]?.label ?? item.label)}
+                    </p>
+                    <ul className="space-y-1">
+                      {item.items.map((sub, j) => (
+                        <li key={j} className="text-white/95 text-xs flex items-start gap-1.5">
+                          <span className="mt-1 w-1.5 h-1.5 rounded-full bg-white/80 flex-shrink-0" />
+                          <span>{sub}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
                 {/* Label */}
                 <div className="p-3 bg-white border border-gray-100 border-t-0">
                   <p className="font-bold text-gray-900 text-sm text-center">{ar ? item.label : (SPECIALIZED_EN[item.label]?.label ?? item.label)}</p>
-                  <p className="text-gray-500 text-xs text-center mt-1 leading-relaxed hidden group-hover:block">{ar ? item.desc : (SPECIALIZED_EN[item.label]?.desc ?? item.desc)}</p>
                 </div>
               </motion.div>
             ))}
