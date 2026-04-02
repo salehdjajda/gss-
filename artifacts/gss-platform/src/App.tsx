@@ -37,6 +37,7 @@ import Pricing from "@/pages/Pricing";
 import Vendors from "@/pages/Vendors";
 import Partners from "@/pages/Partners";
 import Contact from "@/pages/Contact";
+import BookMeeting from "@/pages/BookMeeting";
 import Register from "@/pages/Register";
 import Services from "@/pages/Services";
 
@@ -97,6 +98,7 @@ function MainLayout() {
           <Route path="/partners" component={Partners} />
           <Route path="/services" component={Services} />
           <Route path="/contact" component={Contact} />
+          <Route path="/book-meeting" component={BookMeeting} />
           <Route path="/register" component={Register} />
 
           <Route path="/register/company" component={RegisterCompany} />
