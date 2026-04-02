@@ -14,7 +14,8 @@ import {
   Layers, Thermometer, Bug, LayoutGrid, Anchor,
   Square, AlignJustify, ParkingSquare,
   Briefcase, TrendingDown, AlertTriangle, ClipboardCheck, Package,
-  BarChart3, Receipt, UserCog, BadgeCheck
+  BarChart3, Receipt, UserCog, BadgeCheck,
+  Camera, Wifi, DoorOpen, ArrowUpDown, BatteryCharging, Utensils, Shield
 } from "lucide-react";
 
 const SPECIALIZED = [
@@ -26,6 +27,13 @@ const SPECIALIZED = [
     color: "from-sky-500 to-blue-600",
   },
   {
+    label: "كهرباء",
+    icon: Lightbulb,
+    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&auto=format&fit=crop&q=80",
+    desc: "تمديدات وصيانة الأعمال الكهربائية والإنارة",
+    color: "from-yellow-400 to-amber-600",
+  },
+  {
     label: "سباكة",
     icon: Droplets,
     image: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=600&auto=format&fit=crop&q=80",
@@ -33,11 +41,18 @@ const SPECIALIZED = [
     color: "from-cyan-500 to-teal-600",
   },
   {
-    label: "كهرباء",
-    icon: Lightbulb,
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&auto=format&fit=crop&q=80",
-    desc: "تمديدات وصيانة الأعمال الكهربائية والإنارة",
-    color: "from-yellow-400 to-amber-600",
+    label: "أجهزة منزلية",
+    icon: Monitor,
+    image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&auto=format&fit=crop&q=80",
+    desc: "تنسيق صيانة وتوريد وتركيب الأجهزة المنزلية بمختلف أنواعها من خلال موردين معتمدين — الثلاجات والغسالات والأفران وغيرها.",
+    color: "from-purple-500 to-indigo-600",
+  },
+  {
+    label: "أرضيات",
+    icon: LayoutGrid,
+    image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&auto=format&fit=crop&q=80",
+    desc: "تركيب وصيانة جميع أنواع الأرضيات والبلاط والباركيه الخشبي",
+    color: "from-stone-500 to-slate-600",
   },
   {
     label: "دهانات",
@@ -47,39 +62,25 @@ const SPECIALIZED = [
     color: "from-orange-400 to-red-500",
   },
   {
-    label: "نجارة وتركيبات",
+    label: "نجارة",
     icon: HardHat,
     image: "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=600&auto=format&fit=crop&q=80",
-    desc: "أعمال النجارة والتركيبات الخشبية وتجهيز المكاتب",
+    desc: "أعمال النجارة والتركيبات الخشبية وتجهيز المكاتب والمطابخ",
     color: "from-amber-600 to-yellow-700",
   },
   {
-    label: "عشب صناعي",
-    icon: Leaf,
-    image: "https://images.unsplash.com/photo-1558904541-efa843a96f01?w=600&auto=format&fit=crop&q=80",
-    desc: "تركيب وصيانة العشب الصناعي للمساحات الخارجية",
-    color: "from-green-500 to-emerald-600",
+    label: "جبس",
+    icon: Square,
+    image: "https://images.unsplash.com/photo-1571504211935-1c936b327411?w=600&auto=format&fit=crop&q=80",
+    desc: "تركيب وتشكيل الجبس والديكورات الجبسية ولياسة الجدران",
+    color: "from-pink-400 to-rose-500",
   },
   {
-    label: "لياسة",
-    icon: Layers,
-    image: "https://images.unsplash.com/photo-1572879023364-ab4f53e9d5fa?w=600&auto=format&fit=crop&q=80",
-    desc: "أعمال اللياسة والتشطيبات الجدارية بجميع أنواعها",
-    color: "from-slate-400 to-gray-600",
-  },
-  {
-    label: "غرف التبريد",
-    icon: Thermometer,
-    image: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=600&auto=format&fit=crop&q=80",
-    desc: "تركيب وصيانة وتشغيل غرف التبريد والحفظ البارد",
-    color: "from-blue-400 to-indigo-600",
-  },
-  {
-    label: "مكافحة الحشرات",
-    icon: Bug,
-    image: "https://images.unsplash.com/photo-1530126483408-aa533e55bdb2?w=600&auto=format&fit=crop&q=80",
-    desc: "رش وقاية دورية ومكافحة الحشرات والقوارض",
-    color: "from-lime-500 to-green-700",
+    label: "عزل",
+    icon: Shield,
+    image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&auto=format&fit=crop&q=80",
+    desc: "أعمال العزل الحراري والمائي للأسطح والجدران والأرضيات",
+    color: "from-slate-500 to-gray-700",
   },
   {
     label: "تنظيف",
@@ -89,39 +90,102 @@ const SPECIALIZED = [
     color: "from-violet-500 to-purple-700",
   },
   {
-    label: "أرضيات",
-    icon: LayoutGrid,
-    image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&auto=format&fit=crop&q=80",
-    desc: "تركيب وصيانة جميع أنواع الأرضيات والبلاط",
-    color: "from-stone-500 to-slate-600",
+    label: "مكافحة حشرات",
+    icon: Bug,
+    image: "https://images.unsplash.com/photo-1530126483408-aa533e55bdb2?w=600&auto=format&fit=crop&q=80",
+    desc: "رش وقاية دورية ومكافحة الحشرات والقوارض",
+    color: "from-lime-500 to-green-700",
   },
   {
-    label: "حوض سباحة",
+    label: "كاميرات وأنظمة أمنية",
+    icon: Camera,
+    image: "https://images.unsplash.com/photo-1557597774-9d273605dfa9?w=600&auto=format&fit=crop&q=80",
+    desc: "تنظيم توريد وتركيب وصيانة أنظمة المراقبة والتحكم الأمني وأجهزة البصمة",
+    color: "from-slate-600 to-gray-800",
+  },
+  {
+    label: "شبكات وتقنية",
+    icon: Wifi,
+    image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&auto=format&fit=crop&q=80",
+    desc: "تنسيق تجهيز وصيانة البنية التقنية للمواقع والمكاتب — شبكات وإنترنت وسيرفرات",
+    color: "from-blue-500 to-indigo-700",
+  },
+  {
+    label: "اتصالات",
+    icon: Phone,
+    image: "https://images.unsplash.com/photo-1516321497487-e288fb19713f?w=600&auto=format&fit=crop&q=80",
+    desc: "تنظيم خدمات الهاتف والإنترنت والسنترالات التشغيلية والتنسيق مع مزودي الخدمة",
+    color: "from-cyan-600 to-blue-700",
+  },
+  {
+    label: "أبواب أوتوماتيكية",
+    icon: DoorOpen,
+    image: "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&auto=format&fit=crop&q=80",
+    desc: "تنسيق تركيب وصيانة الأبواب الزجاجية والبوابات الكهربائية وأبواب الرول",
+    color: "from-gray-500 to-slate-700",
+  },
+  {
+    label: "مصاعد",
+    icon: ArrowUpDown,
+    image: "https://images.unsplash.com/photo-1567452839976-89f0ef04e77b?w=600&auto=format&fit=crop&q=80",
+    desc: "تنظيم صيانة وفحص وتشغيل أنظمة المصاعد والسلالم الكهربائية",
+    color: "from-neutral-500 to-stone-700",
+  },
+  {
+    label: "مسابح",
     icon: Anchor,
     image: "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?w=600&auto=format&fit=crop&q=80",
     desc: "تنظيف وصيانة وتشغيل أحواض السباحة",
     color: "from-teal-400 to-cyan-600",
   },
   {
-    label: "أعمال جبسية",
-    icon: Square,
-    image: "https://images.unsplash.com/photo-1571504211935-1c936b327411?w=600&auto=format&fit=crop&q=80",
-    desc: "تركيب وتشكيل الجبس والديكورات الجبسية المتنوعة",
-    color: "from-pink-400 to-rose-500",
+    label: "حدائق",
+    icon: Leaf,
+    image: "https://images.unsplash.com/photo-1558904541-efa843a96f01?w=600&auto=format&fit=crop&q=80",
+    desc: "تنسيق تنسيق المناظر الطبيعية والزراعة والعشب الصناعي وصيانة الحدائق",
+    color: "from-green-500 to-emerald-700",
   },
   {
-    label: "باركيه",
-    icon: AlignJustify,
-    image: "https://images.unsplash.com/photo-1562663474-6cbb3eaa4d14?w=600&auto=format&fit=crop&q=80",
-    desc: "تركيب وصيانة وتلميع أرضيات الباركيه الخشبي",
-    color: "from-yellow-600 to-amber-800",
-  },
-  {
-    label: "مضلات المواقف",
+    label: "مظلات وسواتر",
     icon: ParkingSquare,
     image: "https://images.unsplash.com/photo-1614854262340-ab1ca7d079c7?w=600&auto=format&fit=crop&q=80",
-    desc: "تصنيع وتركيب وصيانة مظلات مواقف السيارات",
+    desc: "تصنيع وتركيب وصيانة المظلات والسواتر ومظلات مواقف السيارات",
     color: "from-indigo-500 to-blue-700",
+  },
+  {
+    label: "واجهات ولوحات",
+    icon: Layers,
+    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&auto=format&fit=crop&q=80",
+    desc: "تركيب اللوحات التجارية والإعلانية وواجهات المحلات والمباني",
+    color: "from-rose-500 to-pink-700",
+  },
+  {
+    label: "معدات تجارية",
+    icon: Utensils,
+    image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&auto=format&fit=crop&q=80",
+    desc: "تنسيق توريد وتركيب وصيانة معدات المطابخ التجارية والمطاعم والمقاهي",
+    color: "from-amber-500 to-orange-700",
+  },
+  {
+    label: "أنظمة تشغيل المباني",
+    icon: Building2,
+    image: "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&auto=format&fit=crop&q=80",
+    desc: "تنظيم تجهيز وصيانة أنظمة BMS وأنظمة الإنذار والتحكم المركزي للمباني",
+    color: "from-blue-600 to-indigo-800",
+  },
+  {
+    label: "طاقة احتياطية",
+    icon: BatteryCharging,
+    image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=600&auto=format&fit=crop&q=80",
+    desc: "تنسيق توريد وتركيب وصيانة المولدات وأنظمة UPS والطاقة الاحتياطية",
+    color: "from-yellow-500 to-amber-700",
+  },
+  {
+    label: "مواقف ذكية",
+    icon: Car,
+    image: "https://images.unsplash.com/photo-1470224114660-3f6686c562eb?w=600&auto=format&fit=crop&q=80",
+    desc: "تنسيق تركيب وتشغيل أنظمة إدارة مواقف السيارات الذكية للمجمعات والمنشآت",
+    color: "from-slate-600 to-blue-800",
   },
 ];
 
@@ -455,21 +519,30 @@ const CATEGORIES_EN: Record<string, { label: string; description: string; servic
 };
 
 const SPECIALIZED_EN: Record<string, { label: string; desc: string }> = {
-  "تكييف":           { label: "Air Conditioning", desc: "Installation and maintenance of all types of AC and cooling systems" },
-  "سباكة":           { label: "Plumbing",          desc: "Plumbing, waterproofing, and water network maintenance" },
-  "كهرباء":          { label: "Electrical",        desc: "Electrical works, wiring, and lighting maintenance" },
-  "دهانات":          { label: "Painting",          desc: "Interior and exterior painting with professional finishing standards" },
-  "نجارة وتركيبات": { label: "Carpentry",          desc: "Carpentry, wood installations, and office setup" },
-  "عشب صناعي":       { label: "Artificial Grass",  desc: "Installation and maintenance of artificial grass for outdoor areas" },
-  "لياسة":           { label: "Plastering",         desc: "Plastering and wall finishing works of all types" },
-  "غرف التبريد":     { label: "Cold Rooms",         desc: "Installation, maintenance, and operation of cold storage rooms" },
-  "مكافحة الحشرات":  { label: "Pest Control",       desc: "Periodic pest and rodent control" },
-  "تنظيف":           { label: "Cleaning",           desc: "Daily and deep cleaning of facilities and branches" },
-  "أرضيات":          { label: "Flooring",           desc: "Installation and maintenance of all types of flooring and tiles" },
-  "حوض سباحة":       { label: "Swimming Pools",     desc: "Cleaning, maintenance, and operation of swimming pools" },
-  "أعمال جبسية":     { label: "Gypsum Works",       desc: "Gypsum installation and shaping for various decorations" },
-  "باركيه":          { label: "Parquet",             desc: "Installation, maintenance, and polishing of wooden parquet" },
-  "مضلات المواقف":   { label: "Parking Shades",     desc: "Manufacturing, installation, and maintenance of car park shades" },
+  "تكييف":                    { label: "Air Conditioning",       desc: "Installation and maintenance of all types of AC and cooling systems" },
+  "كهرباء":                   { label: "Electrical",             desc: "Electrical works, wiring, and lighting maintenance" },
+  "سباكة":                    { label: "Plumbing",               desc: "Plumbing, waterproofing, and water network maintenance" },
+  "أجهزة منزلية":             { label: "Home Appliances",        desc: "Coordinating maintenance, supply, and installation of home appliances through certified vendors" },
+  "أرضيات":                   { label: "Flooring",               desc: "Installation and maintenance of all types of flooring, tiles, and parquet" },
+  "دهانات":                   { label: "Painting",               desc: "Interior and exterior painting with professional finishing standards" },
+  "نجارة":                    { label: "Carpentry",              desc: "Carpentry, wood installations, office and kitchen setup" },
+  "جبس":                      { label: "Gypsum Works",           desc: "Gypsum installation, shaping, and wall plastering" },
+  "عزل":                      { label: "Insulation",             desc: "Thermal and waterproofing insulation for roofs, walls, and floors" },
+  "تنظيف":                    { label: "Cleaning",               desc: "Daily and deep cleaning of facilities and branches" },
+  "مكافحة حشرات":             { label: "Pest Control",           desc: "Periodic pest and rodent control" },
+  "كاميرات وأنظمة أمنية":    { label: "CCTV & Security",        desc: "Supply, installation, and maintenance of surveillance and access control systems" },
+  "شبكات وتقنية":             { label: "Networks & IT",          desc: "Technical infrastructure setup for sites and offices — networks, internet, and servers" },
+  "اتصالات":                  { label: "Telecom",                desc: "Phone, internet, and PBX services and coordination with service providers" },
+  "أبواب أوتوماتيكية":        { label: "Automatic Doors",        desc: "Installation and maintenance of automatic glass doors, rolling shutters, and electric gates" },
+  "مصاعد":                    { label: "Elevators",              desc: "Maintenance, inspection, and operation of elevators and escalators" },
+  "مسابح":                    { label: "Swimming Pools",         desc: "Cleaning, maintenance, and operation of swimming pools" },
+  "حدائق":                    { label: "Gardens & Landscaping",  desc: "Landscaping, planting, artificial grass, and garden maintenance" },
+  "مظلات وسواتر":             { label: "Shades & Canopies",      desc: "Manufacturing, installation, and maintenance of shades, canopies, and parking covers" },
+  "واجهات ولوحات":            { label: "Facades & Signage",      desc: "Installation of commercial signs, advertising boards, and building facades" },
+  "معدات تجارية":             { label: "Commercial Equipment",   desc: "Supply, installation, and maintenance of commercial kitchen and café equipment" },
+  "أنظمة تشغيل المباني":      { label: "Building Systems (BMS)", desc: "Setup and maintenance of BMS, alarm systems, and central control for buildings" },
+  "طاقة احتياطية":            { label: "Backup Power",           desc: "Supply, installation, and maintenance of generators, UPS, and backup power systems" },
+  "مواقف ذكية":               { label: "Smart Parking",          desc: "Installation and operation of smart car park management systems for complexes and facilities" },
 };
 
 // All specialized items as searchable services
@@ -718,15 +791,15 @@ export default function Services() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <span className="inline-block bg-secondary/10 text-primary text-sm font-bold px-4 py-1.5 rounded-full mb-4">
-              {ar ? "الخدمات التخصصية" : "Specialized Services"}
+              {ar ? "الخدمات الفنية" : "Technical Services"}
             </span>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              {ar ? "أعمال الصيانة والتجهيز المتخصصة" : "Specialized Maintenance & Setup Works"}
+              {ar ? "الخدمات الفنية والتجهيزات المتكاملة" : "Integrated Technical & Setup Services"}
             </h2>
-            <p className="text-gray-500 text-lg max-w-2xl mx-auto">
+            <p className="text-gray-500 text-lg max-w-3xl mx-auto">
               {ar
-                ? "نغطي جميع أعمال الصيانة والتجهيز المتخصصة من خلال شبكة موردين معتمدين — سواء طلب واحد أو مشروع كامل."
-                : "We cover all specialized maintenance and setup works through a network of certified vendors — whether a single request or a full project."}
+                ? "تنظم منصة GSS خدمات التوريد والتركيب والصيانة الفنية عبر شبكة موردين معتمدين، وتشمل تجهيز وتشغيل الأنظمة والمرافق والأجهزة للمنازل والمنشآت، مع متابعة التنفيذ حتى اكتمال الخدمة وفق متطلباتكم."
+                : "GSS organizes supply, installation, and technical maintenance services through a network of certified vendors — covering systems, facilities, and equipment for homes and businesses, with full follow-up until service completion."}
             </p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
