@@ -1,13 +1,8 @@
 uploads = []
+outputs = []
 
 [[generated]]
 id = "nNgFdiMS5Q7zxOZqMcz_E"
 uri = "file://artifacts/pitch-deck/public/hero-facility.png"
 type = "image"
 title = "gss facility hero"
-
-[[outputs]]
-id = "UnzFF4Q-DxpMELvsqKw9l"
-uri = "file://.local/outputs/Hello-Who--1-.pdf"
-type = "pdf"
-title = "Hello Who (1).pdf"
