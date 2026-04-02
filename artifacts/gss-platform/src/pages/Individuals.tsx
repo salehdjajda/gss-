@@ -1,193 +1,13 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import {
   ArrowLeft, ArrowRight, ShieldCheck, Banknote, Star,
-  Award, Zap, ClipboardCheck, Clock, ChevronDown, ChevronUp, Send
+  Award, Zap, ClipboardCheck, Clock
 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useIndividualAuth } from "@/contexts/IndividualAuthContext";
 
-// ── Service categories ────────────────────────────────────────────────────────
-const SERVICE_CATEGORIES = [
-  {
-    icon: "🔧",
-    ar: { title: "الصيانة المنزلية والكهربائية", services: [
-      "تكييف (تركيب – صيانة – تنظيف – تعبئة فريون)",
-      "كهرباء (أعطال – تمديدات – تركيب إنارة وأجهزة)",
-      "سباكة (تسريبات – تمديدات – تركيب أدوات صحية)",
-      "صيانة الأجهزة المنزلية",
-      "صيانة الثلاجات والفريزرات وغرف التبريد",
-      "صيانة الأفران والأجهزة المطبخية",
-      "صيانة عامة متعددة الأعمال",
-    ]},
-    en: { title: "Home & Electrical Maintenance", services: [
-      "AC (Installation – Maintenance – Cleaning – Freon Refill)",
-      "Electrical (Faults – Extensions – Lighting & Appliance Installation)",
-      "Plumbing (Leaks – Extensions – Fixture Installation)",
-      "Home Appliance Maintenance",
-      "Refrigerators, Freezers & Cold Room Maintenance",
-      "Oven & Kitchen Appliance Maintenance",
-      "General Multi-Task Maintenance",
-    ]},
-  },
-  {
-    icon: "🏗️",
-    ar: { title: "أعمال التشطيب والتجهيز", services: [
-      "دهانات داخلية وخارجية",
-      "نجارة وتركيبات",
-      "تركيب الأبواب والأقفال",
-      "أرضيات وتبليط",
-      "باركيه وأرضيات خشبية",
-      "أعمال جبسية وأسقف مستعارة",
-      "لياسة وتشطيبات",
-      "تركيب الزجاج والعزل",
-      "العزل الحراري والمائي",
-      "تركيب الأثاث الجاهز",
-      "تجهيز المطابخ المنزلية",
-    ]},
-    en: { title: "Finishing & Fit-Out Works", services: [
-      "Interior & Exterior Painting",
-      "Carpentry & Installations",
-      "Door & Lock Installation",
-      "Flooring & Tiling",
-      "Parquet & Wooden Flooring",
-      "Gypsum Works & False Ceilings",
-      "Plastering & Finishing",
-      "Glass & Insulation Installation",
-      "Thermal & Waterproofing Insulation",
-      "Ready-Made Furniture Assembly",
-      "Home Kitchen Fitting",
-    ]},
-  },
-  {
-    icon: "📡",
-    ar: { title: "الأنظمة التقنية والخدمات الذكية", services: [
-      "كاميرات مراقبة",
-      "أنظمة إنذار وسلامة",
-      "ستالايت وتمديدات تلفزيون",
-      "تمديدات الإنترنت والشبكات المنزلية",
-      "تركيب الأقفال الذكية",
-      "تركيب وحدات الطاقة الاحتياطية الصغيرة",
-    ]},
-    en: { title: "Tech Systems & Smart Services", services: [
-      "CCTV Cameras",
-      "Alarm & Safety Systems",
-      "Satellite & TV Cabling",
-      "Internet & Home Network Cabling",
-      "Smart Lock Installation",
-      "Small UPS / Backup Power Installation",
-    ]},
-  },
-  {
-    icon: "🧹",
-    ar: { title: "خدمات التنظيف والصيانة الدورية", services: [
-      "تنظيف منازل ومكاتب",
-      "تنظيف خزانات المياه",
-      "مكافحة الحشرات والقوارض",
-      "صيانة المسابح",
-      "تركيب وصيانة العشب الصناعي",
-    ]},
-    en: { title: "Cleaning & Periodic Maintenance", services: [
-      "Home & Office Cleaning",
-      "Water Tank Cleaning",
-      "Pest & Rodent Control",
-      "Swimming Pool Maintenance",
-      "Artificial Grass Installation & Maintenance",
-    ]},
-  },
-  {
-    icon: "🚛",
-    ar: { title: "النقل والخدمات اللوجستية", services: [
-      "نقل الأثاث",
-      "تغليف الأغراض",
-      "شحن داخلي",
-      "استلام وتسليم الشحنات نيابة عن العميل",
-    ]},
-    en: { title: "Moving & Logistics Services", services: [
-      "Furniture Moving",
-      "Item Packaging",
-      "Domestic Shipping",
-      "Shipment Collection & Delivery on Client's Behalf",
-    ]},
-  },
-  {
-    icon: "🏠",
-    ar: { title: "تجهيز العقارات والمكاتب", services: [
-      "تجهيز الشقق قبل السكن",
-      "تجهيز المكاتب المنزلية",
-      "تجهيز المحلات الصغيرة",
-      "تجهيز العقارات للتأجير",
-      "متابعة صيانة العقارات الاستثمارية",
-    ]},
-    en: { title: "Property & Office Preparation", services: [
-      "Apartment Preparation Before Move-In",
-      "Home Office Setup",
-      "Small Shop Fit-Out",
-      "Property Preparation for Rental",
-      "Investment Property Maintenance Follow-Up",
-    ]},
-  },
-  {
-    icon: "🚗",
-    ar: { title: "خدمات المركبات والمرافق", services: [
-      "خدمات المركبات الأساسية",
-      "تركيب مظلات وسواتر",
-      "صيانة المواقف والمرافق الخارجية",
-    ]},
-    en: { title: "Vehicles & Facilities Services", services: [
-      "Basic Vehicle Services",
-      "Shade & Partition Installation",
-      "Parking & Outdoor Facilities Maintenance",
-    ]},
-  },
-  {
-    icon: "📄",
-    ar: { title: "الفواتير والخدمات الحكومية", services: [
-      "متابعة فواتير الكهرباء والمياه والاتصالات",
-      "تجديد التراخيص",
-      "متابعة المعاملات الحكومية",
-      "خدمات الشؤون الحكومية",
-    ]},
-    en: { title: "Bills & Government Services", services: [
-      "Electricity, Water & Telecom Bill Follow-Up",
-      "License Renewal",
-      "Government Transaction Follow-Up",
-      "Government Affairs Services",
-    ]},
-  },
-  {
-    icon: "📄",
-    ar: { title: "خدمات المستندات والطباعة", services: [
-      "طباعة المستندات الرسمية",
-      "خدمات التصوير والطباعة المكتبية",
-      "ترجمة الوثائق",
-      "تصديق الوثائق",
-    ]},
-    en: { title: "Documents & Printing Services", services: [
-      "Official Document Printing",
-      "Office Photocopying & Printing Services",
-      "Document Translation",
-      "Document Attestation",
-    ]},
-  },
-  {
-    icon: "✨",
-    ar: { title: "خدمات إضافية متنوعة", services: [
-      "خدمات البريد والشحن",
-      "خدمات التصوير للعقارات والمواقع",
-      "استلام وتسليم المعاملات نيابة عن العميل",
-      "تنسيق خدمات متعددة في نفس الطلب",
-    ]},
-    en: { title: "Additional Miscellaneous Services", services: [
-      "Postal & Courier Services",
-      "Real Estate & Site Photography",
-      "Transaction Collection & Delivery on Client's Behalf",
-      "Coordinating Multiple Services in One Request",
-    ]},
-  },
-];
 
 // ── Feature list (6 items) ────────────────────────────────────────────────────
 const FEATURES_AR = [
@@ -232,10 +52,6 @@ export default function Individuals() {
 
   const features  = lang === "ar" ? FEATURES_AR : FEATURES_EN;
   const steps     = lang === "ar" ? STEPS_AR    : STEPS_EN;
-  const categories = SERVICE_CATEGORIES;
-
-  const [showOther, setShowOther] = useState(false);
-  const [otherText, setOtherText] = useState("");
 
   return (
     <div>
@@ -342,99 +158,24 @@ export default function Individuals() {
         </div>
       </section>
 
-      {/* ── SERVICES (categorised) ─────────────────────────────────────────── */}
+      {/* ── SERVICES ──────────────────────────────────────────────────────── */}
       <section id="ind-services" className="py-20 bg-white">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               {lang === "ar" ? "الخدمات المتاحة للأفراد" : "Services Available for Individuals"}
             </h2>
-            <p className="text-gray-500 max-w-2xl mx-auto text-sm leading-relaxed">
+            <p className="text-gray-500 text-base leading-relaxed mb-10">
               {lang === "ar"
                 ? "توفر منصة GSS شبكة واسعة من الموردين والفنيين لتنسيق ومتابعة مختلف الخدمات المنزلية والمكتبية والعقارية حتى إنجازها بالكامل."
                 : "GSS provides a wide network of vendors and technicians to coordinate and follow up on all home, office, and real estate services until full completion."}
             </p>
-          </div>
-
-          {/* Category cards */}
-          <div className="mt-10 space-y-4">
-            {categories.map((cat, catIdx) => {
-              const catData = lang === "ar" ? cat.ar : cat.en;
-              return (
-                <motion.div key={catIdx} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: catIdx * 0.04 }}
-                  className="border border-gray-100 rounded-2xl overflow-hidden">
-                  <div className="bg-gray-50 px-5 py-4 flex items-center gap-3">
-                    <span className="text-2xl">{cat.icon}</span>
-                    <h3 className="font-bold text-gray-900 text-base">{catData.title}</h3>
-                  </div>
-                  <div className="px-5 py-4 grid sm:grid-cols-2 gap-x-6 gap-y-2">
-                    {catData.services.map((svc, si) => (
-                      <div key={si} className="flex items-start gap-2 text-sm text-gray-600">
-                        <span className="text-primary mt-0.5 shrink-0">✓</span>
-                        <span>{svc}</span>
-                      </div>
-                    ))}
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
-
-          {/* "Other service" option */}
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
-            className="mt-5 border-2 border-dashed border-primary/30 rounded-2xl overflow-hidden">
-            <button
-              onClick={() => setShowOther(!showOther)}
-              className="w-full flex items-center justify-between px-5 py-4 hover:bg-primary/5 transition-colors"
-            >
-              <div className="flex items-center gap-3">
-                <span className="text-2xl">➕</span>
-                <span className="font-bold text-primary text-base">
-                  {lang === "ar" ? "طلب خدمة أخرى" : "Request Another Service"}
-                </span>
-              </div>
-              {showOther ? <ChevronUp size={18} className="text-primary" /> : <ChevronDown size={18} className="text-primary" />}
-            </button>
-            {showOther && (
-              <div className="px-5 pb-5">
-                <p className="text-gray-500 text-sm mb-3">
-                  {lang === "ar"
-                    ? "اكتب تفاصيل الخدمة المطلوبة وسيتولى فريق GSS التنسيق مع المورد المناسب لتنفيذها عبر شبكتنا المعتمدة"
-                    : "Describe the service you need and the GSS team will coordinate with the right vendor to execute it through our certified network"}
-                </p>
-                <textarea
-                  rows={3}
-                  value={otherText}
-                  onChange={e => setOtherText(e.target.value)}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition resize-none mb-3"
-                  placeholder={lang === "ar" ? "اكتب تفاصيل الخدمة هنا..." : "Describe your service here..."}
-                />
-                <Link href={`/register/individual${otherText ? `?service=other&details=${encodeURIComponent(otherText)}` : ""}`}>
-                  <Button className="font-bold" size="sm">
-                    <Send size={14} className="ms-2" />
-                    {lang === "ar" ? "أرسل الطلب" : "Send Request"}
-                  </Button>
-                </Link>
-              </div>
-            )}
-          </motion.div>
-
-          {/* Closing summary */}
-          <div className="mt-8 bg-primary/5 border border-primary/15 rounded-2xl px-6 py-5 text-center">
-            <p className="text-gray-600 text-sm leading-relaxed">
-              {lang === "ar"
-                ? "إذا لم تجد الخدمة المطلوبة ضمن القائمة، يمكنك إرسال طلبك مباشرة وسيقوم فريق GSS بتنسيق التنفيذ مع المورد المناسب ومتابعة الخدمة حتى إنجازها بالكامل."
-                : "If you can't find the service you need in the list, you can send your request directly and the GSS team will coordinate execution with the right vendor and follow up until full completion."}
-            </p>
-          </div>
-
-          <div className="text-center mt-10">
-            <Link href={ctaHref}>
-              <Button size="lg" className="h-13 px-10 text-lg font-bold">
-                {lang === "ar" ? "اطلب خدمتك الآن" : "Request Your Service Now"} <Arrow className="ms-2" size={20} />
+            <Link href="/services">
+              <Button size="lg" className="h-14 px-12 text-lg font-bold">
+                {lang === "ar" ? "تصفح جميع الخدمات" : "Browse All Services"} <Arrow className="ms-2" size={20} />
               </Button>
             </Link>
-          </div>
+          </motion.div>
         </div>
       </section>
 
