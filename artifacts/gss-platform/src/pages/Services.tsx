@@ -1,11 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useIndividualAuth } from "@/contexts/IndividualAuthContext";
+import { useCompanyAuth } from "@/contexts/AccountAuthContext";
 import {
   Wrench, Sparkles, Truck, Users, Monitor, FileText, Building2,
   ShieldCheck, Car, Home, Calendar, Brain, ArrowLeft,
@@ -15,7 +17,8 @@ import {
   Square, AlignJustify, ParkingSquare,
   Briefcase, TrendingDown, AlertTriangle, ClipboardCheck, Package,
   BarChart3, Receipt, UserCog, BadgeCheck,
-  Camera, Wifi, DoorOpen, ArrowUpDown, BatteryCharging, Utensils, Shield
+  Camera, Wifi, DoorOpen, ArrowUpDown, BatteryCharging, Utensils, Shield,
+  User, X as XIcon
 } from "lucide-react";
 
 const SPECIALIZED = [
@@ -632,11 +635,29 @@ export default function Services() {
   const { lang } = useLanguage();
   const ar = lang === "ar";
   const { toast } = useToast();
+  const [, navigate] = useLocation();
+  const individualAuth = useIndividualAuth();
+  const companyAuth = useCompanyAuth();
+
   const [customForm, setCustomForm] = useState({ companyName: "", accountNumber: "", employeeName: "", phone: "", email: "", description: "" });
   const [submitting, setSubmitting] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
+  const [showPortalModal, setShowPortalModal] = useState(false);
+  const [pendingService, setPendingService] = useState("");
+
+  function handleServiceClick(serviceName: string) {
+    sessionStorage.setItem("gss_pending_service", serviceName);
+    if (individualAuth.isLoggedIn) {
+      navigate("/request/service");
+    } else if (companyAuth.isLoggedIn) {
+      navigate("/request/company-service");
+    } else {
+      setPendingService(serviceName);
+      setShowPortalModal(true);
+    }
+  }
 
   const filteredServices = (() => {
     const q = searchQuery.trim();
@@ -835,6 +856,7 @@ export default function Services() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: i * 0.05 }}
                 className="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all cursor-pointer"
+                onClick={() => handleServiceClick(item.label)}
               >
                 {/* Background Image */}
                 <div className="h-44 relative">
@@ -952,9 +974,13 @@ export default function Services() {
                       ))}
                     </ul>
                     <div className="mt-8 flex gap-3 flex-wrap">
-                      <Link href="/register/company">
-                        <Button size="sm" className="font-bold">{ar ? "طلب هذه الخدمة" : "Request This Service"}</Button>
-                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => handleServiceClick(ar ? cat.label : (CATEGORIES_EN[cat.id]?.label ?? cat.label))}
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-colors"
+                      >
+                        {ar ? "طلب هذه الخدمة" : "Request This Service"}
+                      </button>
                       <Link href="/contact">
                         <Button variant="outline" size="sm" className={`${colors.text} border-current hover:opacity-80`}>
                           {ar ? "استفسار" : "Inquire"}
@@ -1057,6 +1083,81 @@ export default function Services() {
           </div>
         </div>
       </section>
+
+      {/* Portal Selection Modal */}
+      {showPortalModal && (
+        <div
+          className="fixed inset-0 bg-black/60 z-[200] flex items-center justify-center p-4"
+          onClick={() => setShowPortalModal(false)}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 12 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            className="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl relative"
+            onClick={e => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setShowPortalModal(false)}
+              className="absolute top-4 left-4 p-1.5 rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+            >
+              <XIcon size={18} />
+            </button>
+            <div className="text-center mb-6">
+              <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl">📋</span>
+              </div>
+              <h2 className="text-lg font-bold text-gray-900 mb-1">
+                {ar ? "اطلب الخدمة:" : "Request Service:"}
+              </h2>
+              <p className="text-primary font-bold text-base mb-1">{pendingService}</p>
+              <p className="text-gray-500 text-sm">
+                {ar ? "سجّل دخولك أو أنشئ حساباً للمتابعة" : "Sign in or create an account to continue"}
+              </p>
+            </div>
+            <div className="grid grid-cols-2 gap-3 mb-5">
+              <button
+                type="button"
+                onClick={() => { setShowPortalModal(false); navigate("/register/individual"); }}
+                className="flex flex-col items-center gap-2.5 p-5 rounded-2xl border-2 border-green-200 hover:border-green-400 hover:bg-green-50 transition-all"
+              >
+                <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
+                  <User size={22} className="text-green-600" />
+                </div>
+                <span className="font-bold text-sm text-gray-800">{ar ? "فرد" : "Individual"}</span>
+                <span className="text-gray-400 text-xs text-center leading-tight">
+                  {ar ? "للأفراد والعائلات" : "For individuals & families"}
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={() => { setShowPortalModal(false); navigate("/register/company"); }}
+                className="flex flex-col items-center gap-2.5 p-5 rounded-2xl border-2 border-blue-200 hover:border-blue-400 hover:bg-blue-50 transition-all"
+              >
+                <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+                  <Building2 size={22} className="text-blue-600" />
+                </div>
+                <span className="font-bold text-sm text-gray-800">{ar ? "منشأة" : "Facility"}</span>
+                <span className="text-gray-400 text-xs text-center leading-tight">
+                  {ar ? "للشركات والمنشآت" : "For companies & facilities"}
+                </span>
+              </button>
+            </div>
+            <div className="text-center">
+              <p className="text-gray-400 text-xs">
+                {ar ? "لديك حساب بالفعل؟ " : "Already have an account? "}
+                <button
+                  type="button"
+                  onClick={() => { setShowPortalModal(false); navigate("/portal/login"); }}
+                  className="text-primary font-bold hover:underline"
+                >
+                  {ar ? "سجّل الدخول" : "Sign In"}
+                </button>
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 }

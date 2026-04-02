@@ -55,6 +55,7 @@ import IndividualDashboard from "@/pages/dashboard/IndividualDashboard";
 
 // Individual Service Request
 import RequestService from "@/pages/individuals/RequestService";
+import RequestServiceCompany from "@/pages/company/RequestServiceCompany";
 
 // Admin
 import AdminDashboard from "@/pages/admin/AdminDashboard";
@@ -111,6 +112,7 @@ function MainLayout() {
           <Route path="/dashboard/consultant" component={ConsultantDashboard} />
           <Route path="/dashboard/individual" component={IndividualDashboard} />
           <Route path="/request/service" component={RequestService} />
+          <Route path="/request/company-service" component={RequestServiceCompany} />
 
           {/* Auth Routes */}
           <Route path="/portal/login" component={PortalLoginPage} />

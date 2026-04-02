@@ -104,7 +104,14 @@ function LoginForm({ portalType }: { portalType: PortalType }) {
     const result = auth.login(loginForm.phone, loginForm.password);
     setLoading(false);
     if (!result.success) { setError(result.error || ""); return; }
-    navigate(dashboardMap[portalType]);
+    const pendingSvc = sessionStorage.getItem("gss_pending_service");
+    if (pendingSvc && portalType === "individual") {
+      navigate("/request/service");
+    } else if (pendingSvc && portalType === "company") {
+      navigate("/request/company-service");
+    } else {
+      navigate(dashboardMap[portalType]);
+    }
   }
 
   return (

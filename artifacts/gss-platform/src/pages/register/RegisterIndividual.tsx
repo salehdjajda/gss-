@@ -43,7 +43,8 @@ export default function RegisterIndividual() {
     const result = register({ name: regForm.name, phone: regForm.phone, city: regForm.city, password: regForm.password });
     setLoading(false);
     if (!result.success) { setError(result.error || ""); return; }
-    navigate("/dashboard/individual");
+    const pendingSvc = sessionStorage.getItem("gss_pending_service");
+    navigate(pendingSvc ? "/request/service" : "/dashboard/individual");
   }
 
   async function handleLogin(e: React.FormEvent) {
@@ -54,7 +55,8 @@ export default function RegisterIndividual() {
     const result = login(loginForm.phone, loginForm.password);
     setLoading(false);
     if (!result.success) { setError(result.error || ""); return; }
-    navigate("/dashboard/individual");
+    const pendingSvc = sessionStorage.getItem("gss_pending_service");
+    navigate(pendingSvc ? "/request/service" : "/dashboard/individual");
   }
 
   return (
