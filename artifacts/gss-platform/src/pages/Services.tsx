@@ -14,7 +14,7 @@ import {
   Layers, Thermometer, Bug, LayoutGrid, Anchor,
   Square, AlignJustify, ParkingSquare,
   Briefcase, TrendingDown, AlertTriangle, ClipboardCheck, Package,
-  BarChart3
+  BarChart3, Receipt, UserCog, BadgeCheck
 } from "lucide-react";
 
 const SPECIALIZED = [
@@ -364,6 +364,50 @@ const CATEGORIES = [
       "إعداد تقارير حالة الأصول",
     ],
   },
+  {
+    id: "licenses",
+    label: "إدارة التراخيص التشغيلية",
+    icon: BadgeCheck,
+    color: "emerald",
+    image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&auto=format&fit=crop&q=80",
+    description: "تتابع منصة GSS جميع التراخيص والاشتراطات التنظيمية للمنشآت وتُنبّه قبل انتهائها لضمان الامتثال الكامل وتفادي أي توقف تشغيلي.",
+    services: [
+      "متابعة التراخيص البلدية",
+      "متابعة اشتراطات الدفاع المدني",
+      "متابعة التراخيص الصحية",
+      "متابعة تصاريح الجهات التنظيمية",
+      "متابعة فواتير الخدمات التشغيلية",
+    ],
+  },
+  {
+    id: "bills-tracking",
+    label: "متابعة فواتير الخدمات التشغيلية",
+    icon: Receipt,
+    color: "sky",
+    image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&auto=format&fit=crop&q=80",
+    description: "تتولى منصة GSS رصد وتتبع جميع فواتير الخدمات التشغيلية للمنشأة، وتُحلل الاستهلاك وتُنبّه عند الشذوذ لتحقيق تحكم أفضل في التكاليف — وهي ميزة تنافسية تُميّز GSS في السوق.",
+    highlight: true,
+    services: [
+      "متابعة فواتير الكهرباء",
+      "متابعة فواتير المياه",
+      "متابعة فواتير الاتصالات",
+      "متابعة الإيجارات التشغيلية",
+    ],
+  },
+  {
+    id: "vendor-management",
+    label: "إدارة الموردين الحاليين للمنشأة",
+    icon: UserCog,
+    color: "fuchsia",
+    image: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&auto=format&fit=crop&q=80",
+    description: "تُدير منصة GSS العلاقة مع موردي المنشأة الحاليين وتُقيّم أداءهم وجودة تنفيذهم، واقتراح بدائل أكثر كفاءة عند الحاجة.",
+    services: [
+      "تنظيم العلاقة مع الموردين الحاليين",
+      "متابعة جودة التنفيذ",
+      "تقييم الأداء التشغيلي",
+      "اقتراح بدائل عند الحاجة",
+    ],
+  },
 ];
 
 const colorMap: Record<string, { bg: string; text: string; border: string; badge: string }> = {
@@ -381,8 +425,11 @@ const colorMap: Record<string, { bg: string; text: string; border: string; badge
   amber:  { bg: "bg-amber-50",  text: "text-amber-700",  border: "border-amber-200",  badge: "bg-amber-100 text-amber-800" },
   lime:   { bg: "bg-lime-50",   text: "text-lime-700",   border: "border-lime-200",   badge: "bg-lime-100 text-lime-700" },
   rose:   { bg: "bg-rose-50",   text: "text-rose-700",   border: "border-rose-200",   badge: "bg-rose-100 text-rose-700" },
-  stone:  { bg: "bg-stone-50",  text: "text-stone-700",  border: "border-stone-200",  badge: "bg-stone-100 text-stone-700" },
-  violet: { bg: "bg-violet-50", text: "text-violet-700", border: "border-violet-200", badge: "bg-violet-100 text-violet-700" },
+  stone:   { bg: "bg-stone-50",   text: "text-stone-700",   border: "border-stone-200",   badge: "bg-stone-100 text-stone-700" },
+  violet:  { bg: "bg-violet-50",  text: "text-violet-700",  border: "border-violet-200",  badge: "bg-violet-100 text-violet-700" },
+  emerald: { bg: "bg-emerald-50", text: "text-emerald-700", border: "border-emerald-200", badge: "bg-emerald-100 text-emerald-700" },
+  sky:     { bg: "bg-sky-50",     text: "text-sky-700",     border: "border-sky-200",     badge: "bg-sky-100 text-sky-700" },
+  fuchsia: { bg: "bg-fuchsia-50", text: "text-fuchsia-700", border: "border-fuchsia-200", badge: "bg-fuchsia-100 text-fuchsia-700" },
 };
 
 const CATEGORIES_EN: Record<string, { label: string; description: string; services: string[] }> = {
@@ -400,8 +447,11 @@ const CATEGORIES_EN: Record<string, { label: string; description: string; servic
   "vendor-contracts": { label: "Vendor Contracts",             description: "GSS organizes operational vendor contracts and follows up on their execution.", services: ["Follow up on vendor contracts", "Coordinate contract renewals", "Analyze contract compliance levels", "Suggest operational alternatives when needed"] },
   budget:           { label: "Operational Budget",              description: "GSS helps facilities control operational expenses related to services.", services: ["Monitor operational service budgets", "Analyze expense variances", "Compare costs across sites", "Suggest lower-cost operational solutions", "Prepare decision-support reports"] },
   emergency:        { label: "Emergency Response",              description: "GSS organizes rapid response to sudden operational failures.", services: ["Coordinate emergency fault response", "Follow up on sudden outage cases", "Coordinate with vendors for urgent intervention", "Follow up on critical report closure"] },
-  compliance:       { label: "Operational Compliance",          description: "GSS supports facilities in following up on operational regulatory requirements.", services: ["Follow up on civil defense requirements", "Follow up on municipality requirements", "Follow up on occupational safety requirements", "Follow up on operational licenses"] },
-  assets:           { label: "Operational Assets",              description: "GSS organizes monitoring of operational assets for facilities and branches.", services: ["Organize operational asset records", "Monitor technical asset status", "Coordinate asset replacement when needed", "Prepare asset status reports"] },
+  compliance:         { label: "Operational Compliance",          description: "GSS supports facilities in following up on operational regulatory requirements.", services: ["Follow up on civil defense requirements", "Follow up on municipality requirements", "Follow up on occupational safety requirements", "Follow up on operational licenses"] },
+  assets:             { label: "Operational Assets",              description: "GSS organizes monitoring of operational assets for facilities and branches.", services: ["Organize operational asset records", "Monitor technical asset status", "Coordinate asset replacement when needed", "Prepare asset status reports"] },
+  licenses:           { label: "Operational License Management", description: "GSS tracks all licenses and regulatory requirements for facilities, alerting before expiry to ensure full compliance and avoid operational disruption.", services: ["Follow up on municipal licenses", "Follow up on civil defense requirements", "Follow up on health licenses", "Follow up on regulatory authority permits", "Monitor operational service bills"] },
+  "bills-tracking":   { label: "Operational Bills Tracking",     description: "GSS monitors all operational service bills for the facility, analyzes consumption, and alerts on anomalies for better cost control — a key competitive advantage in the market.", services: ["Follow up on electricity bills", "Follow up on water bills", "Follow up on telecom bills", "Monitor operational lease payments"] },
+  "vendor-management": { label: "Facility Vendor Management",   description: "GSS manages relationships with the facility's existing vendors, evaluates their performance and execution quality, and suggests more efficient alternatives when needed.", services: ["Organize relationships with current vendors", "Monitor execution quality", "Evaluate operational performance", "Suggest alternatives when needed"] },
 };
 
 const SPECIALIZED_EN: Record<string, { label: string; desc: string }> = {
