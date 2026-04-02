@@ -2,9 +2,8 @@ import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import {
-  ShieldCheck, TrendingDown, Users, RefreshCcw, Network,
-  BarChart3, CheckCircle2, ArrowLeft, X, UserCheck,
-  FileText, Building2, Star, Layers,
+  CheckCircle2, ArrowLeft, X,
+  Users, FileText, Building2, Network,
 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -12,71 +11,19 @@ export default function Companies() {
   const { lang } = useLanguage();
   const ar = lang === "ar";
 
-  const serviceCategories = ar ? [
-    { emoji: "🔧", name: "صيانة وتشغيل",  desc: "تكييف، كهرباء، سباكة، نجارة وأكثر" },
-    { emoji: "📄", name: "تراخيص وحكومي", desc: "تجديد التراخيص، شؤون حكومية، دفاع مدني" },
-    { emoji: "🧹", name: "نظافة وخدمات",  desc: "نظافة، مكافحة حشرات، نقل وشحن" },
-    { emoji: "💧", name: "مالي وإداري",    desc: "فواتير، إيجارات، أسطول، وثائق" },
-  ] : [
-    { emoji: "🔧", name: "Maintenance & Operations", desc: "AC, electrical, plumbing, carpentry and more" },
-    { emoji: "📄", name: "Licenses & Government",    desc: "License renewal, government affairs, civil defense" },
-    { emoji: "🧹", name: "Cleaning & Services",      desc: "Cleaning, pest control, transport & shipping" },
-    { emoji: "💧", name: "Financial & Admin",         desc: "Bills, rentals, fleet, documents" },
-  ];
-
-  const sectors = ar ? [
-    { name: "سلاسل المطاعم والمقاهي",              icon: "🍽️", desc: "فروع متعددة + تراخيص صحية + صيانة معدات + عقود نظافة" },
-    { name: "متاجر التجزئة والسوبرماركت",          icon: "🛒", desc: "تبريد + كاميرات + تكييف + تجهيز فروع + موردون متعددون" },
-    { name: "المستشفيات والعيادات والمراكز الطبية", icon: "🏥", desc: "تراخيص صحية + صيانة أجهزة + تنظيف متخصص + عقود تشغيل" },
-    { name: "الشركات متعددة الفروع والمكاتب",      icon: "🏢", desc: "كهرباء + اتصالات + نظافة + إيجارات + خدمات مكتبية" },
-    { name: "شركات المقاولات والتطوير العقاري",    icon: "🏗️", desc: "مواقع تشغيل متعددة + موردون + معدات + متابعة عقود" },
-    { name: "المدارس والمراكز التعليمية",           icon: "🎓", desc: "تراخيص تعليم + صيانة مرافق + نقل + تجهيزات تشغيلية" },
-    { name: "الفنادق والشقق المفروشة",              icon: "🏨", desc: "صيانة مستمرة + تجهيز غرف + خدمات تشغيل يومية" },
-    { name: "المولات والمراكز التجارية",            icon: "🏬", desc: "إدارة مرافق + عقود صيانة + أمن وسلامة + موردون متعددون" },
-    { name: "شركات النقل والخدمات اللوجستية",      icon: "🚚", desc: "إدارة أسطول + مستودعات + عقود تشغيل + مواقع متعددة" },
-    { name: "المصانع والمنشآت الصناعية",            icon: "🏭", desc: "مرافق تشغيل + عقود صيانة + خدمات فنية + متابعة موردين" },
-    { name: "شركات التوزيع والمستودعات",            icon: "🧴", desc: "مواقع متعددة + تجهيزات تشغيل + نقل + صيانة دورية" },
-    { name: "الجهات الحكومية وشبه الحكومية",        icon: "🏛️", desc: "تنسيق خدمات تشغيل + متابعة موردين + إدارة مرافق" },
-    { name: "الشركات الناشئة سريعة النمو",          icon: "🚀", desc: "توسع سريع + تجهيز مواقع + موردون متعددون + متابعة تشغيل" },
-  ] : [
-    { name: "Restaurant & Café Chains",         icon: "🍽️", desc: "Multiple branches + health licenses + equipment maintenance + cleaning contracts" },
-    { name: "Retail & Supermarkets",            icon: "🛒", desc: "Cooling + cameras + AC + branch setup + multiple vendors" },
-    { name: "Hospitals, Clinics & Medical Centers", icon: "🏥", desc: "Health licenses + equipment maintenance + specialized cleaning + operation contracts" },
-    { name: "Multi-Branch Companies & Offices", icon: "🏢", desc: "Electricity + telecom + cleaning + rentals + office services" },
-    { name: "Contracting & Real Estate",        icon: "🏗️", desc: "Multiple operation sites + vendors + equipment + contract follow-up" },
-    { name: "Schools & Educational Centers",    icon: "🎓", desc: "Education licenses + facility maintenance + transport + operational setups" },
-    { name: "Hotels & Furnished Apartments",    icon: "🏨", desc: "Continuous maintenance + room setup + daily operation services" },
-    { name: "Malls & Commercial Centers",       icon: "🏬", desc: "Facility management + maintenance contracts + security & safety + multiple vendors" },
-    { name: "Transport & Logistics Companies",  icon: "🚚", desc: "Fleet management + warehouses + operation contracts + multiple sites" },
-    { name: "Factories & Industrial Facilities",icon: "🏭", desc: "Operation facilities + maintenance contracts + technical services + vendor follow-up" },
-    { name: "Distribution & Warehouse Companies",icon: "🧴", desc: "Multiple sites + operational setups + transport + periodic maintenance" },
-    { name: "Government & Semi-Government",     icon: "🏛️", desc: "Operational service coordination + vendor follow-up + facility management" },
-    { name: "Fast-Growing Startups",            icon: "🚀", desc: "Rapid expansion + site setup + multiple vendors + operation follow-up" },
-  ];
-
-  const savings = ar ? [
-    { role: "مدير تشغيل",   icon: Users },
-    { role: "مشرف مرافق",   icon: Building2 },
-    { role: "منسق موردين",  icon: Network },
-    { role: "متابع تراخيص", icon: FileText },
-  ] : [
-    { role: "Operations Manager",    icon: Users },
-    { role: "Facilities Supervisor", icon: Building2 },
-    { role: "Vendor Coordinator",    icon: Network },
-    { role: "License Tracker",       icon: FileText },
-  ];
-
-  const heroStats = ar ? [
-    { num: "صفر",   label: "موظف إضافي",          sub: "مدير حساب مخصص من GSS" },
-    { num: "100%",  label: "متابعة شهرية مضمونة", sub: "فواتير، صيانة، تراخيص" },
-    { num: "نقطة", label: "اتصال واحدة فقط",      sub: "لكل خدماتكم التشغيلية" },
-    { num: "وفر",  label: "تكاليف التوظيف",        sub: "بدون راتب أو تأمين أو مكتب" },
-  ] : [
-    { num: "Zero",  label: "Extra Employees",         sub: "Dedicated GSS account manager" },
-    { num: "100%",  label: "Guaranteed Monthly Follow-up", sub: "Bills, maintenance, licenses" },
-    { num: "One",   label: "Point of Contact",         sub: "For all your operational services" },
-    { num: "Save",  label: "Hiring Costs",             sub: "No salary, insurance, or office" },
-  ];
+  const savings = ar
+    ? [
+        { role: "مدير تشغيل",   icon: Users },
+        { role: "مشرف مرافق",   icon: Building2 },
+        { role: "منسق موردين",  icon: Network },
+        { role: "متابع تراخيص", icon: FileText },
+      ]
+    : [
+        { role: "Operations Manager",    icon: Users },
+        { role: "Facilities Supervisor", icon: Building2 },
+        { role: "Vendor Coordinator",    icon: Network },
+        { role: "License Tracker",       icon: FileText },
+      ];
 
   const noItems = ar
     ? ["راتب شهري + مزايا وظيفية", "مكتب أو جهاز", "تدريب أو تأهيل", "إجازات أو تأمين صحي"]
@@ -86,21 +33,19 @@ export default function Companies() {
     ? ["متابعة تشغيلية كاملة طوال الشهر", "تقارير شهرية بكل الإنفاق", "تنبيهات مبكرة للتراخيص والعقود", "استجابة سريعة لبلاغات الصيانة"]
     : ["Full operational follow-up all month", "Monthly reports on all spending", "Early alerts for licenses and contracts", "Fast response to maintenance reports"];
 
-  const benefits = ar ? [
-    { icon: UserCheck,   title: "مدير حساب مخصص",             desc: "شخص حقيقي يعرف منشأتكم ويتابع كل شيء — ليس نظاماً إلكترونياً فقط" },
-    { icon: TrendingDown, title: "توفير فعلي في التكاليف",     desc: "بدائل بأسعار أفضل، اكتشاف تكاليف مخفية، تقليل إعادة التنفيذ" },
-    { icon: Layers,       title: "نقطة اتصال واحدة",            desc: "الصيانة، التراخيص، الفواتير — كل شيء عبر GSS فقط" },
-    { icon: BarChart3,    title: "تقارير شهرية وشفافية كاملة", desc: "تعرفون أين يذهب كل ريال وما هي فرص التوفير" },
-    { icon: RefreshCcw,   title: "لا حاجة لتغيير موردييكم",    desc: "نُنظّم الإدارة فوق ما هو موجود — بدون أي تعطيل" },
-    { icon: ShieldCheck,  title: "تنبيهات مبكرة للتراخيص",     desc: "لا مفاجآت — تنبيه قبل 60 يوماً من انتهاء أي ترخيص أو عقد" },
-  ] : [
-    { icon: UserCheck,   title: "Dedicated Account Manager",      desc: "A real person who knows your facility and follows up on everything — not just software" },
-    { icon: TrendingDown, title: "Real Cost Savings",              desc: "Better-priced alternatives, discovering hidden costs, reducing rework" },
-    { icon: Layers,       title: "Single Point of Contact",        desc: "Maintenance, licenses, bills — everything through GSS only" },
-    { icon: BarChart3,    title: "Monthly Reports & Full Transparency", desc: "You know where every riyal goes and what savings opportunities exist" },
-    { icon: RefreshCcw,   title: "No Need to Change Your Vendors", desc: "We organize management on top of what exists — without any disruption" },
-    { icon: ShieldCheck,  title: "Early License Alerts",           desc: "No surprises — 60-day alert before any license or contract expires" },
-  ];
+  const heroStats = ar
+    ? [
+        { num: "صفر",  label: "موظف إضافي",          sub: "مدير حساب مخصص من GSS" },
+        { num: "100%", label: "متابعة شهرية مضمونة",  sub: "فواتير، صيانة، تراخيص" },
+        { num: "نقطة", label: "اتصال واحدة فقط",      sub: "لكل خدماتكم التشغيلية" },
+        { num: "وفر",  label: "تكاليف التوظيف",        sub: "بدون راتب أو تأمين أو مكتب" },
+      ]
+    : [
+        { num: "Zero", label: "Extra Employees",              sub: "Dedicated GSS account manager" },
+        { num: "100%", label: "Guaranteed Monthly Follow-up", sub: "Bills, maintenance, licenses" },
+        { num: "One",  label: "Point of Contact",             sub: "For all your operational services" },
+        { num: "Save", label: "Hiring Costs",                 sub: "No salary, insurance, or office" },
+      ];
 
   return (
     <div className="pb-0">
@@ -127,18 +72,11 @@ export default function Companies() {
                   ? "كل منشأة تتحمل يومياً عبء الفواتير والصيانة والتراخيص وعشرات الموردين — نحن نتولى هذا كله بدلاً منكم."
                   : "Every facility bears daily burdens of bills, maintenance, licenses, and dozens of vendors — we handle all of this on your behalf."}
               </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link href="/register/company">
-                  <Button size="lg" className="h-14 px-10 text-lg font-bold bg-secondary hover:bg-secondary/90 text-primary" data-testid="cta-hero-register">
-                    {ar ? "سجّل منشأتك مجاناً" : "Register Your Facility Free"} <ArrowLeft className="mr-2" size={20} />
-                  </Button>
-                </Link>
-                <Link href="#scenario">
-                  <Button size="lg" variant="outline" className="h-14 px-10 text-lg text-white border-white hover:bg-white/10">
-                    {ar ? "شوف السيناريو الحقيقي" : "See the Real Scenario"}
-                  </Button>
-                </Link>
-              </div>
+              <Link href="/register/company">
+                <Button size="lg" className="h-14 px-10 text-lg font-bold bg-secondary hover:bg-secondary/90 text-primary">
+                  {ar ? "سجّل منشأتك مجاناً" : "Register Your Facility Free"} <ArrowLeft className="mr-2" size={20} />
+                </Button>
+              </Link>
             </div>
             <div className="grid grid-cols-2 gap-4">
               {heroStats.map((item, i) => (
@@ -157,22 +95,22 @@ export default function Companies() {
       {/* CORE POSITIONING */}
       <section className="py-20 bg-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <span className="inline-block bg-amber-50 text-amber-700 font-bold text-sm px-4 py-1.5 rounded-full mb-5">
                 {ar ? "الفكرة الأساسية" : "The Core Idea"}
               </span>
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-5 leading-tight">
-                {ar ? (<>نحن موظفوكم<br />التشغيليون</>) : (<>We Are Your<br />Operations Team</>)}
+                {ar ? (<>نحن موظفوكم<br />التشغيليون</>): (<>We Are Your<br />Operations Team</>)}
               </h2>
               <p className="text-gray-600 text-lg leading-relaxed mb-6">
                 {ar
                   ? "الفاتورة المتأخرة، البلاغ المعلّق، الترخيص على وشك الانتهاء — هذه مشاكل لا تُحلّها برامج إدارة، بل تحتاج شخصاً يرفع الهاتف ويتابع. نحن ذلك الشخص."
                   : "The overdue bill, the pending report, the expiring license — these problems aren't solved by management software. They need someone to pick up the phone and follow up. That's us."}
               </p>
-              <Link href="/register/company">
-                <Button size="lg" className="font-bold" data-testid="cta-positioning">
-                  {ar ? "ابدأ الآن" : "Get Started"} <ArrowLeft className="mr-2" size={18} />
+              <Link href="/services">
+                <Button variant="outline" className="font-bold border-primary text-primary">
+                  {ar ? "تصفح جميع الخدمات التشغيلية" : "Browse All Operational Services"} <ArrowLeft className="mr-2" size={16} />
                 </Button>
               </Link>
             </div>
@@ -194,183 +132,11 @@ export default function Companies() {
               </div>
             </div>
           </div>
-
-          <div className="text-center mb-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">{ar ? "ما الذي نتابعه نيابةً عنكم؟" : "What Do We Follow Up on Your Behalf?"}</h3>
-            <p className="text-gray-500">{ar ? "أكثر من 25 خدمة تشغيلية — موزّعة على 4 محاور رئيسية" : "Over 25 operational services — across 4 main pillars"}</p>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-            {serviceCategories.map((cat, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.07 }}
-                className="bg-primary/5 border border-primary/10 rounded-2xl p-5 text-center hover:border-primary/30 hover:shadow-sm transition-all">
-                <p className="text-3xl mb-3">{cat.emoji}</p>
-                <p className="font-bold text-gray-900 text-sm mb-1">{cat.name}</p>
-                <p className="text-gray-500 text-xs leading-relaxed">{cat.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-
-          <div className="bg-gray-50 rounded-2xl px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <p className="text-gray-600 text-sm text-center sm:text-right">
-              {ar
-                ? "📲 أرسل طلبك → نجلب أفضل عرض من موردين معتمدين → نتابع حتى الإنجاز ✅"
-                : "📲 Submit your request → We get the best offer from certified vendors → We follow up until done ✅"}
-            </p>
-            <Link href="/register/company" className="flex-shrink-0">
-              <Button variant="outline" size="sm" className="font-bold border-primary text-primary" data-testid="cta-how-it-works">
-                {ar ? "سجّل وجرّب" : "Register & Try"}
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* CHALLENGES & SOLUTION */}
-      <section className="py-20 bg-slate-900 text-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <span className="inline-block bg-secondary/20 text-secondary font-bold text-xs px-4 py-1.5 rounded-full mb-4 tracking-wide uppercase">
-              {ar ? "التحديات والحلول" : "Challenges & Solutions"}
-            </span>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 leading-snug">
-              {ar
-                ? "كيف يمكن تعزيز كفاءة إدارة الخدمات التشغيلية في منشأتكم؟"
-                : "How Can Operational Service Management Efficiency Be Enhanced in Your Facility?"}
-            </h2>
-            <p className="text-slate-400 text-base max-w-2xl mx-auto leading-relaxed">
-              {ar
-                ? "حتى المنشآت الأكثر تنظيمًا تواجه تحديات تشغيلية يومية تؤثر بشكل غير مباشر على الكفاءة والتكلفة وسرعة التنفيذ."
-                : "Even the most organized facilities face daily operational challenges that indirectly affect efficiency, cost, and execution speed."}
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-5 mb-7">
-            {(ar ? [
-              {
-                icon: ShieldCheck,
-                title: "تحديات تشغيلية شائعة",
-                points: [
-                  "تعدد الموردين واختلاف مستوى التنسيق بينهم",
-                  "استهلاك وقت إداري كبير في التنسيق اليومي",
-                  "تفاوت الأسعار وصعوبة توحيد جودة التنفيذ عبر الفروع",
-                ],
-              },
-              {
-                icon: TrendingDown,
-                title: "تحديات في إدارة التكاليف",
-                points: [
-                  "عدم وضوح تفاصيل المصروفات التشغيلية",
-                  "تكاليف غير مباشرة يصعب ملاحظتها (إعادة أعمال، تأخير)",
-                  "ارتفاع التكلفة نتيجة غياب التنسيق المركزي",
-                ],
-              },
-              {
-                icon: BarChart3,
-                title: "تحديات في المتابعة والتقارير",
-                points: [
-                  "غياب رؤية مركزية لجميع الطلبات التشغيلية",
-                  "صعوبة إعداد تقارير تشغيلية دقيقة بشكل دوري",
-                  "ضعف القدرة على تحليل الأداء واتخاذ قرارات مبنية على بيانات",
-                ],
-              },
-              {
-                icon: RefreshCcw,
-                title: "تحديات في استمرارية التشغيل",
-                points: [
-                  "تأخر الاستجابة لبعض الطلبات التشغيلية",
-                  "الاعتماد على أشخاص محددين في المتابعة",
-                  "صعوبة متابعة التراخيص والعقود بشكل استباقي",
-                ],
-              },
-            ] : [
-              {
-                icon: ShieldCheck,
-                title: "Common Operational Challenges",
-                points: [
-                  "Multiple vendors with inconsistent coordination",
-                  "High administrative time spent on daily coordination",
-                  "Price variations and difficulty unifying execution quality across branches",
-                ],
-              },
-              {
-                icon: TrendingDown,
-                title: "Cost Management Challenges",
-                points: [
-                  "Lack of clarity on operational expense details",
-                  "Hidden indirect costs (rework, delays)",
-                  "Higher total costs due to absence of central coordination",
-                ],
-              },
-              {
-                icon: BarChart3,
-                title: "Monitoring & Reporting Challenges",
-                points: [
-                  "No centralized view of all operational requests",
-                  "Difficulty producing accurate operational reports periodically",
-                  "Limited ability to analyze performance and make data-driven decisions",
-                ],
-              },
-              {
-                icon: RefreshCcw,
-                title: "Operational Continuity Challenges",
-                points: [
-                  "Delayed responses to some operational requests",
-                  "Dependency on specific individuals for follow-up",
-                  "Difficulty proactively tracking licenses and contracts",
-                ],
-              },
-            ]).map((cat, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.08 }}
-                className="bg-slate-800/60 border border-slate-700/80 rounded-2xl p-6 hover:border-slate-600 transition-colors"
-              >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-secondary/15 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <cat.icon size={20} className="text-secondary" />
-                  </div>
-                  <h3 className="font-bold text-white text-base">{cat.title}</h3>
-                </div>
-                <ul className="space-y-2.5">
-                  {cat.points.map((pt, j) => (
-                    <li key={j} className="flex items-start gap-2.5 text-slate-300 text-sm leading-relaxed">
-                      <span className="mt-2 w-1.5 h-1.5 rounded-full bg-red-400 flex-shrink-0" />
-                      {pt}
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
-            ))}
-          </div>
-
-          <div className="bg-primary/25 border border-primary/40 rounded-2xl p-6 flex flex-col md:flex-row items-center gap-6">
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-2">
-                <CheckCircle2 size={18} className="text-secondary flex-shrink-0" />
-                <h3 className="text-base font-bold text-secondary">
-                  {ar ? "كيف تعالج GSS هذه التحديات؟" : "How Does GSS Address These Challenges?"}
-                </h3>
-              </div>
-              <p className="text-slate-300 leading-relaxed text-sm">
-                {ar
-                  ? "تعمل منصة GSS كطبقة تشغيل داعمة من خلال تنظيم الطلبات، وتوحيد التنسيق مع الموردين، وتحسين وضوح المصروفات، وتوفير تقارير تشغيلية تدعم اتخاذ القرار."
-                  : "GSS acts as a supporting operational layer — organizing requests, unifying vendor coordination, improving expense clarity, and providing decision-supporting operational reports."}
-              </p>
-            </div>
-            <Link href="/register/company" className="flex-shrink-0">
-              <Button size="lg" className="h-12 px-7 font-bold bg-secondary text-primary hover:bg-secondary/90" data-testid="cta-challenges-register">
-                {ar ? "سجّل منشأتك مجاناً" : "Register Your Facility Free"} <ArrowLeft className="mr-2" size={16} />
-              </Button>
-            </Link>
-          </div>
         </div>
       </section>
 
       {/* REAL SCENARIO */}
-      <section id="scenario" className="py-16 bg-gray-50">
+      <section className="py-16 bg-gray-50">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <span className="inline-block bg-primary/10 text-primary font-bold text-sm px-4 py-1.5 rounded-full mb-3">
@@ -447,18 +213,6 @@ export default function Companies() {
               </div>
             </motion.div>
           </div>
-
-          <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-            className="bg-primary text-white rounded-2xl px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-white/90 font-medium text-center sm:text-right">
-              {ar ? "نقطة اتصال واحدة — متابعة كاملة — تقرير شهري واضح" : "One point of contact — full follow-up — clear monthly report"}
-            </p>
-            <Link href="/register/company" className="flex-shrink-0">
-              <Button className="bg-secondary hover:bg-secondary/90 text-primary font-bold px-6" data-testid="cta-scenario">
-                {ar ? "ابدأ الآن" : "Get Started"} <ArrowLeft className="mr-1" size={16} />
-              </Button>
-            </Link>
-          </motion.div>
         </div>
       </section>
 
@@ -484,8 +238,8 @@ export default function Companies() {
               { icon: "📊", period: "شهرياً",   items: ["فاتورة موحدة لكل فرع", "تقرير تشغيلي شامل + تنبيه التراخيص"] },
             ] : [
               { icon: "📅", period: "Daily",   items: ["Receive reports and direct to vendors", "Follow execution and confirm closure"] },
-              { icon: "📋", period: "Weekly", items: ["Review open requests", "Vendor performance report"] },
-              { icon: "📊", period: "Monthly",   items: ["Unified invoice per branch", "Full operational report + license alerts"] },
+              { icon: "📋", period: "Weekly",  items: ["Review open requests", "Vendor performance report"] },
+              { icon: "📊", period: "Monthly", items: ["Unified invoice per branch", "Full operational report + license alerts"] },
             ]).map((block, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
                 className="bg-primary/5 border border-primary/10 rounded-3xl p-6">
@@ -570,66 +324,6 @@ export default function Companies() {
         </div>
       </section>
 
-      {/* WHO IS THIS FOR */}
-      <section className="py-16 bg-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
-              {ar ? "من يستفيد أكثر من خدمات GSS؟" : "Who Benefits Most from GSS?"}
-            </h2>
-            <p className="text-gray-500 text-base max-w-2xl mx-auto">
-              {ar
-                ? "أي منشأة لديها أكثر من موقع، أو تتعامل مع عدة موردين، أو تحتاج متابعة تشغيلية مستمرة للخدمات اليومية"
-                : "Any facility with more than one location, dealing with multiple vendors, or needing continuous operational follow-up for daily services"}
-            </p>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
-            {sectors.map((sector, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.04 }}
-                className="bg-primary/5 border border-primary/10 rounded-2xl p-5 hover:border-primary/30 hover:shadow-sm transition-all">
-                <p className="text-3xl mb-3">{sector.icon}</p>
-                <h3 className="font-bold text-gray-900 text-sm mb-1">{sector.name}</h3>
-                <p className="text-gray-500 text-xs leading-relaxed">{sector.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-          <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-            className="bg-primary/5 border border-primary/20 rounded-2xl px-7 py-5 text-center">
-            <p className="text-gray-700 text-base leading-relaxed">
-              {ar ? (
-                <>إذا كانت منشأتكم تعتمد على موردين متعددين أو تحتاج متابعة تشغيلية مستمرة للفروع والخدمات اليومية —{" "}<span className="font-bold text-primary">فغالباً ستستفيدون من نموذج التشغيل الذي تقدمه GSS.</span></>
-              ) : (
-                <>If your facility relies on multiple vendors or needs continuous operational follow-up for branches and daily services —{" "}<span className="font-bold text-primary">you will most likely benefit from GSS's operational model.</span></>
-              )}
-            </p>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* BENEFITS */}
-      <section className="py-16 bg-slate-900 text-white">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-3">{ar ? "لماذا GSS تحديداً؟" : "Why GSS Specifically?"}</h2>
-            <p className="text-slate-400 text-base">{ar ? "6 مزايا مباشرة تجعل قرار التسجيل سهلاً" : "6 direct advantages that make the registration decision easy"}</p>
-          </div>
-          <div className="grid md:grid-cols-2 gap-4">
-            {benefits.map((item, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.07 }}
-                className="flex items-start gap-4 bg-slate-800 rounded-2xl p-5 border border-slate-700">
-                <div className="w-10 h-10 bg-primary/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <item.icon size={18} className="text-secondary" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-white text-base mb-1">{item.title}</h4>
-                  <p className="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* FINAL CTA */}
       <section className="py-24 bg-primary text-white text-center">
         <div className="max-w-2xl mx-auto px-4">
@@ -637,23 +331,15 @@ export default function Companies() {
             {ar ? (<>فريق تشغيل احترافي لمنشأتكم<br />بدون تكاليف التوظيف</>) : (<>Professional Operations Team for Your Facility<br />Without Hiring Costs</>)}
           </h2>
           <p className="text-white/75 text-lg mb-10">
-            {ar ? "سجّلوا الآن وسيتواصل مدير الحساب المخصص لدراسة احتياجاتكم." : "Register now and the dedicated account manager will contact you to study your needs."}
+            {ar
+              ? "سجّلوا الآن وسيتواصل مدير الحساب المخصص لدراسة احتياجاتكم — بدون أي التزام مسبق."
+              : "Register now and your dedicated account manager will contact you to study your needs — no prior commitment."}
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/register/company">
-              <Button size="lg" className="h-14 px-12 text-xl font-bold bg-secondary hover:bg-secondary/90 text-primary" data-testid="cta-register-company-bottom">
-                {ar ? "سجّل منشأتك الآن — مجاناً" : "Register Your Facility Now — Free"} <ArrowLeft className="mr-2" size={22} />
-              </Button>
-            </Link>
-            <Link href="/contact">
-              <Button size="lg" variant="outline" className="h-14 px-10 text-lg text-white border-white hover:bg-white/10">
-                {ar ? "تواصل معنا أولاً" : "Contact Us First"}
-              </Button>
-            </Link>
-          </div>
-          <p className="text-white/40 text-sm mt-6">
-            {ar ? "لا يوجد التزام مسبق — فريق GSS سيتواصل معكم لشرح التفاصيل" : "No prior commitment — GSS team will contact you to explain the details"}
-          </p>
+          <Link href="/register/company">
+            <Button size="lg" className="h-14 px-12 text-xl font-bold bg-secondary hover:bg-secondary/90 text-primary">
+              {ar ? "سجّل منشأتك الآن — مجاناً" : "Register Your Facility Now — Free"} <ArrowLeft className="mr-2" size={22} />
+            </Button>
+          </Link>
         </div>
       </section>
 

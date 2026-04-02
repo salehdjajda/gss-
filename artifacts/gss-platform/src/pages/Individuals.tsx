@@ -2,61 +2,52 @@ import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import {
-  ArrowLeft, ArrowRight, ShieldCheck, Banknote, Star,
-  Award, Zap, ClipboardCheck, Clock
+  ArrowLeft, ArrowRight, ShieldCheck, Banknote,
+  Star, Award, ClipboardCheck
 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useIndividualAuth } from "@/contexts/IndividualAuthContext";
 
-
-// ── Feature list (6 items) ────────────────────────────────────────────────────
 const FEATURES_AR = [
-  { icon: Banknote,      color: "bg-green-50 text-green-600",   title: "سعر المورد المباشر",         desc: "تدفع تكلفة التنفيذ الفعلية بدون أي هامش خفي" },
-  { icon: Award,         color: "bg-blue-50 text-blue-600",     title: "فنيون معتمدون ومحترفون",      desc: "شبكة موردين مختارة ومجربة وليست عمالة عشوائية" },
-  { icon: ClipboardCheck,color: "bg-primary/10 text-primary",   title: "متابعة حتى إغلاق الطلب",     desc: "ننسق مع المورد حتى التأكد من رضاك الكامل" },
-  { icon: Zap,           color: "bg-amber-50 text-amber-600",   title: "رسوم خدمة شفافة",            desc: "تعرف التكلفة قبل بدء التنفيذ بدون مفاجآت" },
-  { icon: Clock,         color: "bg-sky-50 text-sky-600",       title: "استجابة سريعة",              desc: "يتم التواصل خلال ساعات لتأكيد العرض والموعد" },
-  { icon: ShieldCheck,   color: "bg-rose-50 text-rose-600",     title: "ضمان جودة التنفيذ",          desc: "في حال عدم رضاك يتم إعادة التنسيق حتى حل المشكلة" },
+  { icon: Banknote,       color: "bg-green-50 text-green-600",  title: "سعر المورد المباشر",      desc: "تدفع تكلفة التنفيذ الفعلية بدون أي هامش خفي" },
+  { icon: Award,          color: "bg-blue-50 text-blue-600",    title: "فنيون معتمدون ومحترفون",   desc: "شبكة موردين مختارة ومجربة وليست عمالة عشوائية" },
+  { icon: ClipboardCheck, color: "bg-primary/10 text-primary",  title: "متابعة حتى إغلاق الطلب",  desc: "ننسق مع المورد حتى التأكد من رضاك الكامل" },
+  { icon: ShieldCheck,    color: "bg-rose-50 text-rose-600",    title: "رسوم شفافة — لا مفاجآت",  desc: "تعرف التكلفة الكاملة قبل بدء التنفيذ" },
 ];
 
 const FEATURES_EN = [
-  { icon: Banknote,      color: "bg-green-50 text-green-600",   title: "Direct Vendor Price",          desc: "You pay the actual execution cost with no hidden margin" },
-  { icon: Award,         color: "bg-blue-50 text-blue-600",     title: "Certified & Professional Techs",desc: "A curated, vetted vendor network — not random labour" },
-  { icon: ClipboardCheck,color: "bg-primary/10 text-primary",   title: "Follow-Up Until Closed",       desc: "We coordinate with the vendor until your full satisfaction" },
-  { icon: Zap,           color: "bg-amber-50 text-amber-600",   title: "Transparent Service Fee",      desc: "Know the total cost before execution — no surprises" },
-  { icon: Clock,         color: "bg-sky-50 text-sky-600",       title: "Fast Response",                desc: "We reach out within hours to confirm the offer and schedule" },
-  { icon: ShieldCheck,   color: "bg-rose-50 text-rose-600",     title: "Execution Quality Guarantee",  desc: "If you're not satisfied, we re-coordinate until it's resolved" },
+  { icon: Banknote,       color: "bg-green-50 text-green-600",  title: "Direct Vendor Price",          desc: "You pay the actual execution cost with no hidden margin" },
+  { icon: Award,          color: "bg-blue-50 text-blue-600",    title: "Certified & Professional Techs",desc: "A curated, vetted vendor network — not random labour" },
+  { icon: ClipboardCheck, color: "bg-primary/10 text-primary",  title: "Follow-Up Until Closed",       desc: "We coordinate with the vendor until your full satisfaction" },
+  { icon: ShieldCheck,    color: "bg-rose-50 text-rose-600",    title: "Transparent Fee — No Surprises",desc: "Know the full cost before execution begins" },
 ];
 
-// ── Steps ─────────────────────────────────────────────────────────────────────
 const STEPS_AR = [
-  { num: "01", icon: "📲", title: "أرسل طلبك",          desc: "اختر الخدمة وأدخل التفاصيل أو أرفق صور المشكلة" },
-  { num: "02", icon: "💰", title: "نجهّز العرض المناسب", desc: "يتم التنسيق مع الموردين المعتمدين واختيار أفضل عرض" },
-  { num: "03", icon: "✅", title: "تنفيذ الخدمة",        desc: "بعد موافقتك يتم جدولة الموعد مباشرة" },
-  { num: "04", icon: "⭐", title: "تقييم وإغلاق الطلب", desc: "يتم إغلاق الطلب بعد تأكيد رضاك عن التنفيذ" },
+  { num: "01", icon: "📲", title: "أرسل طلبك",           desc: "اختر الخدمة وأدخل التفاصيل أو أرفق صور المشكلة" },
+  { num: "02", icon: "💰", title: "نجهّز أفضل عرض",      desc: "نتواصل مع موردين معتمدين ونختار أفضل سعر تنفيذ" },
+  { num: "03", icon: "✅", title: "تنفيذ الخدمة",         desc: "بعد موافقتك يتم جدولة الموعد مباشرة" },
+  { num: "04", icon: "⭐", title: "تأكيد وإغلاق الطلب",  desc: "يُغلق الطلب فقط بعد التأكد من رضاك الكامل" },
 ];
 
 const STEPS_EN = [
-  { num: "01", icon: "📲", title: "Send Your Request",     desc: "Choose the service, enter details or attach photos of the issue" },
-  { num: "02", icon: "💰", title: "We Prepare the Quote",  desc: "We coordinate with certified vendors and select the best offer" },
-  { num: "03", icon: "✅", title: "Service Execution",     desc: "Once you approve, the appointment is scheduled immediately" },
-  { num: "04", icon: "⭐", title: "Review & Close",        desc: "The request is closed after your satisfaction is confirmed" },
+  { num: "01", icon: "📲", title: "Send Your Request",    desc: "Choose the service, enter details or attach photos of the issue" },
+  { num: "02", icon: "💰", title: "We Prepare the Quote", desc: "We coordinate with certified vendors and select the best execution price" },
+  { num: "03", icon: "✅", title: "Service Execution",    desc: "Once you approve, the appointment is scheduled immediately" },
+  { num: "04", icon: "⭐", title: "Confirm & Close",      desc: "The request closes only after your full satisfaction is confirmed" },
 ];
-
 
 export default function Individuals() {
   const { lang, isRTL } = useLanguage();
   const { isLoggedIn }  = useIndividualAuth();
   const ctaHref = isLoggedIn ? "/request/service" : "/register/individual";
-  const Arrow = isRTL ? ArrowLeft : ArrowRight;
-
-  const features  = lang === "ar" ? FEATURES_AR : FEATURES_EN;
-  const steps     = lang === "ar" ? STEPS_AR    : STEPS_EN;
+  const Arrow   = isRTL ? ArrowLeft : ArrowRight;
+  const features = lang === "ar" ? FEATURES_AR : FEATURES_EN;
+  const steps    = lang === "ar" ? STEPS_AR    : STEPS_EN;
 
   return (
     <div>
 
-      {/* ── HERO ──────────────────────────────────────────────────────────── */}
+      {/* HERO */}
       <section className="relative bg-primary py-28 text-white overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=1600&auto=format&fit=crop&q=80')] bg-cover bg-center opacity-10" />
         <div className="absolute inset-0 bg-gradient-to-b from-primary via-primary/95 to-primary/90" />
@@ -83,20 +74,19 @@ export default function Individuals() {
               </Link>
             </div>
 
-            {/* Stat cards */}
             <div className="grid grid-cols-2 gap-4">
               {(lang === "ar"
                 ? [
-                    { num: "صفر",   label: "هامش ربح مخفي",       sub: "تدفع سعر التكلفة المباشر" },
-                    { num: "100%",  label: "فنيون مرخصون",         sub: "شبكتنا مؤهلة ومعتمدة" },
-                    { num: "ساعات", label: "وقت الاستجابة",        sub: "نتواصل معك بسرعة" },
-                    { num: "ضمان",  label: "جودة التنفيذ",         sub: "أو نُعيد التنسيق مجاناً" },
+                    { num: "صفر",   label: "هامش ربح مخفي",  sub: "تدفع سعر التكلفة المباشر" },
+                    { num: "100%",  label: "فنيون مرخصون",    sub: "شبكتنا مؤهلة ومعتمدة" },
+                    { num: "ساعات", label: "وقت الاستجابة",   sub: "نتواصل معك بسرعة" },
+                    { num: "ضمان",  label: "جودة التنفيذ",    sub: "أو نُعيد التنسيق مجاناً" },
                   ]
                 : [
-                    { num: "Zero",       label: "Hidden Margin",       sub: "You pay the direct cost" },
-                    { num: "100%",       label: "Licensed Technicians", sub: "Our network is certified" },
-                    { num: "Hours",      label: "Response Time",        sub: "We reach you quickly" },
-                    { num: "Guarantee",  label: "Execution Quality",    sub: "Or we re-coordinate free" },
+                    { num: "Zero",      label: "Hidden Margin",       sub: "You pay the direct cost" },
+                    { num: "100%",      label: "Licensed Technicians", sub: "Our network is certified" },
+                    { num: "Hours",     label: "Response Time",        sub: "We reach you quickly" },
+                    { num: "Guarantee", label: "Execution Quality",    sub: "Or we re-coordinate free" },
                   ]
               ).map((item, i) => (
                 <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 + i * 0.1 }}
@@ -111,15 +101,15 @@ export default function Individuals() {
         </div>
       </section>
 
-      {/* ── WHY GSS (6 features) ──────────────────────────────────────────── */}
+      {/* WHY GSS */}
       <section className="py-20 bg-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
               {lang === "ar" ? "لماذا يختار الأفراد منصة GSS؟" : "Why Individuals Choose GSS?"}
             </h2>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {features.map((feat, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.07 }}
                 className="bg-gray-50 border border-gray-100 rounded-3xl p-6 hover:shadow-sm transition-shadow">
@@ -134,7 +124,7 @@ export default function Individuals() {
         </div>
       </section>
 
-      {/* ── HOW IT WORKS ──────────────────────────────────────────────────── */}
+      {/* HOW IT WORKS */}
       <section className="py-16 bg-primary/5">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -158,8 +148,8 @@ export default function Individuals() {
         </div>
       </section>
 
-      {/* ── SERVICES ──────────────────────────────────────────────────────── */}
-      <section id="ind-services" className="py-20 bg-white">
+      {/* SERVICES */}
+      <section className="py-20 bg-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -167,8 +157,8 @@ export default function Individuals() {
             </h2>
             <p className="text-gray-500 text-base leading-relaxed mb-10">
               {lang === "ar"
-                ? "توفر منصة GSS شبكة واسعة من الموردين والفنيين لتنسيق ومتابعة مختلف الخدمات المنزلية والمكتبية والعقارية حتى إنجازها بالكامل."
-                : "GSS provides a wide network of vendors and technicians to coordinate and follow up on all home, office, and real estate services until full completion."}
+                ? "صيانة، تشطيب، أنظمة تقنية، تنظيف، نقل، خدمات حكومية وأكثر — كل شيء في مكان واحد."
+                : "Maintenance, finishing, tech systems, cleaning, moving, government services and more — all in one place."}
             </p>
             <Link href="/services">
               <Button size="lg" className="h-14 px-12 text-lg font-bold">
@@ -179,7 +169,7 @@ export default function Individuals() {
         </div>
       </section>
 
-      {/* ── TESTIMONIAL ───────────────────────────────────────────────────── */}
+      {/* TESTIMONIAL */}
       <section className="py-12 bg-secondary/5 border-y border-secondary/20">
         <div className="max-w-3xl mx-auto px-4 text-center">
           <div className="flex items-center justify-center gap-1 mb-4">
@@ -191,30 +181,6 @@ export default function Individuals() {
               : '"For the first time I paid the real technician price — no middleman, no surprises"'}
           </p>
           <p className="text-gray-400 text-sm">{lang === "ar" ? "عميل GSS — الرياض" : "GSS Client — Riyadh"}</p>
-        </div>
-      </section>
-
-      {/* ── CTA ───────────────────────────────────────────────────────────── */}
-      <section className="py-24 bg-primary text-white text-center">
-        <div className="max-w-2xl mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold mb-5">
-            {lang === "ar" ? "جاهز تطلب خدمتك؟" : "Ready to Request Your Service?"}
-          </h2>
-          <p className="text-white/75 text-lg mb-4">
-            {lang === "ar"
-              ? "اطلب الآن وسنتواصل معك خلال ساعات لتأكيد العرض والموعد."
-              : "Submit now and we'll reach out within hours to confirm the offer and schedule."}
-          </p>
-          <p className="text-secondary font-bold mb-10 text-sm">
-            {lang === "ar"
-              ? "ضمان الجودة + سعر شفاف + فنيون مرخصون"
-              : "Quality Guarantee + Transparent Pricing + Licensed Technicians"}
-          </p>
-          <Link href={ctaHref}>
-            <Button size="lg" className="h-14 px-12 text-xl font-bold bg-secondary hover:bg-secondary/90 text-primary">
-              {lang === "ar" ? "اطلب خدمتك الآن" : "Request Your Service Now"} <Arrow className="ms-2" size={22} />
-            </Button>
-          </Link>
         </div>
       </section>
 
