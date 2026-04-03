@@ -707,7 +707,7 @@ export default function Services() {
         <div className="absolute inset-0 bg-gradient-to-b from-primary/95 to-primary/90" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            {ar ? "الخدمات الإدارية والتشغيلية الشاملة" : "Comprehensive Administrative & Operational Services"}
+            {ar ? "صيانة · تشغيل · خدمات إدارية" : "Maintenance · Operations · Admin Services"}
           </h1>
           <p className="text-xl text-white/80 max-w-3xl mx-auto leading-relaxed mb-10">
             {ar

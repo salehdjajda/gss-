@@ -188,8 +188,8 @@ export default function Pricing() {
             </span>
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
               {isAr
-                ? "الخدمات الإدارية والتشغيلية للأفراد والمنشآت"
-                : "Administrative & Operational Services for Individuals & Facilities"}
+                ? "صيانة · تشغيل · خدمات إدارية للأفراد والمنشآت"
+                : "Maintenance · Operations · Admin Services for Individuals & Facilities"}
             </h2>
             <p className="text-gray-500 mt-3 max-w-2xl mx-auto text-sm leading-relaxed">
               {isAr

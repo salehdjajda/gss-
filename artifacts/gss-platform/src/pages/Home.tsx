@@ -368,8 +368,8 @@ export default function Home() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-primary mb-3">
               {ar
-                ? "مهما كان قطاعك، GSS تدعم خدماتك الإدارية والتشغيلية"
-                : "Whatever Your Sector, GSS Supports Your Administrative & Operational Services"}
+                ? "مهما كان قطاعك، GSS تدعم صيانتك وتشغيلك وخدماتك الإدارية"
+                : "Whatever Your Sector, GSS Supports Your Maintenance, Operations & Admin Services"}
             </h2>
             <p className="text-gray-500 text-lg max-w-2xl mx-auto">
               {ar
@@ -543,7 +543,7 @@ export default function Home() {
       <section className="bg-primary py-24 text-white text-center">
         <div className="max-w-4xl mx-auto px-4">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            {ar ? "ابدأ في تنظيم خدماتك الإدارية والتشغيلية — للمنشآت والأفراد" : "Start Organizing Your Administrative & Operational Services — For Facilities & Individuals"}
+            {ar ? "صيانة · تشغيل · خدمات إدارية — للمنشآت والأفراد" : "Maintenance · Operations · Admin Services — For Facilities & Individuals"}
           </h2>
           <p className="text-xl text-primary-foreground/80 mb-10 leading-relaxed">
             {ar
