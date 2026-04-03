@@ -154,7 +154,7 @@ export default function Home() {
             className="mb-2"
           >
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-tight tracking-tight">
-              {ar ? "منصة الخدمات الإدارية والتشغيلية" : "Administrative & Operational Services"}
+              {ar ? "صيانة · تشغيل · خدمات إدارية" : "Maintenance · Operations · Admin Services"}
             </h1>
           </motion.div>
 
