@@ -251,13 +251,13 @@ export default function Home() {
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
                 <Link href="/register/company">
-                  <Button size="lg" className="h-12 px-7 font-bold bg-secondary text-primary hover:bg-secondary/90" data-testid="link-challenge-register">
-                    {ar ? "سجّل الآن" : "Register Now"} <ArrowLeft className="mr-2" size={16} />
+                  <Button size="lg" className="h-12 px-7 font-bold bg-secondary text-primary hover:bg-secondary/90" data-testid="link-challenge-register-company">
+                    {ar ? "سجّل منشأتك" : "Register Facility"} <ArrowLeft className="mr-2" size={16} />
                   </Button>
                 </Link>
-                <Link href="/companies">
+                <Link href="/register/individual">
                   <Button size="lg" variant="outline" className="h-12 px-7 font-bold border-white/30 text-white hover:bg-white/10">
-                    {ar ? "اعرف أكثر" : "Learn More"}
+                    {ar ? "سجّل كفرد" : "Register as Individual"}
                   </Button>
                 </Link>
               </div>
@@ -408,13 +408,13 @@ export default function Home() {
             <div className="flex gap-3 shrink-0">
               <Link href="/register/company">
                 <Button className="font-bold px-6 bg-primary hover:bg-primary/90">
-                  {ar ? "سجّل الآن" : "Register Now"}
+                  {ar ? "منشأة" : "Facility"}
                   <ArrowLeft className="mr-2" size={16} />
                 </Button>
               </Link>
-              <Link href="/pricing">
+              <Link href="/register/individual">
                 <Button variant="outline" className="font-bold px-5 border-primary text-primary hover:bg-primary hover:text-white">
-                  {ar ? "عرض الباقات" : "View Plans"}
+                  {ar ? "فرد" : "Individual"}
                 </Button>
               </Link>
             </div>
@@ -542,13 +542,16 @@ export default function Home() {
       {/* CTA */}
       <section className="bg-primary py-24 text-white text-center">
         <div className="max-w-4xl mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            {ar ? "صيانة · تشغيل · خدمات إدارية — للمنشآت والأفراد" : "Maintenance · Operations · Admin Services — For Facilities & Individuals"}
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            {ar ? "ابدأ مع GSS اليوم" : "Start with GSS Today"}
           </h2>
-          <p className="text-xl text-primary-foreground/80 mb-10 leading-relaxed">
+          <p className="text-xl text-primary-foreground/80 mb-4 leading-relaxed">
             {ar
-              ? "عبر نقطة تشغيل واحدة، بنموذج مرن حسب الطلب يناسبك سواء كنت منشأة أو فرداً، مع إمكانية إضافة مزايا تشغيلية متقدمة حسب احتياجاتك."
-              : "Through a single operational point, with a flexible on-demand model suitable for facilities and individuals alike, with the ability to add advanced features based on your needs."}
+              ? "نقطة تشغيل واحدة تخدم منشأتك أو طلبك الشخصي — بأسعار شفافة وتنفيذ متابَع حتى الإغلاق."
+              : "One operational point serving your facility or personal request — with transparent pricing and execution followed through to closure."}
+          </p>
+          <p className="text-secondary font-bold text-lg mb-10">
+            {ar ? "اختر كيف تريد التسجيل:" : "Choose how you'd like to register:"}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/register/company">
@@ -557,18 +560,18 @@ export default function Home() {
                 className="bg-secondary hover:bg-secondary/90 text-primary font-bold h-14 px-10 text-lg"
                 data-testid="cta-register-company"
               >
-                {ar ? "سجّل الآن" : "Register Now"}
+                {ar ? "سجّل منشأتك مجانًا" : "Register Your Facility Free"}
                 <ArrowLeft className="mr-2" size={20} />
               </Button>
             </Link>
-            <Link href="/contact">
+            <Link href="/register/individual">
               <Button
                 size="lg"
                 variant="outline"
                 className="h-14 px-10 text-lg text-white border-white hover:bg-white/10"
-                data-testid="cta-contact"
+                data-testid="cta-register-individual"
               >
-                {ar ? "تواصل معنا أولاً" : "Contact Us First"}
+                {ar ? "سجّل كفرد واطلب خدمتك" : "Register as Individual"}
               </Button>
             </Link>
           </div>
