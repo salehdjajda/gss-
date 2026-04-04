@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useIndividualAuth } from "@/contexts/IndividualAuthContext";
 import { useCompanyAuth } from "@/contexts/AccountAuthContext";
 import {
   Wrench, Sparkles, Truck, Users, Monitor, FileText, Building2,
@@ -618,7 +617,6 @@ export default function Services() {
   const ar = lang === "ar";
   const { toast } = useToast();
   const [, navigate] = useLocation();
-  const individualAuth = useIndividualAuth();
   const companyAuth = useCompanyAuth();
 
   const [customForm, setCustomForm] = useState({ companyName: "", accountNumber: "", employeeName: "", phone: "", email: "", description: "" });
@@ -631,9 +629,7 @@ export default function Services() {
 
   function handleServiceClick(serviceName: string) {
     sessionStorage.setItem("gss_pending_service", serviceName);
-    if (individualAuth.isLoggedIn) {
-      navigate("/request/service");
-    } else if (companyAuth.isLoggedIn) {
+    if (companyAuth.isLoggedIn) {
       navigate("/request/company-service");
     } else {
       setPendingService(serviceName);
@@ -736,7 +732,7 @@ export default function Services() {
                 <div className="max-h-80 overflow-y-auto">
                   {searchQuery.trim().length === 0 ? (
                     <div className="px-5 py-4 text-gray-400 text-sm text-center">
-                      {ar ? "ابدأ الكتابة للبحث من بين 16 تصنيفاً وأكثر من 70 مهمة تشغيلية" : "Start typing to search among 16 categories and 70+ operational tasks"}
+                      {ar ? "ابدأ الكتابة للبحث من بين 18 تصنيفاً وأكثر من 80 مهمة تشغيلية" : "Start typing to search among 18 categories and 80+ operational tasks"}
                     </div>
                   ) : filteredServices.length > 0 ? (
                     filteredServices.slice(0, 40).map((item, i) => {
@@ -794,13 +790,13 @@ export default function Services() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             {(ar ? [
-              { num: "16",      label: "تصنيفاً خدمياً تشغيلياً" },
-              { num: "+70",     label: "مهمة تشغيلية مغطاة" },
+              { num: "18",      label: "تصنيفاً تشغيلياً شاملاً" },
+              { num: "+80",     label: "مهمة تشغيلية مغطاة" },
               { num: "واحدة",   label: "نقطة تنسيق لكل الطلبات" },
               { num: "شفاف",    label: "نموذج تسعير واضح مسبقاً" },
             ] : [
-              { num: "16",       label: "Operational Service Categories" },
-              { num: "70+",      label: "Operational Tasks Covered" },
+              { num: "18",       label: "Operational Service Categories" },
+              { num: "80+",      label: "Operational Tasks Covered" },
               { num: "One",      label: "Single Coordination Point" },
               { num: "Transparent", label: "Clear Pre-agreed Pricing" },
             ]).map((item, i) => (
@@ -1023,7 +1019,7 @@ export default function Services() {
               <Textarea
                 value={customForm.description}
                 onChange={e => setCustomForm(p => ({ ...p, description: e.target.value }))}
-                placeholder={ar ? "صف باختصار ما تحتاجه (منشأة أو فرد)، وسيتواصل معك فريق GSS لدراسة الطلب وتقديم حل مناسب..." : "Briefly describe what you need (facility or individual), and the GSS team will get in touch to study and provide a suitable solution..."}
+                placeholder={ar ? "صف باختصار الاحتياج التشغيلي لمنشأتكم، وسيتواصل معكم فريق GSS لدراسة الطلب وتقديم حل مناسب..." : "Briefly describe your facility's operational need, and the GSS team will get in touch to study and provide a suitable solution..."}
                 rows={4}
                 required
               />
@@ -1040,6 +1036,54 @@ export default function Services() {
         </div>
       </section>
 
+      {/* Operational Procurement Section */}
+      <section className="py-20 bg-slate-900 text-white">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <span className="inline-block bg-secondary/20 text-secondary font-bold text-xs px-4 py-1.5 rounded-full mb-4 tracking-wide uppercase">
+              {ar ? "المشتريات التشغيلية" : "Operational Procurement"}
+            </span>
+            <h2 className="text-3xl font-bold mb-4">
+              {ar ? "المشتريات التشغيلية المرتبطة بطلبات الخدمة" : "Operational Procurement Linked to Service Requests"}
+            </h2>
+            <p className="text-slate-400 max-w-2xl mx-auto text-base leading-relaxed">
+              {ar
+                ? "في حال تطلّب تنفيذ أي خدمة توفير مواد أو قطع غيار أو أجهزة، تتولى GSS إدارة عملية التوريد كاملة — مع إمكانية طلب دفعة مقدمة قبل البدء."
+                : "If any service execution requires procuring materials, spare parts, or equipment, GSS manages the entire procurement process — with the option to request a down payment before starting."}
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+            {(ar ? [
+              { icon: "🔩", label: "طلب قطع غيار",         desc: "توفير قطع الغيار اللازمة للصيانة والإصلاح" },
+              { icon: "📦", label: "طلب مواد تشغيلية",     desc: "مواد ومستلزمات تشغيل الفروع والمواقع" },
+              { icon: "💻", label: "طلب أجهزة ومعدات",     desc: "أجهزة وأدوات تشغيلية حسب المواصفات" },
+              { icon: "💰", label: "طلب عرض سعر",           desc: "الحصول على أفضل عرض سعر من شبكة الموردين" },
+              { icon: "🚚", label: "متابعة التوريد",         desc: "متابعة عمليات التوريد والتسليم حتى الاستلام" },
+            ] : [
+              { icon: "🔩", label: "Spare Parts Request",        desc: "Procuring spare parts needed for maintenance & repair" },
+              { icon: "📦", label: "Operational Materials",       desc: "Materials and supplies for branch and site operations" },
+              { icon: "💻", label: "Equipment & Devices",         desc: "Operational tools and equipment per specifications" },
+              { icon: "💰", label: "Price Quotation Request",     desc: "Best quote from the certified vendor network" },
+              { icon: "🚚", label: "Supply Follow-up",            desc: "Full procurement and delivery tracking until receipt" },
+            ]).map((item, i) => (
+              <div key={i} className="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-5 hover:border-secondary/40 transition-all">
+                <div className="text-3xl mb-3">{item.icon}</div>
+                <h3 className="font-bold text-white mb-1.5 text-base">{item.label}</h3>
+                <p className="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+          <div className="bg-amber-500/10 border border-amber-400/30 rounded-2xl px-6 py-4 text-sm text-amber-300 text-center">
+            <strong className="font-bold">
+              {ar ? "ملاحظة مشتريات: " : "Procurement Note: "}
+            </strong>
+            {ar
+              ? "يحق لمنصة GSS طلب دفعة مقدمة قبل البدء بأي عملية شراء — يتم الاتفاق على قيمتها مسبقاً ضمن حدود العقد المتفق عليه."
+              : "GSS Platform reserves the right to request a down payment before starting any procurement process — the amount is agreed upon in advance within the contract limits."}
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="py-16 bg-primary text-white text-center">
         <div className="max-w-4xl mx-auto px-4">
@@ -1048,13 +1092,13 @@ export default function Services() {
           </h2>
           <p className="text-white/80 text-lg mb-8 max-w-2xl mx-auto">
             {ar
-              ? "سجّل الآن — سواء كنت فرداً أو منشأة — وسيتولى فريق GSS تنظيم جميع خدماتك الإدارية والتشغيلية عبر نقطة اتصال واحدة."
-              : "Register now — whether you're an individual or a facility — and the GSS team will organize all your administrative and operational services through a single point of contact."}
+              ? "سجّل منشأتكم وسيتولى فريق GSS تنظيم جميع خدماتكم التشغيلية عبر نقطة اتصال واحدة وشبكة موردين معتمدين."
+              : "Register your facility and the GSS team will organize all your operational services through a single point of contact and a certified vendor network."}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/register">
+            <Link href="/register/company">
               <Button size="lg" className="h-14 px-10 text-lg font-bold bg-secondary hover:bg-secondary/90 text-primary" data-testid="cta-services-register">
-                {ar ? "سجّل الآن" : "Register Now"} <ArrowLeft className="mr-2" size={20} />
+                {ar ? "سجّل منشأتكم" : "Register Your Facility"} <ArrowLeft className="mr-2" size={20} />
               </Button>
             </Link>
             <Link href="/contact">
