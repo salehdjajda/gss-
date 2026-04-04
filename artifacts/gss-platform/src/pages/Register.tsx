@@ -7,7 +7,7 @@ export default function Register() {
   const clientOptions = [
     {
       title: "فرد",
-      desc: "سجّل كفرد واطلب خدماتك التشغيلية (صيانة، نظافة، IT وغيرها) بسهولة.",
+      desc: "سجّل كفرد واطلب خدمات الصيانة والتشغيل والإدارة بسهولة.",
       icon: User,
       link: "/register/individual",
       btnText: "تسجيل كفرد",
@@ -15,7 +15,7 @@ export default function Register() {
     },
     {
       title: "منشأة",
-      desc: "سجّل منشأتك لتنظيم وإدارة عملياتك التشغيلية بالكامل عبر نقطة اتصال واحدة.",
+      desc: "سجّل منشأتك لتنظيم خدمات الصيانة والتشغيل والإدارة عبر نقطة اتصال واحدة.",
       icon: Building2,
       link: "/register/company",
       btnText: "تسجيل كمنشأة",

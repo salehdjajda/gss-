@@ -31,7 +31,7 @@ export default function Home() {
   const gssSupportPoints = ar ? [
     "تنظيم الطلبات عبر نقطة تشغيل واحدة",
     "توحيد التنسيق مع الموردين",
-    "تحسين وضوح المصروفات التشغيلية",
+    "تحسين وضوح المصروفات والتكاليف",
     "متابعة التنفيذ حتى الإغلاق",
     "توفير تقارير تشغيلية تدعم اتخاذ القرار",
   ] : [
@@ -142,7 +142,7 @@ export default function Home() {
           >
             <span className="w-2 h-2 bg-secondary rounded-full animate-pulse" />
             <span className="text-sm font-medium text-white/90">
-              {ar ? "المنصة التشغيلية الأولى في المملكة" : "Saudi Arabia's First Operational Platform"}
+              {ar ? "أولى منصات الصيانة والتشغيل والإدارة في المملكة" : "Saudi Arabia's First Maintenance, Operations & Admin Platform"}
             </span>
           </motion.div>
 
@@ -229,8 +229,8 @@ export default function Home() {
             </span>
             <h2 className="text-3xl md:text-4xl font-bold mb-4 leading-snug">
               {ar
-                ? "كيف تساعدك منصة GSS في إدارة خدماتك التشغيلية؟"
-                : "How Does GSS Help You Manage Your Operational Services?"}
+                ? "كيف تساعدك منصة GSS في الصيانة والتشغيل والإدارة؟"
+                : "How Does GSS Help You with Maintenance, Operations & Admin?"}
             </h2>
           </div>
 
@@ -246,8 +246,8 @@ export default function Home() {
             <motion.div variants={fadeInUp}>
               <p className="text-slate-300 text-lg leading-relaxed mb-8">
                 {ar
-                  ? "سواء كنت منشأة أو فرداً، تحتاج إلى مستوى أعلى من التنسيق في الخدمات التشغيلية، وتحكم أوضح في المصروفات، ورؤية واضحة لكل ما تم تنفيذه."
-                  : "Whether you're a facility or an individual, you need a higher level of coordination in operational services, clearer expense control, and full visibility into everything executed."}
+                  ? "سواء كنت منشأة أو فرداً، تحتاج إلى تنسيق واضح في خدمات الصيانة والتشغيل والإدارة، مع رؤية كاملة لكل ما تم تنفيذه."
+                  : "Whether you're a facility or an individual, you need clear coordination across maintenance, operations & admin services, with full visibility into everything executed."}
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
                 <Link href="/register/company">
@@ -373,8 +373,8 @@ export default function Home() {
             </h2>
             <p className="text-gray-500 text-lg max-w-2xl mx-auto">
               {ar
-                ? "شبكتنا من الموردين والخبرة التشغيلية تغطي طيفاً واسعاً من القطاعات داخل المملكة."
-                : "Our vendor network and operational expertise cover a wide range of sectors across the Kingdom."}
+                ? "شبكتنا من الموردين المعتمدين تغطي طيفاً واسعاً من القطاعات في خدمات الصيانة والتشغيل والإدارة."
+                : "Our certified vendor network covers a wide range of sectors in maintenance, operations & admin services."}
             </p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 mb-12">
@@ -433,8 +433,8 @@ export default function Home() {
               </h3>
               <p className="text-gray-600 leading-relaxed mb-6">
                 {ar
-                  ? "استقبل طلبات عمل مباشرة من شركات ومنشآت متعددة. لا عمولات على الخدمات التشغيلية اليومية. تقديم سعرك بشفافية كاملة."
-                  : "Receive work requests directly from multiple companies and facilities. No commissions on daily operational services. Submit your price with full transparency."}
+                  ? "استقبل طلبات عمل مباشرة من شركات ومنشآت متعددة. لا عمولات على خدمات الصيانة والتشغيل اليومية. تقديم سعرك بشفافية كاملة."
+                  : "Receive work requests directly from multiple companies and facilities. No commissions on daily maintenance & operations services. Submit your price with full transparency."}
               </p>
               <Link href="/vendors">
                 <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-white" data-testid="link-vendor-network">
