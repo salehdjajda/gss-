@@ -24,7 +24,7 @@ export function Footer() {
             <ul className="space-y-2 text-sm">
               <li><Link href="/"           className="hover:text-secondary transition-colors">{t("nav_home")}</Link></li>
               <li><Link href="/companies"  className="hover:text-secondary transition-colors">{t("footer_forCompanies")}</Link></li>
-              <li><Link href="/individuals"className="hover:text-secondary transition-colors">{t("nav_individuals")}</Link></li>
+              <li><Link href="/services"   className="hover:text-secondary transition-colors">{t("nav_services")}</Link></li>
               <li><Link href="/vendors"    className="hover:text-secondary transition-colors">{t("footer_vendorNetwork")}</Link></li>
               <li><Link href="/partners"   className="hover:text-secondary transition-colors">{t("footer_partners")}</Link></li>
             </ul>
@@ -44,9 +44,9 @@ export function Footer() {
             <h3 className="text-white font-semibold mb-4">{t("footer_register")}</h3>
             <ul className="space-y-2 text-sm">
               <li><Link href="/register/company"    className="hover:text-secondary transition-colors">{t("footer_registerCompany")}</Link></li>
-              <li><Link href="/register/individual" className="hover:text-secondary transition-colors">{t("footer_registerIndividual")}</Link></li>
               <li><Link href="/register/vendor"     className="hover:text-secondary transition-colors">{t("footer_joinVendor")}</Link></li>
               <li><Link href="/register/consultant" className="hover:text-secondary transition-colors">{t("footer_joinConsultant")}</Link></li>
+              <li><Link href="/contact"             className="hover:text-secondary transition-colors">{t("footer_contactUs")}</Link></li>
             </ul>
           </div>
         </div>

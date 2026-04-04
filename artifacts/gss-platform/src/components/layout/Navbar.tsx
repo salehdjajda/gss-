@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { Menu, X, ChevronDown, Globe, ShieldCheck, LogIn, Building2, User, Wrench, Users } from "lucide-react";
+import { Menu, X, ChevronDown, Globe, ShieldCheck, LogIn, Building2, Wrench, Users } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import logoImg from "@assets/image_1774909317242.png";
@@ -32,7 +32,6 @@ export function Navbar() {
   const mainLinks = [
     { href: "/",            label: t("nav_home") },
     { href: "/companies",   label: t("nav_companies") },
-    { href: "/individuals", label: t("nav_individuals") },
     { href: "/services",    label: t("nav_services") },
     { href: "/how-it-works",label: t("nav_howItWorks") },
     { href: "/pricing",     label: t("nav_pricing") },
@@ -46,7 +45,6 @@ export function Navbar() {
 
   const loginOptions = [
     { href: "/portal/login?type=company",    labelAr: "المنشآت والشركات",  labelEn: "Facilities",      icon: Building2,   color: "text-blue-600",   bg: "bg-blue-50" },
-    { href: "/portal/login?type=individual", labelAr: "الأفراد",           labelEn: "Individuals",     icon: User,        color: "text-green-600",  bg: "bg-green-50" },
     { href: "/portal/login?type=vendor",     labelAr: "الموردون",          labelEn: "Vendors",         icon: Wrench,      color: "text-orange-600", bg: "bg-orange-50" },
     { href: "/portal/login?type=consultant", labelAr: "المستشارون",        labelEn: "Consultants",     icon: Users,       color: "text-purple-600", bg: "bg-purple-50" },
     { href: "/login",                        labelAr: "إدارة المنصة",      labelEn: "Platform Admin",  icon: ShieldCheck, color: "text-red-600",    bg: "bg-red-50" },
@@ -75,7 +73,7 @@ export function Navbar() {
                   location === link.href
                     ? "text-primary bg-primary/8 font-semibold"
                     : "text-gray-600 hover:text-primary hover:bg-gray-50"
-                } ${link.href === "/individuals" ? "text-secondary font-semibold" : ""}`}
+                }`}
                 data-testid={`link-nav-${link.href}`}
               >
                 {link.label}
@@ -96,9 +94,9 @@ export function Navbar() {
               {lang === "ar" ? "EN" : "عر"}
             </button>
 
-            {/* Individual Account Badge (when logged in) */}
+            {/* Account Badge (when logged in) */}
             {isLoggedIn && account && (
-              <Link href="/dashboard/individual"
+              <Link href="/dashboard/company"
                 className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-primary/8 border border-primary/20 hover:bg-primary/12 transition-colors">
                 <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white text-xs font-black">
                   {account.name.charAt(0)}
@@ -234,7 +232,7 @@ export function Navbar() {
                   onClick={() => { setIsMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: "smooth" }); }}
                   className={`flex items-center px-4 py-3 rounded-xl text-base font-medium transition-colors ${
                     location === link.href ? "text-primary bg-primary/8 font-semibold" : "text-gray-700 hover:text-primary hover:bg-gray-50"
-                  } ${link.href === "/individuals" ? "text-secondary" : ""}`}
+                  }`}
                   data-testid={`link-mobile-nav-${link.href}`}
                 >
                   {link.label}
