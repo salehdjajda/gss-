@@ -79,16 +79,18 @@ function StatusPipeline({ order, stages }: { order: WorkOrder; stages: typeof ST
   );
 }
 
-function WorkOrderCard({ order, stages, priorityLabels, ar, onApprove }: {
+function WorkOrderCard({ order, stages, priorityLabels, ar, onApprove, approvingId }: {
   order: WorkOrder;
   stages: typeof STAGES_AR;
   priorityLabels: typeof PRIORITY_LABEL_AR;
   ar: boolean;
   onApprove: (id: string) => void;
+  approvingId: string | null;
 }) {
   const [expanded, setExpanded] = useState(false);
   const stageInfo = stages.find(s => s.key === order.status);
   const prio = priorityLabels[order.priority];
+  const isApproving = approvingId === order.id;
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
@@ -123,8 +125,9 @@ function WorkOrderCard({ order, stages, priorityLabels, ar, onApprove }: {
               {ar ? "يتطلب اعتمادكم لإغلاق أمر العمل" : "Requires your approval to close the work order"}
             </p>
             <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white text-xs font-bold shrink-0"
-              onClick={() => onApprove(order.id)}>
-              {ar ? "اعتماد الاستلام" : "Approve & Close"}
+              disabled={isApproving}
+              onClick={() => !isApproving && onApprove(order.id)}>
+              {isApproving ? (ar ? "جاري الاعتماد..." : "Approving...") : (ar ? "اعتماد الاستلام" : "Approve & Close")}
             </Button>
           </div>
         )}
@@ -299,6 +302,7 @@ export default function WorkOrders() {
                     priorityLabels={priorityLabels}
                     ar={ar}
                     onApprove={handleApprove}
+                    approvingId={approving}
                   />
                 ))
               )}
