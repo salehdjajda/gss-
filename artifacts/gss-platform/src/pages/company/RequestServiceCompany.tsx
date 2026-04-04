@@ -2,70 +2,238 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { CheckCircle2, ArrowLeft, ArrowRight, Lock, ChevronDown, ChevronUp, Building2 } from "lucide-react";
+import {
+  CheckCircle2, ArrowLeft, Lock, ChevronDown, ChevronUp,
+  Building2, AlertTriangle, Package, Info,
+} from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useCompanyAuth } from "@/contexts/AccountAuthContext";
 
-const CATS_AR = [
-  { icon: "🔧", title: "الصيانة التشغيلية", services: ["تكييف وتبريد", "كهرباء وإنارة", "سباكة وصرف صحي", "صيانة عامة للمنشأة", "مصاعد وسلالم كهربائية", "مكافحة الحشرات والقوارض"] },
-  { icon: "🏗️", title: "أعمال التشطيب والتجهيز", services: ["دهانات ولياسة", "نجارة وتركيبات", "أرضيات وتبليط", "أعمال جبسية", "عزل حراري ومائي", "تجهيز مطابخ تجارية"] },
-  { icon: "🔒", title: "الأنظمة الأمنية والتقنية", services: ["كاميرات مراقبة وأنظمة أمنية", "شبكات وواي فاي", "أنظمة التحكم بالدخول", "أنظمة إنذار وسلامة", "أبواب أوتوماتيكية"] },
-  { icon: "🧹", title: "خدمات النظافة", services: ["تنظيف يومي للمكاتب", "تنظيف عميق دوري", "تنظيف الواجهات", "تعقيم وتطهير", "تنظيف ما بعد التشطيب"] },
-  { icon: "🌿", title: "الخدمات الخارجية", services: ["حدائق وتنسيق المناظر", "مظلات وسواتر", "مواقف ذكية", "تركيب اللوحات والواجهات", "مسابح وأحواض"] },
-  { icon: "⚡", title: "الطاقة والبنية التحتية", services: ["طاقة احتياطية ومولدات", "أنظمة UPS", "أنظمة تشغيل المباني BMS", "أنظمة الطاقة الشمسية", "صيانة محطات الكهرباء"] },
-  { icon: "📦", title: "التوريد والخدمات اللوجستية", services: ["توريد مستلزمات تشغيلية", "معدات تجارية", "أجهزة مكتبية وإلكترونيات", "نقل وشحن"] },
-  { icon: "📋", title: "الخدمات الإدارية", services: ["متابعة فواتير الخدمات", "تجديد التراخيص التشغيلية", "إدارة عقود الموردين", "الشؤون الحكومية"] },
-];
+const WORK_ORDERS_KEY = "gss_work_orders";
 
-const CATS_EN = [
-  { icon: "🔧", title: "Operational Maintenance", services: ["AC & Cooling", "Electrical & Lighting", "Plumbing & Drainage", "General Facility Maintenance", "Elevators & Escalators", "Pest Control"] },
-  { icon: "🏗️", title: "Finishing & Fit-Out", services: ["Painting & Plastering", "Carpentry", "Tiling & Flooring", "Gypsum Works", "Insulation", "Commercial Kitchen Fit-Out"] },
-  { icon: "🔒", title: "Security & Tech Systems", services: ["CCTV & Security Systems", "Networks & Wi-Fi", "Access Control Systems", "Alarm & Safety Systems", "Automatic Doors"] },
-  { icon: "🧹", title: "Cleaning Services", services: ["Daily Office Cleaning", "Deep Periodic Cleaning", "Facade Cleaning", "Sanitization", "Post-Construction Cleaning"] },
-  { icon: "🌿", title: "Outdoor Services", services: ["Landscaping & Gardens", "Shade Structures", "Smart Parking", "Signage & Facades", "Swimming Pools"] },
-  { icon: "⚡", title: "Energy & Infrastructure", services: ["Backup Power & Generators", "UPS Systems", "Building Management Systems", "Solar Energy Systems", "Electrical Maintenance"] },
-  { icon: "📦", title: "Supply & Logistics", services: ["Operational Supplies", "Commercial Equipment", "Office Equipment & Electronics", "Transport & Shipping"] },
-  { icon: "📋", title: "Administrative Services", services: ["Utility Bill Follow-Up", "License Renewal", "Vendor Contract Management", "Government Affairs"] },
-];
+export type WorkOrderStatus =
+  | "received"
+  | "work_order"
+  | "vendor"
+  | "in_progress"
+  | "pending_approval"
+  | "closed"
+  | "invoiced";
 
-const COMPANY_REQUESTS_KEY = "gss_company_requests";
-
-export interface CompanyServiceRequest {
+export interface WorkOrder {
   id: string;
   accountNumber: string;
   companyName: string;
-  service: string;
+  category: string;
+  subService: string;
+  branch: string;
+  priority: "urgent" | "high" | "normal" | "scheduled";
   details: string;
-  preferredTime: string;
-  status: "pending" | "confirmed" | "in_progress" | "completed";
+  isProcurement: boolean;
+  procurementType: string;
+  status: WorkOrderStatus;
+  statusHistory: Array<{ status: WorkOrderStatus; date: string; note?: string }>;
   submittedAt: string;
+  estimatedDays?: number;
+  vendorName?: string;
 }
 
-export function getCompanyRequests(accountNumber: string): CompanyServiceRequest[] {
+export function getWorkOrders(accountNumber: string): WorkOrder[] {
   try {
-    const all = JSON.parse(localStorage.getItem(COMPANY_REQUESTS_KEY) || "[]") as CompanyServiceRequest[];
+    const all = JSON.parse(localStorage.getItem(WORK_ORDERS_KEY) || "[]") as WorkOrder[];
     return all.filter(r => r.accountNumber === accountNumber);
   } catch { return []; }
 }
 
+export function updateWorkOrderStatus(id: string, newStatus: WorkOrderStatus, note?: string) {
+  try {
+    const all = JSON.parse(localStorage.getItem(WORK_ORDERS_KEY) || "[]") as WorkOrder[];
+    const idx = all.findIndex(o => o.id === id);
+    if (idx === -1) return false;
+    all[idx].status = newStatus;
+    all[idx].statusHistory.push({ status: newStatus, date: new Date().toLocaleString("ar-SA"), note });
+    localStorage.setItem(WORK_ORDERS_KEY, JSON.stringify(all));
+    return true;
+  } catch { return false; }
+}
+
+const CATS_AR = [
+  {
+    icon: "🔧", id: "maintenance",
+    title: "الصيانة والتشغيل الفني",
+    services: ["صيانة الكهرباء والتمديدات الكهربائية", "صيانة المياه والسباكة", "صيانة وتشغيل أنظمة التكييف", "الصيانة الوقائية والدورية", "معالجة الأعطال التشغيلية", "الصيانة الطارئة وخارج الدوام"],
+  },
+  {
+    icon: "🏗️", id: "projects",
+    title: "تجهيز الفروع والمواقع",
+    services: ["تجهيز مكتب جديد", "افتتاح فرع جديد", "إعادة تأهيل وتطوير موقع قائم", "تجهيز مواقع مؤقتة", "إغلاق وإعادة تسليم موقع"],
+  },
+  {
+    icon: "🏢", id: "work-env",
+    title: "بيئة العمل والخدمات الإدارية",
+    services: ["خدمات النظافة اليومية والدورية", "خدمات الضيافة والمأكولات والمشروبات", "خدمات الحراسة الأمنية", "المستلزمات والقرطاسية المكتبية", "متابعة المرافق والخدمات اليومية"],
+  },
+  {
+    icon: "🏠", id: "housing",
+    title: "إسكان الموظفين",
+    services: ["تجهيز مواقع السكن الجديدة", "صيانة المرافق السكنية", "إدارة عقود الإيجار والتأمينات", "متابعة أصول مواقع الإسكان", "تنسيق انتقالات الموظفين وتسليم المواقع"],
+  },
+  {
+    icon: "📡", id: "telecom",
+    title: "خدمات الاتصالات والتقنية",
+    services: ["خدمات الإنترنت والشبكات", "الخطوط الهاتفية الداخلية والخارجية", "أنظمة الكاميرات والمراقبة", "أنظمة الحضور والانصراف", "الدعم الفني للأجهزة والشبكات"],
+  },
+  {
+    icon: "🚗", id: "fleet",
+    title: "الأسطول والمركبات",
+    services: ["صيانة المركبات وإصلاح الأعطال", "تجديد الاستمارات والتسجيل", "إدارة التأمين على المركبات", "متابعة حوادث المركبات", "الصيانة الدورية والجدولة"],
+  },
+  {
+    icon: "🚚", id: "transport",
+    title: "النقل والخدمات اللوجستية",
+    services: ["نقل الموظفين بين المواقع", "نقل المعدات والتجهيزات", "نقل وتخزين الأصول التشغيلية", "تنسيق عمليات الشحن والتوصيل"],
+  },
+  {
+    icon: "🛡️", id: "security",
+    title: "الأمن والسلامة",
+    services: ["أنظمة الإنذار والإطفاء", "متطلبات الدفاع المدني", "تجهيز مخارج الطوارئ واللافتات", "إجراءات ومخططات الطوارئ", "تفتيش دوري على السلامة"],
+  },
+  {
+    icon: "🎪", id: "events",
+    title: "الفعاليات والمناسبات التشغيلية",
+    services: ["الفعاليات الداخلية والاجتماعات", "المؤتمرات وورش العمل الكبرى", "الفعاليات الرسمية والاحتفالية", "التجهيزات المؤقتة للمواقع"],
+  },
+  {
+    icon: "💡", id: "consulting",
+    title: "الاستشارات التشغيلية",
+    services: ["دراسة كفاءة التشغيل وفرص التحسين", "مراجعة عقود الموردين وشروطها", "تحليل التكاليف التشغيلية وفرص التوفير", "إعادة تنظيم إجراءات التشغيل"],
+  },
+  {
+    icon: "📝", id: "vendor-contracts",
+    title: "إدارة عقود الموردين",
+    services: ["متابعة بنود وتفاصيل العقود", "مراجعة أداء الموردين دورياً", "تجديد العقود وإدارة انتهائها", "تحسين شروط التعاقد وخفض التكاليف"],
+  },
+  {
+    icon: "📊", id: "budget",
+    title: "إدارة الميزانية التشغيلية",
+    services: ["تتبع المصروفات التشغيلية الشهرية", "تحليل التكاليف وفرص الخفض", "تقارير الميزانية الدورية", "رفع كفاءة الإنفاق التشغيلي"],
+  },
+  {
+    icon: "⚡", id: "emergency",
+    title: "الاستجابة للحالات الطارئة",
+    services: ["انقطاع الكهرباء المفاجئ", "تسرب المياه والسباكة الطارئة", "أعطال التكييف", "انقطاع الإنترنت الحرج", "بلاغات السلامة الطارئة"],
+  },
+  {
+    icon: "✅", id: "compliance",
+    title: "الامتثال التشغيلي",
+    services: ["اشتراطات الجهات الحكومية", "الامتثال للوائح التنظيمية", "متابعة السلامة المهنية", "تقارير الامتثال والتدقيق الدوري"],
+  },
+  {
+    icon: "📦", id: "assets",
+    title: "إدارة الأصول التشغيلية",
+    services: ["تسجيل الأصول وإدارة سجلاتها", "متابعة حالة وموقع الأصول", "تنسيق نقل الأصول بين المواقع", "جدولة صيانة الأصول الدورية"],
+  },
+  {
+    icon: "🪪", id: "licenses",
+    title: "إدارة التراخيص التشغيلية",
+    services: ["التراخيص البلدية والبيئية", "شهادات واشتراطات الدفاع المدني", "السجل التجاري ووثائق التأسيس", "تصاريح وموافقات الجهات التنظيمية"],
+  },
+  {
+    icon: "🧾", id: "bills",
+    title: "متابعة فواتير الخدمات التشغيلية",
+    services: ["فواتير الكهرباء والطاقة", "فواتير المياه والصرف", "فواتير الاتصالات والإنترنت", "الإيجارات التشغيلية", "الاشتراكات الخدمية السنوية"],
+  },
+  {
+    icon: "🤝", id: "vendor-mgmt",
+    title: "إدارة الموردين الحاليين للمنشأة",
+    services: ["تنسيق العمل مع الموردين الحاليين", "متابعة أداء الموردين وتقييمه", "مراجعة الالتزام بالشروط والمواصفات", "مراقبة جودة التنفيذ والتسليم"],
+  },
+];
+
+const CATS_EN = [
+  { icon: "🔧", id: "maintenance", title: "Technical Maintenance & Operations", services: ["Electrical & Wiring Maintenance", "Water & Plumbing Maintenance", "AC System Maintenance & Operation", "Preventive & Periodic Maintenance", "Operational Fault Resolution", "Emergency & After-Hours Maintenance"] },
+  { icon: "🏗️", id: "projects", title: "Branch & Site Setup", services: ["New Office Setup", "New Branch Opening", "Site Rehabilitation & Development", "Temporary Site Setup", "Site Closure & Handover"] },
+  { icon: "🏢", id: "work-env", title: "Work Environment & Admin Services", services: ["Daily & Periodic Cleaning Services", "Hospitality & Food Services", "Security Guard Services", "Office Supplies & Stationery", "Daily Utilities & Facilities Monitoring"] },
+  { icon: "🏠", id: "housing", title: "Employee Housing", services: ["New Housing Site Setup", "Residential Facility Maintenance", "Lease & Insurance Contract Management", "Housing Asset Tracking", "Employee Relocation & Site Handover"] },
+  { icon: "📡", id: "telecom", title: "Telecom & Technology Services", services: ["Internet & Network Services", "Internal & External Phone Lines", "Camera & Surveillance Systems", "Attendance & Access Systems", "Technical Support for Devices & Networks"] },
+  { icon: "🚗", id: "fleet", title: "Fleet & Vehicles", services: ["Vehicle Maintenance & Repairs", "Registration & Re-registration", "Vehicle Insurance Management", "Accident Follow-up", "Periodic Maintenance Scheduling"] },
+  { icon: "🚚", id: "transport", title: "Transport & Logistics", services: ["Employee Transport Between Sites", "Equipment & Fixture Transport", "Asset Storage & Transfer", "Shipping & Delivery Coordination"] },
+  { icon: "🛡️", id: "security", title: "Security & Safety", services: ["Alarm & Fire Suppression Systems", "Civil Defense Requirements", "Emergency Exit & Signage Setup", "Emergency Procedures & Plans", "Periodic Safety Inspection"] },
+  { icon: "🎪", id: "events", title: "Operational Events & Occasions", services: ["Internal Events & Meetings", "Large Conferences & Workshops", "Official & Ceremonial Events", "Temporary Site Setups"] },
+  { icon: "💡", id: "consulting", title: "Operational Consulting", services: ["Efficiency Study & Improvement Opportunities", "Vendor Contract Review", "Cost Analysis & Savings", "Operations Reorganization"] },
+  { icon: "📝", id: "vendor-contracts", title: "Vendor Contract Management", services: ["Contract Terms Monitoring", "Periodic Vendor Performance Review", "Contract Renewal Management", "Contract Condition Improvement"] },
+  { icon: "📊", id: "budget", title: "Operational Budget Management", services: ["Monthly Expense Tracking", "Cost Analysis & Reduction", "Periodic Budget Reports", "Operational Spending Efficiency"] },
+  { icon: "⚡", id: "emergency", title: "Emergency Response", services: ["Sudden Power Outage", "Water Leak & Emergency Plumbing", "AC System Failure", "Critical Internet Outage", "Safety Emergency Reports"] },
+  { icon: "✅", id: "compliance", title: "Operational Compliance", services: ["Government Entity Requirements", "Regulatory Compliance", "Occupational Safety Monitoring", "Compliance & Audit Reports"] },
+  { icon: "📦", id: "assets", title: "Operational Asset Management", services: ["Asset Registration & Records", "Asset Status & Location Tracking", "Asset Transfer Coordination", "Asset Maintenance Scheduling"] },
+  { icon: "🪪", id: "licenses", title: "Operational License Management", services: ["Municipal & Environmental Licenses", "Civil Defense Certificates & Requirements", "Commercial Registration Documents", "Regulatory Permits & Approvals"] },
+  { icon: "🧾", id: "bills", title: "Utility Bill Tracking", services: ["Electricity & Energy Bills", "Water & Drainage Bills", "Telecom & Internet Bills", "Operational Lease Payments", "Annual Service Subscriptions"] },
+  { icon: "🤝", id: "vendor-mgmt", title: "Current Vendor Management", services: ["Coordination with Existing Vendors", "Vendor Performance Monitoring", "Contract Terms Compliance Review", "Execution & Delivery Quality Control"] },
+];
+
+const PROCUREMENT_ITEMS_AR = [
+  { id: "spare_parts",       label: "طلب قطع غيار",       icon: "🔩", desc: "قطع غيار للصيانة والإصلاح" },
+  { id: "materials",         label: "طلب مواد تشغيلية",   icon: "📦", desc: "مواد ومستلزمات التشغيل" },
+  { id: "equipment",         label: "طلب أجهزة ومعدات",   icon: "💻", desc: "أجهزة وأدوات تشغيلية" },
+  { id: "quotation",         label: "طلب عرض سعر",         icon: "💰", desc: "الحصول على أفضل عرض سعر" },
+  { id: "supply_followup",   label: "متابعة التوريد",       icon: "🚚", desc: "متابعة توريد وتسليم" },
+];
+
+const PROCUREMENT_ITEMS_EN = [
+  { id: "spare_parts",       label: "Spare Parts Request",     icon: "🔩", desc: "Spare parts for maintenance & repair" },
+  { id: "materials",         label: "Operational Materials",   icon: "📦", desc: "Materials and operational supplies" },
+  { id: "equipment",         label: "Equipment & Devices",     icon: "💻", desc: "Operational tools & equipment" },
+  { id: "quotation",         label: "Price Quotation Request", icon: "💰", desc: "Get best quote from vendor network" },
+  { id: "supply_followup",   label: "Supply Follow-up",        icon: "🚚", desc: "Track supply and delivery" },
+];
+
+const PRIORITY_AR = [
+  { val: "urgent",    label: "طارئ — خلال ساعات",    color: "border-red-400 bg-red-50 text-red-700" },
+  { val: "high",      label: "عاجل — خلال 24 ساعة",  color: "border-orange-400 bg-orange-50 text-orange-700" },
+  { val: "normal",    label: "عادي — خلال أسبوع",    color: "border-primary bg-primary/5 text-primary" },
+  { val: "scheduled", label: "مجدول — بحسب الاتفاق", color: "border-gray-300 bg-gray-50 text-gray-600" },
+];
+
+const PRIORITY_EN = [
+  { val: "urgent",    label: "Emergency — Within Hours", color: "border-red-400 bg-red-50 text-red-700" },
+  { val: "high",      label: "Urgent — Within 24h",      color: "border-orange-400 bg-orange-50 text-orange-700" },
+  { val: "normal",    label: "Normal — Within a Week",   color: "border-primary bg-primary/5 text-primary" },
+  { val: "scheduled", label: "Scheduled — As Agreed",    color: "border-gray-300 bg-gray-50 text-gray-600" },
+];
+
 export default function RequestServiceCompany() {
-  const { lang, isRTL } = useLanguage();
+  const { lang } = useLanguage();
+  const ar = lang === "ar";
   const { account, isLoggedIn } = useCompanyAuth();
   const [, navigate] = useLocation();
-  const Arrow = isRTL ? ArrowLeft : ArrowRight;
 
-  const CATS = lang === "ar" ? CATS_AR : CATS_EN;
+  const CATS = ar ? CATS_AR : CATS_EN;
+  const PROCUREMENT_ITEMS = ar ? PROCUREMENT_ITEMS_AR : PROCUREMENT_ITEMS_EN;
+  const PRIORITY_OPTIONS = ar ? PRIORITY_AR : PRIORITY_EN;
 
-  const [selectedService, setSelectedService] = useState(() => {
-    const pending = sessionStorage.getItem("gss_pending_service");
-    if (pending) { sessionStorage.removeItem("gss_pending_service"); return pending; }
-    return "";
-  });
+  const [step, setStep] = useState(1);
+  const [requestType, setRequestType] = useState<"service" | "procurement">("service");
+  const [selectedCatIdx, setSelectedCatIdx] = useState<number | null>(null);
+  const [selectedService, setSelectedService] = useState("");
+  const [selectedProcurement, setSelectedProcurement] = useState("");
+  const [branch, setBranch] = useState("");
+  const [priority, setPriority] = useState("normal");
   const [details, setDetails] = useState("");
-  const [preferredTime, setTime] = useState("");
-  const [openCat, setOpenCat] = useState<number | null>(0);
+  const [customService, setCustomService] = useState("");
+  const [openCat, setOpenCat] = useState<number | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [submittedId, setSubmittedId] = useState("");
+
+  const effectiveService = requestType === "procurement"
+    ? selectedProcurement
+    : (selectedService || (customService ? `${ar ? "خدمة مخصصة: " : "Custom: "}${customService}` : ""));
+
+  const step1Valid = !!effectiveService;
+  const step2Valid = !!branch && !!priority;
+  const step3Valid = !!details.trim();
+
+  function goStep(n: number) { setStep(n); window.scrollTo({ top: 0, behavior: "smooth" }); }
 
   if (!isLoggedIn || !account) {
     return (
@@ -73,21 +241,13 @@ export default function RequestServiceCompany() {
         <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
           <Lock size={28} className="text-gray-400" />
         </div>
-        <h2 className="text-xl font-bold text-gray-800">
-          {lang === "ar" ? "يجب تسجيل الدخول أولاً" : "Sign In Required"}
-        </h2>
+        <h2 className="text-xl font-bold text-gray-800">{ar ? "يجب تسجيل الدخول أولاً" : "Sign In Required"}</h2>
         <p className="text-gray-500 text-sm text-center max-w-xs">
-          {lang === "ar"
-            ? "لرفع طلب خدمة يجب أن يكون لديك حساب منشأة على منصة GSS"
-            : "To submit a service request, you need a facility account on GSS Platform"}
+          {ar ? "لرفع طلب خدمة يجب أن يكون لديك حساب منشأة على منصة GSS" : "To submit a service request, you need a facility account on GSS Platform"}
         </p>
         <div className="flex gap-3">
-          <Link href="/register/company">
-            <Button className="font-bold">{lang === "ar" ? "سجّل منشأتك" : "Register Facility"}</Button>
-          </Link>
-          <Link href="/portal/login?type=company">
-            <Button variant="outline">{lang === "ar" ? "تسجيل الدخول" : "Sign In"}</Button>
-          </Link>
+          <Link href="/register/company"><Button className="font-bold">{ar ? "سجّل منشأتك" : "Register Facility"}</Button></Link>
+          <Link href="/portal/login?type=company"><Button variant="outline">{ar ? "تسجيل الدخول" : "Sign In"}</Button></Link>
         </div>
       </div>
     );
@@ -101,27 +261,26 @@ export default function RequestServiceCompany() {
           <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-5">
             <CheckCircle2 size={32} className="text-green-600" />
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            {lang === "ar" ? "تم إرسال طلبك!" : "Request Submitted!"}
-          </h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">{ar ? "تم استلام طلبك!" : "Request Received!"}</h2>
+          <p className="text-xs font-mono text-primary mb-1">{submittedId}</p>
           <p className="text-gray-500 text-sm leading-relaxed mb-2">
-            {lang === "ar"
-              ? "سيتواصل معك فريق GSS خلال ساعات لتأكيد العرض والموعد."
-              : "The GSS team will contact you within hours to confirm the offer and schedule."}
+            {ar
+              ? "سيتولى فريق GSS مراجعة الطلب وإصدار أمر العمل الرسمي وإشعارك خلال ساعات."
+              : "The GSS team will review the request, issue the official work order, and notify you within hours."}
           </p>
-          <p className="text-xs text-gray-400 mb-8">
-            {lang === "ar" ? "رقم حسابك: " : "Account: "}
-            <span className="font-mono font-bold text-primary">{account.accountNumber}</span>
-          </p>
+          {requestType === "procurement" && (
+            <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 mb-5 text-xs text-amber-800 text-start">
+              <strong>{ar ? "ملاحظة مشتريات: " : "Procurement Note: "}</strong>
+              {ar ? "قد يُطلب منكم دفعة مقدمة قبل البدء بعملية التوريد." : "A down payment may be required before procurement begins."}
+            </div>
+          )}
           <div className="flex flex-col gap-3">
-            <Link href="/dashboard/company">
-              <Button className="w-full font-bold">
-                {lang === "ar" ? "عرض طلباتي" : "View My Requests"}
-              </Button>
+            <Link href="/dashboard/company/work-orders">
+              <Button className="w-full font-bold">{ar ? "تابع أوامر العمل" : "Track Work Orders"}</Button>
             </Link>
             <Button variant="outline" className="w-full font-bold"
-              onClick={() => { setSubmitted(false); setSelectedService(""); setDetails(""); setTime(""); }}>
-              {lang === "ar" ? "طلب آخر" : "Another Request"}
+              onClick={() => { setSubmitted(false); setStep(1); setSelectedService(""); setSelectedProcurement(""); setDetails(""); setBranch(""); setCustomService(""); }}>
+              {ar ? "طلب آخر" : "New Request"}
             </Button>
           </div>
         </motion.div>
@@ -131,157 +290,302 @@ export default function RequestServiceCompany() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!selectedService || !account) return;
+    if (!account || !effectiveService) return;
     setLoading(true);
-    await new Promise(r => setTimeout(r, 700));
-    const req: CompanyServiceRequest = {
-      id: `CREQ-${Date.now()}`,
+    await new Promise(r => setTimeout(r, 800));
+    const id = `WO-${Date.now()}`;
+    const cat = CATS.find((_, i) => i === selectedCatIdx);
+    const wo: WorkOrder = {
+      id,
       accountNumber: account.accountNumber,
       companyName: account.name,
-      service: selectedService,
+      category: requestType === "procurement" ? (ar ? "المشتريات التشغيلية" : "Operational Procurement") : (cat?.title || ""),
+      subService: effectiveService,
+      branch,
+      priority: priority as WorkOrder["priority"],
       details,
-      preferredTime,
-      status: "pending",
+      isProcurement: requestType === "procurement",
+      procurementType: requestType === "procurement" ? selectedProcurement : "",
+      status: "received",
+      statusHistory: [{ status: "received", date: new Date().toLocaleString("ar-SA") }],
       submittedAt: new Date().toLocaleString("ar-SA"),
+      estimatedDays: priority === "urgent" ? 1 : priority === "high" ? 3 : 7,
     };
-    const all = JSON.parse(localStorage.getItem(COMPANY_REQUESTS_KEY) || "[]") as CompanyServiceRequest[];
-    all.push(req);
-    localStorage.setItem(COMPANY_REQUESTS_KEY, JSON.stringify(all));
+    const all = JSON.parse(localStorage.getItem(WORK_ORDERS_KEY) || "[]") as WorkOrder[];
+    all.push(wo);
+    localStorage.setItem(WORK_ORDERS_KEY, JSON.stringify(all));
+    setSubmittedId(id);
     setLoading(false);
     setSubmitted(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-14 px-4">
-      <div className="max-w-2xl mx-auto">
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-          <div className="flex items-center justify-between mb-1">
+    <div className="min-h-screen bg-gray-50 pb-20">
+      <div className="bg-primary text-white py-10 px-4">
+        <div className="max-w-2xl mx-auto">
+          <div className="flex items-center justify-between">
             <div>
-              <span className="inline-block bg-blue-100 text-blue-700 font-bold text-xs px-3 py-1 rounded-full mb-3 flex items-center gap-1.5">
-                <Building2 size={12} />
-                {lang === "ar" ? "طلب خدمة — المنشآت" : "Service Request — Facilities"}
+              <span className="inline-block bg-white/10 text-white/80 font-bold text-xs px-3 py-1 rounded-full mb-3">
+                {ar ? "بوابة العميل — رفع طلب تشغيلي" : "Client Portal — Submit Operational Request"}
               </span>
-              <h1 className="text-2xl font-bold text-gray-900">
-                {lang === "ar" ? "اختر الخدمة التي تحتاجها" : "Choose the Service You Need"}
-              </h1>
+              <h1 className="text-2xl font-bold">{ar ? "طلب خدمة تشغيلية" : "Operational Service Request"}</h1>
             </div>
-            <div className="text-end shrink-0">
-              <p className="text-xs text-gray-400">{lang === "ar" ? "رقم الحساب" : "Account"}</p>
-              <p className="font-mono text-xs font-bold text-primary">{account.accountNumber}</p>
-              <p className="text-xs text-gray-500 mt-0.5">{account.name}</p>
+            <div className="text-end">
+              <p className="text-xs text-white/60">{ar ? "رقم الحساب" : "Account"}</p>
+              <p className="font-mono text-sm font-bold text-secondary">{account.accountNumber}</p>
+              <p className="text-xs text-white/70 mt-0.5">{account.name}</p>
             </div>
           </div>
-        </motion.div>
-
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="bg-white rounded-3xl border border-gray-100 overflow-hidden">
-            <div className="px-5 py-4 border-b border-gray-50">
-              <h2 className="font-bold text-gray-900 text-sm flex items-center gap-2">
-                <span className="bg-primary text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-black">1</span>
-                {lang === "ar" ? "اختر الخدمة" : "Select the Service"}
-                {selectedService && <span className="text-primary text-xs font-medium">← {selectedService}</span>}
-              </h2>
-            </div>
-            <div className="divide-y divide-gray-50">
-              {CATS.map((cat, ci) => (
-                <div key={ci}>
-                  <button type="button" onClick={() => setOpenCat(openCat === ci ? null : ci)}
-                    className="w-full flex items-center justify-between px-5 py-3.5 hover:bg-gray-50 transition-colors text-start">
-                    <span className="flex items-center gap-2.5">
-                      <span className="text-xl">{cat.icon}</span>
-                      <span className="font-medium text-gray-800 text-sm">{cat.title}</span>
-                    </span>
-                    {openCat === ci ? <ChevronUp size={16} className="text-gray-400" /> : <ChevronDown size={16} className="text-gray-400" />}
-                  </button>
-                  {openCat === ci && (
-                    <div className="px-5 pb-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      {cat.services.map((svc, si) => (
-                        <button key={si} type="button"
-                          onClick={() => setSelectedService(svc)}
-                          className={`text-start text-sm px-3 py-2.5 rounded-xl border transition-all ${
-                            selectedService === svc
-                              ? "bg-primary text-white border-primary font-bold"
-                              : "border-gray-100 text-gray-600 hover:border-primary/40 hover:bg-gray-50"
-                          }`}
-                        >
-                          {selectedService === svc && "✓ "}{svc}
-                        </button>
-                      ))}
-                    </div>
-                  )}
+          <div className="flex items-center gap-3 mt-6">
+            {[1, 2, 3].map(n => (
+              <div key={n} className="flex items-center gap-2">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold border-2 transition-all ${
+                  step > n ? "bg-secondary border-secondary text-primary" :
+                  step === n ? "bg-white border-white text-primary" :
+                  "bg-white/10 border-white/30 text-white/50"
+                }`}>
+                  {step > n ? "✓" : n}
                 </div>
-              ))}
-              <div className="px-5 py-3">
-                <p className="text-xs text-gray-400 mb-2">
-                  {lang === "ar" ? "أو حدد خدمة مخصصة:" : "Or specify a custom service:"}
-                </p>
-                <input type="text"
-                  value={selectedService.startsWith("__custom__") ? selectedService.replace("__custom__", "") : ""}
-                  onChange={e => setSelectedService(e.target.value ? "__custom__" + e.target.value : "")}
-                  className="w-full border border-dashed border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"
-                  placeholder={lang === "ar" ? "اكتب الخدمة المطلوبة..." : "Type the service you need..."}
-                />
+                <span className={`text-xs font-medium ${step >= n ? "text-white" : "text-white/40"}`}>
+                  {ar
+                    ? [null, "الخدمة", "الموقع والأولوية", "التفاصيل والإرسال"][n]
+                    : [null, "Service", "Location & Priority", "Details & Submit"][n]
+                  }
+                </span>
+                {n < 3 && <div className="w-8 h-0.5 bg-white/20 mx-1" />}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-2xl mx-auto px-4 pt-8">
+        {/* STEP 1: Service Selection */}
+        {step === 1 && (
+          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
+            <div className="flex gap-3 mb-6">
+              <button type="button" onClick={() => setRequestType("service")}
+                className={`flex-1 py-3 rounded-2xl text-sm font-bold border-2 transition-all ${requestType === "service" ? "border-primary bg-primary text-white" : "border-gray-200 bg-white text-gray-600 hover:border-primary/30"}`}>
+                🔧 {ar ? "طلب خدمة تشغيلية" : "Service Request"}
+              </button>
+              <button type="button" onClick={() => setRequestType("procurement")}
+                className={`flex-1 py-3 rounded-2xl text-sm font-bold border-2 transition-all ${requestType === "procurement" ? "border-secondary bg-secondary/10 text-secondary border-secondary" : "border-gray-200 bg-white text-gray-600 hover:border-secondary/30"}`}>
+                📦 {ar ? "طلب مشتريات" : "Procurement Request"}
+              </button>
+            </div>
+
+            {requestType === "service" ? (
+              <div className="bg-white rounded-3xl border border-gray-100 overflow-hidden mb-4">
+                <div className="px-5 py-4 border-b border-gray-50">
+                  <h2 className="font-bold text-gray-900 text-sm flex items-center gap-2">
+                    <span className="bg-primary text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-black">1</span>
+                    {ar ? "اختر التصنيف والخدمة" : "Choose Category & Service"}
+                    {selectedService && (
+                      <span className="text-primary text-xs font-medium bg-primary/10 px-2 py-0.5 rounded-full">
+                        ✓ {selectedService}
+                      </span>
+                    )}
+                  </h2>
+                </div>
+                <div className="divide-y divide-gray-50">
+                  {CATS.map((cat, ci) => (
+                    <div key={ci}>
+                      <button type="button" onClick={() => setOpenCat(openCat === ci ? null : ci)}
+                        className="w-full flex items-center justify-between px-5 py-3.5 hover:bg-gray-50 transition-colors text-start">
+                        <span className="flex items-center gap-2.5">
+                          <span className="text-lg">{cat.icon}</span>
+                          <span className="font-medium text-gray-800 text-sm">{cat.title}</span>
+                        </span>
+                        {openCat === ci ? <ChevronUp size={16} className="text-gray-400" /> : <ChevronDown size={16} className="text-gray-400" />}
+                      </button>
+                      {openCat === ci && (
+                        <div className="px-5 pb-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          {cat.services.map((svc, si) => (
+                            <button key={si} type="button"
+                              onClick={() => { setSelectedService(svc); setSelectedCatIdx(ci); setCustomService(""); }}
+                              className={`text-start text-sm px-3 py-2.5 rounded-xl border transition-all ${
+                                selectedService === svc
+                                  ? "bg-primary text-white border-primary font-bold"
+                                  : "border-gray-100 text-gray-600 hover:border-primary/40 hover:bg-primary/5"
+                              }`}
+                            >
+                              {selectedService === svc && "✓ "}{svc}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+
+                  {/* Unlisted service option */}
+                  <div className="px-5 py-4 bg-gray-50/50">
+                    <p className="text-xs text-gray-400 mb-2 flex items-center gap-1">
+                      <Info size={12} />
+                      {ar ? "خدمة غير مذكورة في القائمة:" : "Service not listed above:"}
+                    </p>
+                    <input type="text"
+                      value={customService}
+                      onChange={e => { setCustomService(e.target.value); if (e.target.value) { setSelectedService(""); setSelectedCatIdx(null); } }}
+                      className="w-full border border-dashed border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary bg-white"
+                      placeholder={ar ? "اكتب الخدمة التي تحتاجها..." : "Describe the service you need..."}
+                    />
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-3 mb-4">
+                <div className="bg-amber-50 border border-amber-200 rounded-2xl px-5 py-3 text-sm text-amber-800">
+                  <strong>{ar ? "تنبيه: " : "Notice: "}</strong>
+                  {ar
+                    ? "قد تتطلب طلبات المشتريات دفعة مقدمة قبل البدء بالتوريد. سيتم إبلاغكم بذلك قبل التنفيذ."
+                    : "Procurement requests may require a down payment before supply begins. You will be notified in advance."}
+                </div>
+                {PROCUREMENT_ITEMS.map((item) => (
+                  <button key={item.id} type="button"
+                    onClick={() => setSelectedProcurement(item.label)}
+                    className={`w-full text-start flex items-center gap-4 px-5 py-4 rounded-2xl border-2 transition-all ${
+                      selectedProcurement === item.label
+                        ? "border-secondary bg-secondary/5"
+                        : "border-gray-200 bg-white hover:border-secondary/40"
+                    }`}
+                  >
+                    <span className="text-2xl">{item.icon}</span>
+                    <div className="flex-1">
+                      <p className={`font-bold text-sm ${selectedProcurement === item.label ? "text-secondary" : "text-gray-800"}`}>
+                        {selectedProcurement === item.label && "✓ "}{item.label}
+                      </p>
+                      <p className="text-gray-400 text-xs">{item.desc}</p>
+                    </div>
+                    {selectedProcurement === item.label && (
+                      <div className="w-6 h-6 bg-secondary rounded-full flex items-center justify-center">
+                        <CheckCircle2 size={14} className="text-white" />
+                      </div>
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            <Button className="w-full h-12 font-bold" disabled={!step1Valid}
+              onClick={() => goStep(2)}>
+              {ar ? "التالي — الموقع والأولوية" : "Next — Location & Priority"} <ArrowLeft className="ms-2" size={18} />
+            </Button>
+          </motion.div>
+        )}
+
+        {/* STEP 2: Branch + Priority */}
+        {step === 2 && (
+          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
+            <div className="bg-primary/5 border border-primary/10 rounded-2xl px-5 py-3 flex items-center justify-between">
+              <div>
+                <p className="text-xs text-gray-400">{ar ? "الخدمة المختارة" : "Selected Service"}</p>
+                <p className="font-bold text-primary text-sm">{effectiveService}</p>
+              </div>
+              <button type="button" onClick={() => goStep(1)} className="text-xs text-gray-400 underline">{ar ? "تغيير" : "Change"}</button>
+            </div>
+
+            <div className="bg-white rounded-3xl border border-gray-100 p-5">
+              <h2 className="font-bold text-gray-900 text-sm flex items-center gap-2 mb-4">
+                <Building2 size={16} className="text-primary" />
+                {ar ? "الفرع أو الموقع" : "Branch or Location"}
+              </h2>
+              <input type="text" value={branch} onChange={e => setBranch(e.target.value)} required
+                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"
+                placeholder={ar ? "مثال: الرياض — الفرع الرئيسي / مستودع جدة / موقع المشروع" : "e.g., Riyadh Main Branch / Jeddah Warehouse / Project Site"}
+              />
+            </div>
+
+            <div className="bg-white rounded-3xl border border-gray-100 p-5">
+              <h2 className="font-bold text-gray-900 text-sm flex items-center gap-2 mb-4">
+                <AlertTriangle size={16} className="text-primary" />
+                {ar ? "مستوى الأولوية" : "Priority Level"}
+              </h2>
+              <div className="grid grid-cols-2 gap-3">
+                {PRIORITY_OPTIONS.map(opt => (
+                  <button key={opt.val} type="button" onClick={() => setPriority(opt.val)}
+                    className={`py-3 px-4 rounded-xl text-xs font-bold border-2 transition-all text-start leading-tight ${
+                      priority === opt.val ? opt.color + " font-black" : "border-gray-200 text-gray-600 hover:border-gray-300"
+                    }`}>
+                    {priority === opt.val && "● "}{opt.label}
+                  </button>
+                ))}
               </div>
             </div>
-          </div>
 
-          <div className="bg-white rounded-3xl border border-gray-100 p-5">
-            <h2 className="font-bold text-gray-900 text-sm flex items-center gap-2 mb-3">
-              <span className="bg-primary text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-black">2</span>
-              {lang === "ar" ? "تفاصيل الطلب" : "Request Details"}
-            </h2>
-            <textarea required rows={4}
-              value={details}
-              onChange={e => setDetails(e.target.value)}
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary resize-none"
-              placeholder={lang === "ar"
-                ? "صف ما تحتاجه بالتفصيل — الموقع، عدد الفروع، حجم الطلب، وأي متطلبات خاصة"
-                : "Describe your needs in detail — location, number of branches, scope, and any special requirements"}
-            />
-          </div>
-
-          <div className="bg-white rounded-3xl border border-gray-100 p-5">
-            <h2 className="font-bold text-gray-900 text-sm flex items-center gap-2 mb-3">
-              <span className="bg-primary text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-black">3</span>
-              {lang === "ar" ? "الوقت المناسب للتنفيذ" : "Preferred Execution Time"}
-            </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              {[
-                { val: "urgent",     ar: "عاجل (خلال 24 ساعة)",  en: "Urgent (within 24h)" },
-                { val: "this_week",  ar: "هذا الأسبوع",            en: "This Week" },
-                { val: "next_week",  ar: "الأسبوع القادم",         en: "Next Week" },
-                { val: "scheduled",  ar: "بحسب الجدول",            en: "Per Schedule" },
-              ].map(opt => (
-                <button key={opt.val} type="button"
-                  onClick={() => setTime(opt.val)}
-                  className={`py-2.5 px-3 rounded-xl text-xs font-bold border transition-all ${
-                    preferredTime === opt.val
-                      ? "bg-primary text-white border-primary"
-                      : "border-gray-200 text-gray-600 hover:border-primary/40"
-                  }`}
-                >
-                  {lang === "ar" ? opt.ar : opt.en}
-                </button>
-              ))}
+            <div className="flex gap-3">
+              <Button variant="outline" className="flex-1 h-12 font-bold border-gray-200" onClick={() => goStep(1)}>
+                {ar ? "السابق" : "Back"}
+              </Button>
+              <Button className="flex-1 h-12 font-bold" disabled={!step2Valid} onClick={() => goStep(3)}>
+                {ar ? "التالي" : "Next"} <ArrowLeft className="ms-2" size={18} />
+              </Button>
             </div>
-          </div>
+          </motion.div>
+        )}
 
-          <div className="bg-blue-50 rounded-2xl px-5 py-3 flex flex-wrap gap-4 justify-center text-xs text-blue-700 font-medium">
-            {(lang === "ar"
-              ? ["✓ موردون معتمدون", "✓ أسعار تنافسية", "✓ تقارير متابعة دورية"]
-              : ["✓ Certified Vendors", "✓ Competitive Pricing", "✓ Regular Progress Reports"]
-            ).map((b, i) => <span key={i}>{b}</span>)}
-          </div>
+        {/* STEP 3: Details + Submit */}
+        {step === 3 && (
+          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="bg-primary/5 border border-primary/10 rounded-2xl px-5 py-3 space-y-1 text-sm">
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-400 text-xs">{ar ? "الخدمة" : "Service"}</span>
+                  <span className="font-bold text-primary text-xs">{effectiveService}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-400 text-xs">{ar ? "الموقع" : "Location"}</span>
+                  <span className="text-gray-700 text-xs">{branch}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-400 text-xs">{ar ? "الأولوية" : "Priority"}</span>
+                  <span className="text-gray-700 text-xs">
+                    {PRIORITY_OPTIONS.find(p => p.val === priority)?.label}
+                  </span>
+                </div>
+                <button type="button" onClick={() => goStep(1)} className="text-xs text-primary/70 underline block">
+                  {ar ? "تعديل" : "Edit"}
+                </button>
+              </div>
 
-          <Button type="submit" size="lg" className="w-full h-13 text-base font-bold"
-            disabled={loading || !selectedService || !details}>
-            {loading
-              ? (lang === "ar" ? "جاري الإرسال..." : "Sending...")
-              : (lang === "ar" ? "أرسل طلب الخدمة" : "Submit Service Request")}
-            {!loading && <Arrow className="ms-2" size={18} />}
-          </Button>
-        </form>
+              <div className="bg-white rounded-3xl border border-gray-100 p-5">
+                <h2 className="font-bold text-gray-900 text-sm flex items-center gap-2 mb-3">
+                  <Package size={16} className="text-primary" />
+                  {ar ? "تفاصيل الطلب (مطلوب)" : "Request Details (Required)"}
+                </h2>
+                <textarea required rows={5} value={details} onChange={e => setDetails(e.target.value)}
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary resize-none"
+                  placeholder={ar
+                    ? "صف الطلب بالتفصيل — نوع المشكلة، الكميات، المواصفات، وأي متطلبات خاصة..."
+                    : "Describe the request in detail — issue type, quantities, specifications, and special requirements..."}
+                />
+              </div>
+
+              {requestType === "procurement" && (
+                <div className="bg-amber-50 border border-amber-200 rounded-2xl px-5 py-4 text-sm text-amber-900">
+                  <p className="font-bold mb-1">{ar ? "تنبيه المشتريات:" : "Procurement Note:"}</p>
+                  <p className="text-xs leading-relaxed">
+                    {ar
+                      ? "سيقوم فريق GSS بمقارنة عروض الأسعار من الموردين المعتمدين وإشعارك بأفضل سعر قبل التنفيذ. يحق للمنصة طلب دفعة مقدمة قبل بدء التوريد."
+                      : "The GSS team will compare quotes from certified vendors and notify you of the best price before proceeding. The platform may request a down payment before supply begins."}
+                  </p>
+                </div>
+              )}
+
+              <div className="flex gap-3">
+                <Button variant="outline" type="button" className="flex-1 h-12 font-bold border-gray-200" onClick={() => goStep(2)}>
+                  {ar ? "السابق" : "Back"}
+                </Button>
+                <Button type="submit" className="flex-1 h-12 font-bold" disabled={loading || !step3Valid}>
+                  {loading
+                    ? (ar ? "جاري الإرسال..." : "Submitting...")
+                    : (ar ? "إرسال الطلب" : "Submit Request")}
+                  {!loading && <ArrowLeft className="ms-2" size={18} />}
+                </Button>
+              </div>
+            </form>
+          </motion.div>
+        )}
       </div>
     </div>
   );

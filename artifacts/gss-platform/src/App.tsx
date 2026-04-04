@@ -49,6 +49,7 @@ import RegisterIndividual from "@/pages/register/RegisterIndividual";
 
 // Dashboards
 import CompanyDashboard from "@/pages/dashboard/CompanyDashboard";
+import WorkOrders from "@/pages/dashboard/WorkOrders";
 import VendorDashboard from "@/pages/dashboard/VendorDashboard";
 import ConsultantDashboard from "@/pages/dashboard/ConsultantDashboard";
 import IndividualDashboard from "@/pages/dashboard/IndividualDashboard";
@@ -108,6 +109,7 @@ function MainLayout() {
           <Route path="/register/individual" component={RegisterIndividual} />
 
           <Route path="/dashboard/company" component={CompanyDashboard} />
+          <Route path="/dashboard/company/work-orders" component={WorkOrders} />
           <Route path="/dashboard/vendor" component={VendorDashboard} />
           <Route path="/dashboard/consultant" component={ConsultantDashboard} />
           <Route path="/dashboard/individual" component={IndividualDashboard} />
