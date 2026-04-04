@@ -46,12 +46,12 @@ const SPECIALIZED = [
     items: ["صيانة شبكات المياه", "إصلاح أعطال السباكة", "تركيب الأدوات الصحية", "أعمال العزل المائي", "صيانة خزانات المياه"],
   },
   {
-    label: "أجهزة منزلية",
+    label: "أجهزة ومعدات المرافق",
     icon: Monitor,
     image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&auto=format&fit=crop&q=80",
-    desc: "تنسيق صيانة وتوريد وتركيب الأجهزة المنزلية بمختلف أنواعها",
+    desc: "تنسيق صيانة وتوريد وتركيب أجهزة ومعدات المرافق التشغيلية",
     color: "from-purple-500 to-indigo-600",
-    items: ["صيانة الثلاجات والفريزرات", "صيانة الغسالات وغسالات الصحون", "صيانة الأفران والميكروويف", "توريد وتركيب الأجهزة", "أجهزة المطبخ الكهربائية"],
+    items: ["أجهزة المطابخ التشغيلية", "صيانة الثلاجات التجارية", "أجهزة الغسيل للمنشآت", "توريد وتركيب المعدات", "معدات الاستراحات والمطاعم"],
   },
   {
     label: "أرضيات",
@@ -107,7 +107,7 @@ const SPECIALIZED = [
     image: "https://images.unsplash.com/photo-1530126483408-aa533e55bdb2?w=600&auto=format&fit=crop&q=80",
     desc: "رش وقاية دورية ومكافحة الحشرات والقوارض",
     color: "from-lime-500 to-green-700",
-    items: ["رش حشرات", "مكافحة النمل الأبيض", "مكافحة القوارض", "تعقيم المنازل", "تعقيم المنشآت"],
+    items: ["رش حشرات", "مكافحة النمل الأبيض", "مكافحة القوارض", "تعقيم المنشآت", "تعقيم مواقع التشغيل"],
   },
   {
     label: "كاميرات وأنظمة أمنية",
@@ -530,7 +530,7 @@ const SPECIALIZED_EN: Record<string, { label: string; desc: string }> = {
   "تكييف":                    { label: "Air Conditioning",       desc: "Installation and maintenance of all types of AC and cooling systems" },
   "كهرباء":                   { label: "Electrical",             desc: "Electrical works, wiring, and lighting maintenance" },
   "سباكة":                    { label: "Plumbing",               desc: "Plumbing, waterproofing, and water network maintenance" },
-  "أجهزة منزلية":             { label: "Home Appliances",        desc: "Coordinating maintenance, supply, and installation of home appliances through certified vendors" },
+  "أجهزة ومعدات المرافق":      { label: "Facility Appliances & Equipment", desc: "Coordinating maintenance, supply, and installation of operational facility appliances and equipment" },
   "أرضيات":                   { label: "Flooring",               desc: "Installation and maintenance of all types of flooring, tiles, and parquet" },
   "دهانات":                   { label: "Painting",               desc: "Interior and exterior painting with professional finishing standards" },
   "نجارة":                    { label: "Carpentry",              desc: "Carpentry, wood installations, office and kitchen setup" },
@@ -821,8 +821,8 @@ export default function Services() {
             </h2>
             <p className="text-gray-500 text-lg max-w-3xl mx-auto">
               {ar
-                ? "تنظم منصة GSS خدمات التوريد والتركيب والصيانة الفنية عبر شبكة موردين معتمدين، وتشمل تجهيز وتشغيل الأنظمة والمرافق والأجهزة للمنازل والمنشآت، مع متابعة التنفيذ حتى اكتمال الخدمة وفق متطلباتكم."
-                : "GSS organizes supply, installation, and technical maintenance services through a network of certified vendors — covering systems, facilities, and equipment for homes and businesses, with full follow-up until service completion."}
+                ? "تنظم منصة GSS خدمات التوريد والتركيب والصيانة الفنية عبر شبكة موردين معتمدين — تشمل تجهيز وتشغيل الأنظمة والمرافق والأجهزة للمنشآت المتعاقدة، مع متابعة التنفيذ حتى اكتمال الخدمة وفق متطلباتكم التشغيلية."
+                : "GSS organizes supply, installation, and technical maintenance services through a network of certified vendors — covering systems, facilities, and equipment for contracted facilities, with full follow-up until service completion per your operational requirements."}
             </p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">

@@ -4,11 +4,11 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import logoImg from "@assets/image_1774909317242.png";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useIndividualAuth } from "@/contexts/IndividualAuthContext";
+import { useCompanyAuth } from "@/contexts/AccountAuthContext";
 
 export function Navbar() {
   const { t, lang, setLang } = useLanguage();
-  const { isLoggedIn, account } = useIndividualAuth();
+  const { isLoggedIn, account } = useCompanyAuth();
   const [location] = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isJoinOpen, setIsJoinOpen] = useState(false);
