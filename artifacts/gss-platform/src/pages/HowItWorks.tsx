@@ -274,6 +274,37 @@ export default function HowItWorks() {
         </div>
       </section>
 
+      {/* Value Proposition Banner */}
+      <section className="py-14 bg-primary text-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-lg leading-relaxed mb-10 text-white/90">
+            {ar
+              ? "تعتمد منصة GSS نموذج إدارة تشغيل مركزي يهدف إلى تنظيم العلاقة بين المنشآت والموردين والمستشارين عبر قناة تنسيق واحدة، بما يضمن وضوح الإجراءات وسرعة التنفيذ وتحسين جودة الخدمات التشغيلية دون تحميل المنشأة عبء المتابعة اليومية."
+              : "GSS Platform adopts a centralized operations management model that organizes the relationship between facilities, vendors, and consultants through a single coordination channel — ensuring procedural clarity, execution speed, and improved service quality without burdening the facility with daily follow-up."}
+          </p>
+          <div className="grid sm:grid-cols-3 gap-4">
+            {(ar
+              ? [
+                  { icon: "🏢", label: "للمنشآت", text: "قناة تنسيق تشغيلي موحدة لجميع الخدمات" },
+                  { icon: "🔧", label: "للموردين", text: "أوامر عمل منظمة ونطاق تنفيذ واضح" },
+                  { icon: "💡", label: "للمستشارين", text: "إطار استشاري متكامل لتقديم التوصيات التشغيلية" },
+                ]
+              : [
+                  { icon: "🏢", label: "For Facilities", text: "Unified operational coordination channel for all services" },
+                  { icon: "🔧", label: "For Vendors", text: "Organized work orders with a clear execution scope" },
+                  { icon: "💡", label: "For Consultants", text: "Integrated advisory framework for operational recommendations" },
+                ]
+            ).map((item, i) => (
+              <div key={i} className="bg-white/10 border border-white/20 rounded-2xl p-5">
+                <div className="text-3xl mb-2">{item.icon}</div>
+                <p className="text-sm font-bold text-white mb-1">{item.label}</p>
+                <p className="text-sm text-white/80">{item.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="py-16 text-center bg-gray-50 border-t border-gray-100">
         <p className="text-gray-500 mb-6 text-base">

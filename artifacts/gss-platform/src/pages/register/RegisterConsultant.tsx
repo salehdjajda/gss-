@@ -285,10 +285,25 @@ export default function RegisterConsultant() {
                     </div>
                   </div>
 
+                  {/* Consultant Policy Section */}
+                  <details className="border border-slate-200 rounded-xl overflow-hidden">
+                    <summary className="px-5 py-3 cursor-pointer text-sm font-semibold text-secondary bg-secondary/5 hover:bg-secondary/10 select-none list-none flex items-center justify-between">
+                      <span>سياسة تقديم الاستشارات التشغيلية عبر منصة GSS</span>
+                      <span className="text-xs text-gray-400 font-normal">اضغط للقراءة</span>
+                    </summary>
+                    <div className="px-5 py-4 bg-slate-50 space-y-3 text-sm text-gray-700 leading-relaxed">
+                      <p>تعمل منصة GSS على تنظيم الاستشارات التشغيلية المقدمة للمنشآت من خلال شبكة مستشارين متخصصين، وفق آلية تنسيق واضحة تضمن جودة التوصيات واستفادة المنشآت منها. ويتم تقديم الاستشارات من خلال المنصة باعتبارها قناة التنسيق المعتمدة لإدارة الطلبات الاستشارية المرتبطة بالخدمات التشغيلية.</p>
+                      <p className="font-semibold text-gray-800">آلية تنفيذ التوصيات الاستشارية</p>
+                      <p>في حال اعتماد توصية تشغيلية مقدمة من المستشار وتم تنفيذها من خلال منصة GSS، يتم توثيق ذلك ضمن إجراءات التشغيل المعتمدة للمنصة وفق نموذج العمل الخاص بها، بما يضمن استمرارية جودة التنفيذ وتحقيق أفضل استفادة تشغيلية للمنشآت.</p>
+                      <p className="font-semibold text-gray-800">الالتزام بالإطار التشغيلي للمنصة</p>
+                      <p>يلتزم المستشار بتقديم الاستشارات المرتبطة بطلبات محالة عبر منصة GSS ضمن الإطار التنسيقي المعتمد للمنصة، بما يضمن وضوح الإجراءات التشغيلية واستمرارية جودة الخدمات المقدمة.</p>
+                    </div>
+                  </details>
+
                   <FormField control={form.control} name="termsConfirmed" render={({ field }) => (
                     <FormItem className="flex items-start gap-3 p-4 border rounded-xl bg-slate-50">
                       <FormControl><Checkbox checked={field.value} onCheckedChange={field.onChange} /></FormControl>
-                      <div><FormLabel className="text-gray-700 leading-relaxed font-medium">أوافق على الانضمام لبرنامج شركاء النجاح في منصة GSS وأقر بصحة البيانات المدخلة.</FormLabel><FormMessage /></div>
+                      <div><FormLabel className="text-gray-700 leading-relaxed font-medium">أوافق على تقديم الاستشارات التشغيلية المرتبطة بطلبات منصة GSS ضمن الإطار التشغيلي المعتمد للمنصة.</FormLabel><FormMessage /></div>
                     </FormItem>
                   )} />
 

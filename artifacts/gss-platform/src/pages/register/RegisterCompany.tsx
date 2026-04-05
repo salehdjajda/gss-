@@ -1349,6 +1349,33 @@ export default function RegisterCompany() {
                     </ul>
                   </div>
 
+                  {/* Facility Policy Section */}
+                  <details className="border border-slate-200 rounded-xl overflow-hidden">
+                    <summary className="px-5 py-3 cursor-pointer text-sm font-semibold text-primary bg-primary/5 hover:bg-primary/10 select-none list-none flex items-center justify-between">
+                      <span>{ar ? "سياسة إدارة الطلبات التشغيلية للمنشآت" : "Operational Request Management Policy for Facilities"}</span>
+                      <span className="text-xs text-gray-400 font-normal">{ar ? "اضغط للقراءة" : "Click to read"}</span>
+                    </summary>
+                    <div className="px-5 py-4 bg-slate-50 space-y-3 text-sm text-gray-700 leading-relaxed">
+                      {ar ? (
+                        <>
+                          <p>تعتمد منصة GSS نموذج إدارة تشغيل يهدف إلى تنظيم ومتابعة الطلبات التشغيلية للمنشآت عبر قناة تنسيق موحدة، بما يضمن وضوح الإجراءات وسرعة التنفيذ وتحسين جودة الخدمات المقدمة. وبموجب هذا النموذج، تكون منصة GSS جهة التنسيق التشغيلية المعتمدة لإدارة الطلبات المحالة عبرها، وتشمل مهامها: استقبال الطلبات، تحليل نطاق الخدمة، ترشيح المورد المناسب، متابعة التنفيذ حتى الإغلاق، معالجة الملاحظات التشغيلية، وإصدار تقارير الإنجاز.</p>
+                          <p className="font-semibold text-gray-800">قناة التنسيق المعتمدة للخدمات التشغيلية</p>
+                          <p>تعتمد المنشأة منصة GSS كجهة تنسيق تشغيلية للخدمات المحالة عبرها. وفي حال إجراء أي تنسيق مباشر خارج إطار المنصة بخصوص خدمة محالة عبرها دون إشعار المنصة، فإن ذلك يُعد خارج نطاق مسؤولية منصة GSS التشغيلية.</p>
+                          <p className="font-semibold text-gray-800">مسؤولية المستخدمين المفوضين</p>
+                          <p>تتحمل المنشأة المسؤولية الكاملة عن الطلبات الصادرة من المستخدمين المفوضين المسجلين لديها داخل المنصة، وتلتزم بتحديث بياناتهم وإبلاغ المنصة بأي تعديل على صلاحياتهم.</p>
+                        </>
+                      ) : (
+                        <>
+                          <p>GSS Platform adopts an operations management model to organize and track facility operational requests through a unified coordination channel, ensuring procedural clarity, execution speed, and improved service quality. GSS is the approved operational coordination entity for all requests routed through it — receiving requests, analyzing service scope, nominating vendors, following up until closure, handling remarks, and issuing completion reports.</p>
+                          <p className="font-semibold text-gray-800">Approved Coordination Channel</p>
+                          <p>The facility designates GSS Platform as the operational coordination entity for services routed through it. Any direct coordination outside the platform's framework, without notifying the platform, falls outside GSS Platform's operational responsibility.</p>
+                          <p className="font-semibold text-gray-800">Authorized User Responsibility</p>
+                          <p>The facility bears full responsibility for requests submitted by its registered authorized users, and must update their profiles and notify the platform of any changes to their access rights.</p>
+                        </>
+                      )}
+                    </div>
+                  </details>
+
                   <div className="space-y-3">
                     <FormField control={form.control} name="authorizationConfirmed" render={({ field }) => (
                       <FormItem className="flex items-start gap-3 p-4 border rounded-xl bg-slate-50">
@@ -1366,7 +1393,7 @@ export default function RegisterCompany() {
                         <FormControl><Checkbox checked={field.value} onCheckedChange={field.onChange} /></FormControl>
                         <div>
                           <FormLabel className="text-gray-700 leading-relaxed font-medium">
-                            {ar ? "أوافق على استلام الاتفاقية التشغيلية وتوقيعها وختمها وإعادة رفعها عبر المنصة." : "I agree to receive, sign, stamp, and re-upload the operational agreement through the platform."}
+                            {ar ? "أوافق على إدارة الطلبات التشغيلية المحالة عبر منصة GSS من خلال قناة التنسيق المعتمدة للمنصة." : "I agree to manage operational requests routed through GSS Platform via the platform's approved coordination channel."}
                           </FormLabel>
                           <FormMessage />
                         </div>

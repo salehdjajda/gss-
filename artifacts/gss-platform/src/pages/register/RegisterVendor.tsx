@@ -56,6 +56,7 @@ const schema = z.object({
   teamSize: z.string().optional(),
   acceptedPaymentTerms: z.array(z.string()).optional(),
   dataConfirmed: z.boolean().refine(val => val === true, "يجب تأكيد صحة البيانات"),
+  termsConfirmed: z.boolean().refine(val => val === true, "يجب الموافقة على سياسة التنسيق التشغيلي"),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -77,7 +78,7 @@ export default function RegisterVendor() {
     defaultValues: {
       name: "", vendorType: "", specialty: "", city: "",
       phone: "", email: "", services: [], serviceScope: "",
-      teamSize: "", acceptedPaymentTerms: [], dataConfirmed: false,
+      teamSize: "", acceptedPaymentTerms: [], dataConfirmed: false, termsConfirmed: false,
     },
   });
 
@@ -386,6 +387,28 @@ export default function RegisterVendor() {
                       )}
                     </div>
                   </div>
+
+                  {/* Vendor Policy Section */}
+                  <details className="border border-slate-200 rounded-xl overflow-hidden">
+                    <summary className="px-5 py-3 cursor-pointer text-sm font-semibold text-primary bg-primary/5 hover:bg-primary/10 select-none list-none flex items-center justify-between">
+                      <span>سياسة تنفيذ الطلبات التشغيلية للموردين المعتمدين</span>
+                      <span className="text-xs text-gray-400 font-normal">اضغط للقراءة</span>
+                    </summary>
+                    <div className="px-5 py-4 bg-slate-50 space-y-3 text-sm text-gray-700 leading-relaxed">
+                      <p>يتم تنفيذ الطلبات التشغيلية المحالة إلى المورد من خلال منصة GSS باعتبارها جهة التنسيق التشغيلية المعتمدة للخدمة، وتشمل مهام المنصة: تنظيم أوامر العمل، توضيح نطاق التنفيذ، متابعة الإنجاز، توثيق الاستلام، ومعالجة الملاحظات التشغيلية.</p>
+                      <p className="font-semibold text-gray-800">الالتزام بقناة تنفيذ الطلبات التشغيلية</p>
+                      <p>يلتزم المورد بتنفيذ الطلبات المحالة إليه عبر منصة GSS وفق آلية التنسيق المعتمدة، وعدم إجراء أي ترتيبات تشغيلية مباشرة مع المنشآت بخصوص الطلبات المحالة عبر المنصة دون إشعارها. وفي حال حدوث ذلك، يحق للمنصة اتخاذ الإجراءات التنظيمية المناسبة وفق الاتفاقية المعتمدة.</p>
+                      <p className="font-semibold text-gray-800">مسؤولية جودة التنفيذ</p>
+                      <p>يلتزم المورد بتنفيذ الأعمال وفق نطاق العمل المعتمد في أمر الخدمة، ومعالجة أي ملاحظات تشغيلية يتم تسجيلها من خلال منصة GSS لضمان إغلاق الطلب بالشكل المطلوب.</p>
+                    </div>
+                  </details>
+
+                  <FormField control={form.control} name="termsConfirmed" render={({ field }) => (
+                    <FormItem className="flex items-start gap-3 p-4 border rounded-xl bg-slate-50">
+                      <FormControl><Checkbox checked={field.value} onCheckedChange={field.onChange} /></FormControl>
+                      <div><FormLabel className="text-gray-700 leading-relaxed font-medium">أوافق على تنفيذ الطلبات التشغيلية المحالة عبر منصة GSS وفق آلية التنسيق المعتمدة لديها.</FormLabel><FormMessage /></div>
+                    </FormItem>
+                  )} />
 
                   <div className="pt-2 flex justify-end">
                     <Button type="submit" className="min-w-[180px] h-12 text-base font-bold" disabled={registerMutation.isPending} data-testid="btn-submit-vendor">
