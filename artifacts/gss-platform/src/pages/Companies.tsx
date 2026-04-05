@@ -324,6 +324,57 @@ export default function Companies() {
         </div>
       </section>
 
+      {/* Motivational Message — Why GSS */}
+      <section className="py-16 bg-slate-50 border-t border-slate-100">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="bg-white border border-slate-200 rounded-3xl p-8 md:p-12"
+          >
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 leading-snug">
+              {ar
+                ? "ما الذي يوفره العمل مع GSS لمنشأتكم؟"
+                : "What does working with GSS offer your facility?"}
+            </h2>
+            <p className="text-gray-700 text-base leading-relaxed mb-8">
+              {ar
+                ? "إدارة الخدمات التشغيلية عبر منصة GSS لا تهدف فقط إلى تنفيذ الطلبات، بل إلى تنظيم دورة العمل بالكامل بدءًا من الطلب وحتى الإغلاق، بما يساعد المنشأة على تحقيق نتائج تشغيلية أفضل على المدى الطويل."
+                : "Managing operational services through GSS Platform is not just about fulfilling requests — it is about organizing the entire work cycle from request to closure, helping the facility achieve better long-term operational outcomes."}
+            </p>
+            <div className="grid sm:grid-cols-2 gap-3 mb-8">
+              {(ar
+                ? [
+                    "تحسين جودة التنفيذ",
+                    "تقليل التكاليف التشغيلية",
+                    "توحيد قنوات التواصل مع الموردين",
+                    "رفع كفاءة المتابعة التشغيلية",
+                    "الحصول على أسعار مناسبة عبر شبكة موردين معتمدين",
+                  ]
+                : [
+                    "Improved execution quality",
+                    "Reduced operational costs",
+                    "Unified vendor communication channels",
+                    "Enhanced operational follow-up efficiency",
+                    "Competitive pricing through a certified vendor network",
+                  ]
+              ).map((item, i) => (
+                <div key={i} className="flex items-center gap-3 bg-primary/5 rounded-xl px-4 py-3">
+                  <CheckCircle2 size={16} className="text-primary flex-shrink-0" />
+                  <span className="text-sm font-medium text-gray-800">{item}</span>
+                </div>
+              ))}
+            </div>
+            <p className="text-gray-600 text-sm leading-relaxed border-t border-slate-100 pt-6">
+              {ar
+                ? "العمل ضمن هذا الإطار يوفر للمنشأة شريك تشغيل يدعم استقرار أعمالها ويعزز كفاءة الإنفاق التشغيلي على المدى الطويل."
+                : "Working within this framework provides the facility with an operations partner that supports business stability and enhances operational spending efficiency over the long term."}
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
       {/* FINAL CTA */}
       <section className="py-24 bg-primary text-white text-center">
         <div className="max-w-2xl mx-auto px-4">

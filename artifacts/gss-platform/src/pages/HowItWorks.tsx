@@ -279,8 +279,8 @@ export default function HowItWorks() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-lg leading-relaxed mb-10 text-white/90">
             {ar
-              ? "تعتمد منصة GSS نموذج إدارة تشغيل مركزي يهدف إلى تنظيم العلاقة بين المنشآت والموردين والمستشارين عبر قناة تنسيق واحدة، بما يضمن وضوح الإجراءات وسرعة التنفيذ وتحسين جودة الخدمات التشغيلية دون تحميل المنشأة عبء المتابعة اليومية."
-              : "GSS Platform adopts a centralized operations management model that organizes the relationship between facilities, vendors, and consultants through a single coordination channel — ensuring procedural clarity, execution speed, and improved service quality without burdening the facility with daily follow-up."}
+              ? "تعتمد منصة GSS نموذج تشغيل منظم يربط الطلبات وأوامر العمل والتنفيذ والفوترة ضمن قناة واحدة واضحة، مما يساعد المنشآت والموردين على تقليل التداخل الإداري وتحسين جودة التنفيذ واستمرارية العلاقة المهنية بين الأطراف."
+              : "GSS Platform adopts an organized operations model connecting requests, work orders, execution, and billing through a single clear channel — helping facilities and vendors reduce administrative overlap, improve execution quality, and maintain continuity of professional relationships."}
           </p>
           <div className="grid sm:grid-cols-3 gap-4">
             {(ar

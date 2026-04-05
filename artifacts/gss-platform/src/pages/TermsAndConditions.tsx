@@ -232,6 +232,27 @@ export default function TermsAndConditions() {
             </p>
           </Section>
 
+          {/* 9. Anti-interference policy */}
+          <Section
+            icon={<ShieldCheck size={20} className="text-primary" />}
+            iconColor="bg-primary/10"
+            bg="bg-primary/5"
+            border="border-primary/20"
+            title={ar ? "سياسة منع التداخل الإداري بين الأطراف" : "Anti-Administrative Interference Policy Between Parties"}
+            delay={0.4}
+          >
+            <p className="text-gray-700 text-sm leading-relaxed mb-3">
+              {ar
+                ? "تعتمد منصة GSS نموذج إدارة تشغيل مركزي يهدف إلى تنظيم العلاقة بين الأطراف عبر قناة تنسيق واحدة لضمان وضوح الإجراءات وسلامة التنفيذ وجودة الخدمة."
+                : "GSS Platform adopts a centralized operations management model aimed at organizing the relationship between all parties through a single coordination channel to ensure procedural clarity, execution integrity, and service quality."}
+            </p>
+            <div className="bg-white border border-primary/20 rounded-xl px-4 py-3 text-sm text-gray-700 leading-relaxed">
+              {ar
+                ? "في حال إجراء أي تنسيق مباشر خارج إطار المنصة بخصوص خدمة محالة عبرها دون إشعارها، فإن المنصة لا تتحمل أي مسؤولية تشغيلية أو فنية أو مالية عن نتائج ذلك الإجراء."
+                : "If any direct coordination is made outside the platform's framework regarding a service routed through it without notifying the platform, the platform bears no operational, technical, or financial responsibility for the outcomes of such action."}
+            </div>
+          </Section>
+
         </div>
       </section>
 

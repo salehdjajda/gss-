@@ -192,6 +192,19 @@ export default function Vendors() {
         </div>
       </section>
 
+      {/* Vendor Motivational Message */}
+      <section className="py-16 bg-primary text-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-2xl md:text-3xl font-bold mb-6">بيئة تشغيلية منظمة تدعم نجاحكم</h2>
+          <p className="text-white/85 text-lg leading-relaxed mb-6">
+            العمل ضمن شبكة الموردين المعتمدين لدى GSS يوفر بيئة تشغيل منظمة تضمن وضوح نطاق العمل واستمرارية فرص التنفيذ وتحسين جودة العلاقة المهنية مع المنشآت.
+          </p>
+          <p className="text-white/75 leading-relaxed max-w-2xl mx-auto">
+            كما يتيح للمورد تنفيذ الطلبات ضمن إطار تنسيقي واضح يقلل التداخل الإداري ويساعد على بناء شراكات تشغيلية طويلة المدى.
+          </p>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="py-16 bg-secondary/5 border-t border-secondary/10">
         <div className="max-w-3xl mx-auto px-4 text-center">

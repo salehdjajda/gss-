@@ -205,8 +205,8 @@ export default function Home() {
             className="text-white/80 text-lg max-w-3xl mx-auto mb-10 leading-relaxed"
           >
             {ar
-              ? "GSS شريككم التشغيلي الخارجي — نتولى إدارة جميع عملياتكم التشغيلية عبر منصة رقمية موحدة، بشبكة موردين معتمدين واستجابة فورية."
-              : "GSS is your external operations partner — managing all your operational processes through a unified digital platform, with a certified vendor network and instant response."}
+              ? "تعتمد منصة GSS نموذج تشغيل موحد يربط الطلبات والتنفيذ والفوترة عبر قناة واحدة واضحة، مما يساعد المنشآت على تحسين جودة الخدمات والحصول على أسعار مناسبة والعمل مع شبكة موردين موثوقين كشركاء نجاح يدعمون استقرار التشغيل ونمو الأعمال."
+              : "GSS Platform adopts a unified operations model connecting requests, execution, and billing through a single clear channel — helping facilities improve service quality, access competitive pricing, and work with a trusted vendor network as success partners supporting operational stability and business growth."}
           </motion.p>
 
           <motion.div
@@ -248,6 +248,48 @@ export default function Home() {
               </div>
             ))}
           </motion.div>
+        </div>
+      </section>
+
+      {/* Model Description — أولًا */}
+      <section className="py-16 bg-white border-b border-slate-100">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 gap-10 items-start">
+            <div>
+              <span className="inline-block bg-primary/10 text-primary font-bold text-xs px-4 py-1.5 rounded-full mb-5 tracking-wide uppercase">
+                {ar ? "نموذج التشغيل الموحد" : "Unified Operations Model"}
+              </span>
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-5 leading-snug">
+                {ar
+                  ? "نموذج تشغيل منظم يربط جميع عناصر الخدمة"
+                  : "An organized operations model that connects every service element"}
+              </h2>
+              <p className="text-gray-600 leading-relaxed mb-4">
+                {ar
+                  ? "تعتمد منصة GSS نموذج تشغيل منظم يربط الطلبات وأوامر العمل والتنفيذ والفوترة ضمن قناة واحدة واضحة، مما يساعد المنشآت والموردين على تقليل التداخل الإداري وتحسين جودة التنفيذ واستمرارية العلاقة المهنية بين الأطراف."
+                  : "GSS Platform adopts an organized operations model that connects requests, work orders, execution, and billing through a single clear channel — helping facilities and vendors reduce administrative overlap, improve execution quality, and sustain professional relationships."}
+              </p>
+              <p className="text-gray-600 leading-relaxed">
+                {ar
+                  ? "كما تتيح المنصة الوصول إلى شبكة موردين معتمدين يتم اختيارهم وفق معايير الجودة والكفاءة والسعر المناسب، بما يضمن تنفيذ الخدمات بأفضل قيمة تشغيلية ممكنة."
+                  : "The platform also provides access to a certified vendor network selected based on quality, efficiency, and competitive pricing — ensuring services are delivered at the best possible operational value."}
+              </p>
+            </div>
+            <div className="bg-slate-50 border border-slate-200 rounded-3xl p-8">
+              <p className="text-gray-700 leading-relaxed mb-6">
+                {ar
+                  ? "العمل عبر منصة GSS لا يقتصر على تنفيذ الطلبات فقط، بل يوفّر للمنشآت شريك تشغيل يساعدها على تحسين كفاءة الإنفاق وتنظيم الخدمات اليومية وبناء علاقة مستقرة مع موردين موثوقين يدعمون نجاح أعمالها على المدى الطويل."
+                  : "Working through GSS Platform is not just about fulfilling requests — it provides facilities with an operations partner that helps improve spending efficiency, organize daily services, and build a stable relationship with trusted vendors that support long-term business success."}
+              </p>
+              <div className="border-t border-slate-200 pt-5">
+                <p className="text-xs text-gray-500 leading-relaxed">
+                  {ar
+                    ? "أما العمل خارج هذا الإطار التنظيمي فغالبًا ما يؤدي إلى ضعف التنسيق وتكرار الأعمال وصعوبة متابعة المسؤوليات التشغيلية وارتفاع التكلفة الإجمالية دون تحقيق الاستفادة المثلى من الموارد المتاحة."
+                    : "Working outside this organizational framework often leads to poor coordination, repeated work, difficulty tracking operational responsibilities, and higher total costs without achieving optimal use of available resources."}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
