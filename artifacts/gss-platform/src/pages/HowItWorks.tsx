@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { ArrowLeft, CheckCircle2, ShieldCheck, AlertCircle, Info, FileText } from "lucide-react";
+import { ArrowLeft, ShieldCheck } from "lucide-react";
 
 export default function HowItWorks() {
   const { lang } = useLanguage();
@@ -26,7 +26,7 @@ export default function HowItWorks() {
     {
       num: "03",
       title: "تحديد المستخدمين المفوضين",
-      desc: "تُحدد المنشأة المستخدمين المخولين برفع الطلبات واعتماد إغلاقها داخل المنصة، مما يضمن الرقابة الكاملة على دورة الطلبات التشغيلية. تُعدّ الطلبات الصادرة من المستخدمين المفوضين طلبات رسمية ملزمة بعد اعتماد التكلفة.",
+      desc: "تُحدد المنشأة المستخدمين المخولين برفع الطلبات واعتماد إغلاقها داخل المنصة، مما يضمن الرقابة الكاملة على دورة الطلبات التشغيلية.",
       badge: "الصلاحيات",
       highlight: false,
     },
@@ -40,21 +40,21 @@ export default function HowItWorks() {
     {
       num: "05",
       title: "مراجعة الطلب وتحديد التكلفة",
-      desc: "يراجع فريق GSS الطلب ويُعدّ عرض التكلفة المبدئي الذي يشمل نطاق العمل والتكلفة التقديرية ومدة التنفيذ — دون الإفصاح عن اسم المورد في هذه المرحلة، لحماية إجراءات التنسيق التشغيلي.",
+      desc: "يراجع فريق GSS الطلب ويُعدّ عرض التكلفة الشامل نيابةً عنكم — يشمل نطاق العمل والتكلفة التقديرية ومدة التنفيذ.",
       badge: "تقييم التكلفة",
       highlight: false,
     },
     {
       num: "06",
       title: "اعتماد التكلفة من المنشأة",
-      desc: "يقوم الشخص المفوض لدى المنشأة باعتماد عرض التكلفة المقدم. لا يُعتبر طلب الخدمة أمر تنفيذ ملزمًا إلا بعد اعتماد التكلفة من الجهة المخولة داخل المنشأة.",
+      desc: "يقوم الشخص المفوض لدى المنشأة باعتماد عرض التكلفة المقدم. بمجرد موافقتكم، يبدأ فريق GSS فوراً بتحريك الطلب للتنفيذ.",
       badge: "اعتماد إلزامي",
       highlight: true,
     },
     {
       num: "07",
       title: "إصدار أمر العمل",
-      desc: "بعد الاعتماد، يُصدر فريق GSS أمر عمل رسمي يوثّق نطاق الخدمة وجدول التنفيذ. في هذه المرحلة يتم تزويد المنشأة ببيانات المورد المكلّف والتفاصيل التنفيذية الكاملة.",
+      desc: "بعد الاعتماد، يُصدر فريق GSS أمر عمل رسمي يوثّق نطاق الخدمة وجدول التنفيذ. يبدأ فريق GSS بالتنسيق الكامل مع فريق التنفيذ لضمان انطلاق الخدمة في أسرع وقت.",
       badge: "التوثيق",
       highlight: false,
     },
@@ -118,7 +118,7 @@ export default function HowItWorks() {
     {
       num: "03",
       title: "Designate Authorized Users",
-      desc: "The facility designates authorized users who can submit requests and approve closures within the platform, ensuring full control over the operational request cycle. Requests issued by authorized users are considered official and binding after cost approval.",
+      desc: "The facility designates authorized users who can submit requests and approve closures within the platform, ensuring full control over the operational request cycle.",
       badge: "Permissions",
       highlight: false,
     },
@@ -132,21 +132,21 @@ export default function HowItWorks() {
     {
       num: "05",
       title: "Request Review & Cost Assessment",
-      desc: "The GSS team reviews the request and prepares an initial cost proposal covering scope of work, estimated cost, and execution timeline — without disclosing the vendor name at this stage, to protect operational coordination procedures.",
+      desc: "The GSS team reviews the request and prepares a comprehensive cost proposal on your behalf — covering scope of work, estimated cost, and execution timeline.",
       badge: "Cost Assessment",
       highlight: false,
     },
     {
       num: "06",
       title: "Cost Approval by the Facility",
-      desc: "The authorized person at the facility approves the submitted cost proposal. A service request is not considered a binding execution order until the cost is approved by the authorized party within the facility.",
+      desc: "The authorized person at the facility approves the submitted cost proposal. Once you approve, the GSS team immediately moves the request into execution.",
       badge: "Mandatory Approval",
       highlight: true,
     },
     {
       num: "07",
       title: "Work Order Issuance",
-      desc: "After approval, the GSS team issues an official work order documenting the service scope and execution schedule. At this stage, the facility is provided with the assigned vendor's information and full execution details.",
+      desc: "After approval, the GSS team issues an official work order documenting the service scope and execution schedule. The GSS team then begins full coordination with the execution team to ensure the service launches as quickly as possible.",
       badge: "Documentation",
       highlight: false,
     },
@@ -262,199 +262,15 @@ export default function HowItWorks() {
                 </div>
               ))}
             </div>
-            <div className="bg-amber-50 border border-amber-200 rounded-xl px-5 py-3 flex items-start gap-3 text-sm text-amber-800">
-              <ShieldCheck size={18} className="text-amber-600 flex-shrink-0 mt-0.5" />
-              <p>
-                <strong>{ar ? "ملاحظة قانونية: " : "Legal Note: "}</strong>
-                {ar
-                  ? "لا يُعتبر طلب الخدمة أمر تنفيذ ملزمًا إلا بعد اعتماد التكلفة من الشخص المفوض لدى المنشأة."
-                  : "A service request is not considered a binding execution order until the cost is approved by the authorized person at the facility."}
+            <div className="text-center pt-2">
+              <p className="text-sm text-gray-500">
+                {ar ? "للاطلاع على السياسات والأحكام التشغيلية الكاملة: " : "For the full operational policies and terms: "}
+                <Link href="/terms" className="text-primary font-medium underline underline-offset-2">
+                  {ar ? "الشروط والأحكام" : "Terms & Conditions"}
+                </Link>
               </p>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Policy Sections */}
-      <section className="py-16 bg-white border-t border-gray-100">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-
-          {/* Quote Policy — Two Phases */}
-          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="bg-slate-50 border border-slate-200 rounded-2xl p-7">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
-                <FileText size={20} className="text-primary" />
-              </div>
-              <h3 className="text-lg font-bold text-gray-900">{ar ? "آلية تقديم عروض الأسعار" : "Quote Submission Process"}</h3>
-            </div>
-            <p className="text-gray-600 text-sm leading-relaxed">
-              {ar
-                ? "تقوم منصة GSS بتقديم عرض تكلفة مبدئي يشمل نطاق العمل والتكلفة التقديرية ومدة التنفيذ دون تحديد اسم المورد المنفذ. ويتم تزويد المنشأة ببيانات المورد والتفاصيل التنفيذية بعد اعتماد التكلفة وإصدار أمر العمل، وذلك لضمان كفاءة التنسيق التشغيلي وحماية جودة التنفيذ."
-                : "GSS Platform provides an initial cost proposal covering the scope of work, estimated cost, and execution timeline — without specifying the vendor's name. The facility is provided with vendor details and execution specifics only after cost approval and work order issuance, to ensure operational coordination efficiency and protect execution quality."}
-            </p>
-          </motion.div>
-
-          {/* Quote Preparation Fees */}
-          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.05 }} className="bg-amber-50 border border-amber-200 rounded-2xl p-7">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
-                <AlertCircle size={20} className="text-amber-600" />
-              </div>
-              <h3 className="text-lg font-bold text-gray-900">{ar ? "سياسة إعداد عروض الأسعار" : "Quote Preparation Policy"}</h3>
-            </div>
-            <p className="text-gray-600 text-sm leading-relaxed mb-3">
-              {ar
-                ? "في الطلبات التشغيلية ضمن نظام الخدمة حسب الطلب، قد يتطلب إعداد عرض التكلفة القيام بزيارة ميدانية أو دراسة نطاق العمل أو التنسيق مع الموردين أو إعداد تحليل فني أو مالي."
-                : "For operational requests under the Pay Per Request model, preparing a cost proposal may require a site visit, scope study, vendor coordination, or technical/financial analysis."}
-            </p>
-            <p className="text-amber-800 text-sm leading-relaxed font-medium">
-              {ar
-                ? "في هذه الحالات، يُعد إعداد العرض جزءًا من الخدمة التشغيلية المقدمة، وقد تترتب عليه رسوم خدمة في حال عدم اعتماد التنفيذ. يتم إشعار المنشأة بذلك مسبقًا قبل البدء في إعداد العرض."
-                : "In such cases, quote preparation is considered part of the operational service provided, and a service fee may apply if execution is not approved. The facility will be notified in advance before quote preparation begins."}
-            </p>
-          </motion.div>
-
-          {/* On-Demand vs Subscription */}
-          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="bg-slate-50 border border-slate-200 rounded-2xl p-7">
-            <div className="flex items-center gap-3 mb-5">
-              <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
-                <Info size={20} className="text-primary" />
-              </div>
-              <h3 className="text-lg font-bold text-gray-900">{ar ? "الفرق بين الخدمة حسب الطلب والاشتراك التشغيلي" : "Pay Per Request vs. Operational Subscription"}</h3>
-            </div>
-            <div className="grid md:grid-cols-2 gap-5">
-              <div className="bg-white border border-blue-100 rounded-xl p-5">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-lg">🔧</span>
-                  <h4 className="font-bold text-gray-900 text-sm">{ar ? "الخدمة حسب الطلب" : "Pay Per Request"}</h4>
-                </div>
-                <p className="text-gray-600 text-sm leading-relaxed">
-                  {ar
-                    ? "تتيح للمنشأة تنفيذ الخدمات التشغيلية عند الحاجة دون اشتراك ثابت، مع اعتماد التكلفة قبل التنفيذ لكل طلب بشكل مستقل لضمان الشفافية الكاملة في التكاليف. قد تنطبق رسوم على إعداد عروض الأسعار المتطلبة لدراسة ميدانية أو تقنية."
-                    : "Allows the facility to execute operational services as needed without a fixed subscription, with cost approval before execution for each request independently to ensure full cost transparency. Fees may apply for quotes requiring site or technical studies."}
-                </p>
-              </div>
-              <div className="bg-white border border-amber-100 rounded-xl p-5">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-lg">📋</span>
-                  <h4 className="font-bold text-gray-900 text-sm">{ar ? "الاشتراك التشغيلي الشهري" : "Monthly Operational Subscription"}</h4>
-                </div>
-                <p className="text-gray-600 text-sm leading-relaxed">
-                  {ar
-                    ? "تشمل خدمات الاشتراك إعداد عروض الأسعار والدراسات التشغيلية والتنسيق الفني ضمن نطاق خدمات المتابعة المستمرة دون رسوم إضافية على إعداد العروض. المنشآت المشتركة تستفيد من أولوية الاستجابة ومدير حساب مخصص."
-                    : "Subscription services include quote preparation, operational studies, and technical coordination within the scope of continuous follow-up services — without additional fees for quote preparation. Subscribed facilities benefit from priority response and a dedicated account manager."}
-                </p>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Vendor Protection */}
-          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }} className="bg-primary/5 border border-primary/20 rounded-2xl p-7">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
-                <ShieldCheck size={20} className="text-primary" />
-              </div>
-              <h3 className="text-lg font-bold text-gray-900">{ar ? "حماية الموردين وإدارة التنسيق" : "Vendor Protection & Coordination Management"}</h3>
-            </div>
-            <p className="text-gray-600 text-sm leading-relaxed">
-              {ar
-                ? "تحتفظ منصة GSS بحق إدارة التنسيق مع الموردين المعتمدين لديها، ولا يتم الإفصاح عن بيانات المورد قبل اعتماد التكلفة وإصدار أمر العمل، باعتبار ذلك جزءًا من إجراءات إدارة الخدمة التشغيلية."
-                : "GSS Platform retains the right to manage coordination with its certified vendors. Vendor information is not disclosed prior to cost approval and work order issuance, as this is part of the operational service management procedures."}
-            </p>
-          </motion.div>
-
-          {/* Vendor Payment Terms Policy */}
-          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="bg-slate-50 border border-slate-200 rounded-2xl p-7">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-slate-200 rounded-xl flex items-center justify-center">
-                <FileText size={20} className="text-slate-600" />
-              </div>
-              <h3 className="text-lg font-bold text-gray-900">{ar ? "سياسة آجال السداد مع الموردين المعتمدين" : "Payment Terms Policy with Certified Vendors"}</h3>
-            </div>
-            <p className="text-gray-600 text-sm leading-relaxed">
-              {ar
-                ? "تعتمد منصة GSS شبكة موردين معتمدين يتم الاتفاق معهم مسبقًا على شروط السداد وفق سياسات تشغيلية واضحة تشمل مدد سداد مختلفة حسب طبيعة الخدمة ونوع المشروع. وعند استلام طلب خدمة، تقوم GSS باختيار المورد المناسب بناءً على توافق شروط التنفيذ وآجال السداد المعتمدة لدى المنشأة مع سياسات المورد. ولا يتم إصدار أمر العمل إلا بعد التأكد من توافق شروط الدفع بين الطرفين."
-                : "GSS Platform operates a certified vendor network with pre-agreed payment terms according to clear operational policies covering varying payment periods based on the nature of the service and project type. When a request is received, GSS selects the appropriate vendor based on alignment between the execution terms and the facility's approved payment policy and the vendor's terms. A work order is only issued after confirming payment term compatibility between both parties."}
-            </p>
-          </motion.div>
-
-          {/* Facility's Existing Vendors */}
-          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.25 }} className="bg-blue-50 border border-blue-100 rounded-2xl p-7">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
-                <Info size={20} className="text-blue-600" />
-              </div>
-              <h3 className="text-lg font-bold text-gray-900">{ar ? "إدارة الموردين الحاليين لدى المنشأة" : "Managing the Facility's Existing Vendors"}</h3>
-            </div>
-            <p className="text-gray-600 text-sm leading-relaxed mb-3">
-              {ar
-                ? "في حال رغبت المنشأة بالاستمرار مع مورديها الحاليين، تقوم منصة GSS بإدارة ومتابعة تنفيذ الطلبات التشغيلية معهم وفق نطاق الخدمة المتفق عليه، دون أن تكون طرفًا ماليًا في العلاقة التعاقدية بينهم."
-                : "If a facility wishes to continue with its existing vendors, GSS Platform manages and follows up on operational request execution with them according to the agreed service scope — without being a financial party in the contractual relationship between them."}
-            </p>
-            <div className="bg-white border border-blue-100 rounded-xl px-4 py-3 text-xs text-blue-700">
-              {ar
-                ? "تبقى مسؤولية السداد مباشرة بين المنشأة والمورد، بينما يقتصر دور المنصة على التنسيق والمتابعة التشغيلية وإصدار تقارير الإنجاز."
-                : "Payment responsibility remains directly between the facility and the vendor. The platform's role is limited to operational coordination, follow-up, and issuing completion reports."}
-            </div>
-          </motion.div>
-
-          {/* Vendor Matching by Payment Terms */}
-          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }} className="bg-green-50 border border-green-100 rounded-2xl p-7">
-            <div className="flex items-center gap-3 mb-5">
-              <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
-                <CheckCircle2 size={20} className="text-green-600" />
-              </div>
-              <h3 className="text-lg font-bold text-gray-900">{ar ? "اختيار المورد وفق سياسة السداد المعتمدة" : "Vendor Selection Based on Approved Payment Policy"}</h3>
-            </div>
-            <p className="text-gray-600 text-sm leading-relaxed mb-4">
-              {ar
-                ? "تقوم منصة GSS باختيار المورد المناسب لكل طلب خدمة بناءً على معايير متكاملة:"
-                : "GSS Platform selects the appropriate vendor for each service request based on comprehensive criteria:"}
-            </p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-4">
-              {(ar ? [
-                "طبيعة الخدمة",
-                "سرعة التنفيذ",
-                "الموقع الجغرافي",
-                "مستوى الجودة",
-                "شروط السداد المعتمدة",
-                "تاريخ الأداء التشغيلي",
-              ] : [
-                "Nature of Service",
-                "Execution Speed",
-                "Geographic Location",
-                "Quality Level",
-                "Approved Payment Terms",
-                "Operational Performance History",
-              ]).map((item, i) => (
-                <div key={i} className="bg-white border border-green-100 rounded-lg px-3 py-2 flex items-center gap-2">
-                  <CheckCircle2 size={13} className="text-green-500 flex-shrink-0" />
-                  <span className="text-xs font-medium text-gray-700">{item}</span>
-                </div>
-              ))}
-            </div>
-            <div className="bg-white border border-green-200 rounded-xl px-4 py-3 text-xs text-green-800">
-              {ar
-                ? "عند اعتماد المنشأة لسياسة سداد محددة (30 أو 60 أو 90 يوم)، يتم ترشيح الموردين القادرين على العمل وفق نفس شروط الدفع فقط — مما يحمي الطرفين ويضمن استمرار التشغيل دون خلافات مالية."
-                : "When a facility adopts a specific payment policy (Net 30, 60, or 90 days), only vendors capable of working under the same payment terms are nominated — protecting both parties and ensuring continuous operations without financial disputes."}
-            </div>
-          </motion.div>
-
-          {/* GSS not a Financial Intermediary */}
-          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.35 }} className="bg-amber-50 border border-amber-200 rounded-2xl p-7">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
-                <AlertCircle size={20} className="text-amber-600" />
-              </div>
-              <h3 className="text-lg font-bold text-gray-900">{ar ? "GSS ليست طرفًا ماليًا في عمليات السداد" : "GSS is Not a Financial Party in Payment Transactions"}</h3>
-            </div>
-            <p className="text-gray-600 text-sm leading-relaxed">
-              {ar
-                ? "لا تكون منصة GSS طرفًا ماليًا في عمليات السداد بين المنشأة والمورد. يقتصر دور المنصة على إدارة الطلبات التشغيلية والتنسيق والمتابعة حتى إغلاق الخدمة وفق المعايير المعتمدة. تُصدر GSS فاتورة منفصلة لرسوم إدارة الخدمة — وهي مستقلة تمامًا عن فواتير الموردين المنفذين."
-                : "GSS Platform is not a financial party in payment transactions between the facility and the vendor. The platform's role is limited to operational request management, coordination, and follow-up until service closure per approved standards. GSS issues a separate invoice for its service management fees — entirely independent of the executing vendors' invoices."}
-            </p>
-          </motion.div>
-
         </div>
       </section>
 
