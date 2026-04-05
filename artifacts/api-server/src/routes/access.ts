@@ -1,7 +1,16 @@
 import { Router } from "express";
 import crypto from "crypto";
+import rateLimit from "express-rate-limit";
 
 const router = Router();
+
+const verifyRateLimit = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  message: { valid: false, error: "محاولات كثيرة، انتظر 15 دقيقة وحاول مجدداً" },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 interface SessionEntry {
   createdAt: number;
@@ -20,7 +29,7 @@ setInterval(
   60 * 60 * 1000,
 );
 
-router.post("/access/verify", (req, res) => {
+router.post("/access/verify", verifyRateLimit, (req, res) => {
   const { password } = req.body as { password?: string };
   if (!password) {
     return res.status(400).json({ valid: false, error: "الرمز مطلوب" });
