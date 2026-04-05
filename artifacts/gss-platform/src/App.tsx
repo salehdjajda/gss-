@@ -61,6 +61,10 @@ import RequestServiceCompany from "@/pages/company/RequestServiceCompany";
 
 // Admin
 import AdminDashboard from "@/pages/admin/AdminDashboard";
+import PreviewAdmin from "@/pages/PreviewAdmin";
+
+// Access Gate
+import { AccessGate } from "@/components/AccessGate";
 
 const queryClient = new QueryClient();
 
@@ -131,6 +135,8 @@ function MainLayout() {
             </ProtectedRoute>
           </Route>
 
+          <Route path="/preview-admin" component={PreviewAdmin} />
+
           <Route component={NotFound} />
         </Switch>
       </main>
@@ -170,22 +176,24 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <LanguageProvider>
-        <IndividualAuthProvider>
-          <CompanyAuth.Provider>
-            <VendorAuth.Provider>
-              <ConsultantAuth.Provider>
-                <AuthProvider>
-                  <TooltipProvider>
-                    <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-                      <Router />
-                    </WouterRouter>
-                    <Toaster />
-                  </TooltipProvider>
-                </AuthProvider>
-              </ConsultantAuth.Provider>
-            </VendorAuth.Provider>
-          </CompanyAuth.Provider>
-        </IndividualAuthProvider>
+        <AccessGate>
+          <IndividualAuthProvider>
+            <CompanyAuth.Provider>
+              <VendorAuth.Provider>
+                <ConsultantAuth.Provider>
+                  <AuthProvider>
+                    <TooltipProvider>
+                      <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
+                        <Router />
+                      </WouterRouter>
+                      <Toaster />
+                    </TooltipProvider>
+                  </AuthProvider>
+                </ConsultantAuth.Provider>
+              </VendorAuth.Provider>
+            </CompanyAuth.Provider>
+          </IndividualAuthProvider>
+        </AccessGate>
       </LanguageProvider>
     </QueryClientProvider>
   );

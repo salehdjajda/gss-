@@ -5,6 +5,7 @@ import registrationsRouter from "./registrations";
 import contactRouter from "./contact";
 import dashboardRouter from "./dashboard";
 import adminRouter from "./admin";
+import accessRouter from "./access";
 
 const router: IRouter = Router();
 
@@ -14,5 +15,6 @@ router.use(registrationsRouter);
 router.use(contactRouter);
 router.use(dashboardRouter);
 router.use(adminRouter);
+router.use(accessRouter);
 
 export default router;
