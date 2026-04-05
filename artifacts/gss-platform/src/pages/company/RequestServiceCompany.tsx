@@ -572,6 +572,28 @@ export default function RequestServiceCompany() {
                 </div>
               )}
 
+              <div className="bg-blue-50 border border-blue-100 rounded-2xl px-5 py-4 text-xs text-blue-800 leading-relaxed">
+                <p className="font-bold mb-1 flex items-center gap-2">
+                  <Info size={14} className="text-blue-500 flex-shrink-0" />
+                  {ar ? "تنبيه قبل الإرسال:" : "Pre-Submission Notice:"}
+                </p>
+                <p>
+                  {ar
+                    ? "قد يتطلب بعض الطلبات إعداد عرض فني أو زيارة ميدانية أو تنسيق مع الموردين. في هذه الحالة سيتم إشعاركم مسبقًا بأي رسوم مرتبطة بإعداد العرض قبل البدء في دراسته. لا يُعتبر الطلب أمر تنفيذ ملزمًا إلا بعد اعتماد التكلفة من الجهة المفوضة."
+                    : "Some requests may require a technical proposal, site visit, or vendor coordination. In such cases, you will be notified in advance of any fees related to quote preparation before it begins. A request is not a binding execution order until the cost is approved by the authorized party."}
+                </p>
+                {ar && (
+                  <p className="mt-2 text-blue-600 font-medium">
+                    عملاء الباقات التشغيلية لا يتم احتساب رسوم إعداد عروض الأسعار عليهم.
+                  </p>
+                )}
+                {!ar && (
+                  <p className="mt-2 text-blue-600 font-medium">
+                    Operational package subscribers are not charged for quote preparation fees.
+                  </p>
+                )}
+              </div>
+
               <div className="flex gap-3">
                 <Button variant="outline" type="button" className="flex-1 h-12 font-bold border-gray-200" onClick={() => goStep(2)}>
                   {ar ? "السابق" : "Back"}

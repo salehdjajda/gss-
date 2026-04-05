@@ -326,6 +326,68 @@ export default function Pricing() {
         </div>
       </section>
 
+      {/* QUOTE PREPARATION FEES */}
+      <section className="py-16 bg-amber-50 border-t border-amber-100">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <div className="flex items-start gap-4 mb-6">
+              <div className="w-12 h-12 bg-amber-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+                <AlertCircle size={22} className="text-amber-600" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-1">
+                  {isAr ? "رسوم إعداد العروض التشغيلية" : "Operational Quote Preparation Fees"}
+                </h2>
+                <p className="text-gray-500 text-sm">
+                  {isAr ? "يختلف هذا البند بين عملاء الخدمة حسب الطلب وعملاء الباقة الشهرية" : "This clause differs between Pay Per Request clients and monthly package subscribers"}
+                </p>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-5 mb-6">
+              <div className="bg-white border border-amber-200 rounded-2xl p-6">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-lg">🔧</span>
+                  <h3 className="font-bold text-gray-900 text-sm">{isAr ? "الخدمة حسب الطلب" : "Pay Per Request"}</h3>
+                </div>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  {isAr
+                    ? "في بعض الطلبات التشغيلية التي تتطلب إعداد عرض فني أو مالي مفصل — كالزيارات الميدانية أو دراسات نطاق العمل أو التحليل التقني — تعتبر عملية إعداد العرض جزءًا من الخدمة التشغيلية المقدمة من منصة GSS، ويجوز احتساب رسوم خدمة في حال عدم اعتماد التنفيذ."
+                    : "For operational requests requiring a detailed technical or financial proposal — such as site visits, scope studies, or technical analysis — the quote preparation process is considered part of the operational service provided by GSS, and a service fee may apply if execution is not approved."}
+                </p>
+                <div className="mt-3 text-xs text-amber-700 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2">
+                  {isAr ? "يتم إشعار المنشأة مسبقًا قبل البدء في إعداد أي عرض يترتب عليه رسوم." : "The facility is notified in advance before preparing any quote that may incur fees."}
+                </div>
+              </div>
+              <div className="bg-white border border-green-200 rounded-2xl p-6">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-lg">📋</span>
+                  <h3 className="font-bold text-gray-900 text-sm">{isAr ? "الباقة الشهرية المدارة" : "Managed Monthly Package"}</h3>
+                </div>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  {isAr
+                    ? "تشمل خدمات الاشتراك إعداد عروض الأسعار والدراسات التشغيلية والتنسيق الفني ضمن نطاق خدمات المتابعة المستمرة دون رسوم إضافية على إعداد العروض."
+                    : "Subscription services include quote preparation, operational studies, and technical coordination within the scope of continuous follow-up services — at no additional charge for quote preparation."}
+                </p>
+                <div className="mt-3 text-xs text-green-700 bg-green-50 border border-green-100 rounded-lg px-3 py-2 flex items-center gap-1.5">
+                  <Check size={12} className="text-green-600 flex-shrink-0" />
+                  {isAr ? "لا تُحتسب رسوم إعداد العروض على عملاء الباقة الشهرية." : "No quote preparation fees charged for monthly package subscribers."}
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white border border-amber-200 rounded-xl px-5 py-3 text-sm text-amber-800 flex items-start gap-3">
+              <Zap size={16} className="text-amber-500 flex-shrink-0 mt-0.5" />
+              <p>
+                {isAr
+                  ? "في حال إعداد عرض فني أو مالي بناءً على طلب المنشأة ولم يتم اعتماد التنفيذ، يحق لمنصة GSS احتساب رسوم الخدمة التشغيلية حسب طبيعة الطلب ونطاقه."
+                  : "If a technical or financial proposal is prepared at the facility's request and execution is not approved, GSS Platform has the right to charge an operational service fee based on the nature and scope of the request."}
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* LARGE PROJECTS */}
       <section className="py-20 bg-primary text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
