@@ -60,6 +60,15 @@ router.post("/access/verify", (req, res) => {
   const { code } = req.body as { code?: string };
   if (!code) return res.status(400).json({ valid: false, error: "Code required" });
 
+  const adminSecret = process.env.PREVIEW_ADMIN_SECRET;
+
+  // Admin secret works as a permanent bypass
+  if (adminSecret && code.trim() === adminSecret) {
+    const token = crypto.randomUUID();
+    sessions.set(token, { createdAt: Date.now() });
+    return res.json({ valid: true, token });
+  }
+
   const normalized = String(code)
     .toUpperCase()
     .replace(/\s/g, "")

@@ -106,9 +106,8 @@ export function AccessGate({ children }: Props) {
             <input
               type="text"
               value={code}
-              onChange={(e) => setCode(e.target.value.toUpperCase())}
-              placeholder="XXXX-XXXX"
-              maxLength={9}
+              onChange={(e) => setCode(e.target.value)}
+              placeholder="أدخل رمز الدخول"
               autoFocus
               className="w-full bg-white/10 text-white text-center text-xl font-mono tracking-[0.3em] placeholder:text-white/25 rounded-xl px-4 py-4 outline-none border border-white/10 focus:border-white/30 transition"
             />
