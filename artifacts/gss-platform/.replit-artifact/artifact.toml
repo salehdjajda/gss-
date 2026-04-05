@@ -13,6 +13,7 @@ version = "1.0.0"
 name = "web"
 paths = [ "/" ]
 localPort = 22504
+autoStart = true
 
 [services.development]
 run = "pnpm --filter @workspace/gss-platform run dev"
