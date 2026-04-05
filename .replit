@@ -28,3 +28,4 @@ timeoutMs = 20000
 
 [userenv.shared]
 VITE_PREVIEW_GATE = "true"
+OWNER_EMAIL = "abdullahzbm@gmail.com"

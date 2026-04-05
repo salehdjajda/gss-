@@ -61,7 +61,6 @@ import RequestServiceCompany from "@/pages/company/RequestServiceCompany";
 
 // Admin
 import AdminDashboard from "@/pages/admin/AdminDashboard";
-import PreviewAdmin from "@/pages/PreviewAdmin";
 
 // Access Gate
 import { AccessGate } from "@/components/AccessGate";
@@ -134,8 +133,6 @@ function MainLayout() {
               <AdminDashboard />
             </ProtectedRoute>
           </Route>
-
-          <Route path="/preview-admin" component={PreviewAdmin} />
 
           <Route component={NotFound} />
         </Switch>

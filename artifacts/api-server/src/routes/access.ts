@@ -1,9 +1,11 @@
 import { Router } from "express";
 import crypto from "crypto";
+import { sendOTPEmail } from "../lib/email.js";
 
 const router = Router();
 
-interface CodeEntry {
+interface OTPEntry {
+  otp: string;
   used: boolean;
   createdAt: number;
 }
@@ -12,71 +14,68 @@ interface SessionEntry {
   createdAt: number;
 }
 
-const codes = new Map<string, CodeEntry>();
+const otpStore = new Map<string, OTPEntry>();
 const sessions = new Map<string, SessionEntry>();
 
+const OTP_TTL_MS = 10 * 60 * 1000;
 const SESSION_TTL_MS = 12 * 60 * 60 * 1000;
-const CODE_TTL_MS = 24 * 60 * 60 * 1000;
-
-const SAFE_CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-
-function generateCode(): string {
-  let raw = "";
-  const bytes = crypto.randomBytes(8);
-  for (let i = 0; i < 8; i++) {
-    raw += SAFE_CHARS[bytes[i] % SAFE_CHARS.length];
-  }
-  return `${raw.slice(0, 4)}-${raw.slice(4)}`;
-}
 
 setInterval(
   () => {
     const now = Date.now();
-    for (const [key, val] of codes) {
-      if (now - val.createdAt > CODE_TTL_MS) codes.delete(key);
+    for (const [k, v] of otpStore) {
+      if (now - v.createdAt > OTP_TTL_MS) otpStore.delete(k);
     }
-    for (const [key, val] of sessions) {
-      if (now - val.createdAt > SESSION_TTL_MS) sessions.delete(key);
+    for (const [k, v] of sessions) {
+      if (now - v.createdAt > SESSION_TTL_MS) sessions.delete(k);
     }
   },
   60 * 60 * 1000,
 );
 
-router.post("/access/generate", (req, res) => {
-  const adminSecret = process.env.PREVIEW_ADMIN_SECRET;
-  if (!adminSecret) {
-    return res.status(503).json({ error: "Preview gate not configured" });
+router.post("/access/request-otp", async (req, res) => {
+  const otp = String(crypto.randomInt(100000, 999999));
+  const requestId = crypto.randomUUID();
+
+  otpStore.set(requestId, { otp, used: false, createdAt: Date.now() });
+
+  try {
+    await sendOTPEmail(otp);
+  } catch (err) {
+    console.error("[ACCESS GATE] Email send failed:", err);
   }
-  const { secret } = req.body as { secret?: string };
-  if (!secret || secret !== adminSecret) {
-    return res.status(403).json({ error: "Unauthorized" });
-  }
-  const code = generateCode();
-  codes.set(code, { used: false, createdAt: Date.now() });
-  return res.json({ code });
+
+  return res.json({ requestId });
 });
 
-router.post("/access/verify", (req, res) => {
-  const { code } = req.body as { code?: string };
-  if (!code) return res.status(400).json({ valid: false, error: "Code required" });
+router.post("/access/verify-otp", (req, res) => {
+  const { requestId, otp } = req.body as { requestId?: string; otp?: string };
+
+  if (!requestId || !otp) {
+    return res.status(400).json({ valid: false, error: "بيانات ناقصة" });
+  }
 
   const adminSecret = process.env.PREVIEW_ADMIN_SECRET;
-
-  // Admin secret works as a permanent bypass
-  if (adminSecret && code.trim() === adminSecret) {
+  if (adminSecret && otp.trim() === adminSecret) {
     const token = crypto.randomUUID();
     sessions.set(token, { createdAt: Date.now() });
     return res.json({ valid: true, token });
   }
 
-  const normalized = String(code)
-    .toUpperCase()
-    .replace(/\s/g, "")
-    .replace(/[^A-Z0-9\-]/g, "");
-
-  const entry = codes.get(normalized);
-  if (!entry) return res.json({ valid: false, error: "الكود غير صحيح" });
-  if (entry.used) return res.json({ valid: false, error: "تم استخدام هذا الكود مسبقاً" });
+  const entry = otpStore.get(requestId);
+  if (!entry) {
+    return res.json({ valid: false, error: "انتهت صلاحية الطلب، اضغط طلب رمز جديد" });
+  }
+  if (entry.used) {
+    return res.json({ valid: false, error: "تم استخدام هذا الرمز مسبقاً" });
+  }
+  if (Date.now() - entry.createdAt > OTP_TTL_MS) {
+    otpStore.delete(requestId);
+    return res.json({ valid: false, error: "انتهت صلاحية الرمز (10 دقائق)، اطلب رمزاً جديداً" });
+  }
+  if (otp.trim() !== entry.otp) {
+    return res.json({ valid: false, error: "الرمز غير صحيح" });
+  }
 
   entry.used = true;
   const token = crypto.randomUUID();
