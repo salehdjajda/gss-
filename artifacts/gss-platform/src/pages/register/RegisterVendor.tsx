@@ -35,6 +35,15 @@ const SCOPE_OPTIONS = [
   { val: "all", label: "جميع مناطق المملكة" },
 ];
 
+const PAYMENT_TERMS_OPTIONS = [
+  "دفع فوري",
+  "دفع بعد التنفيذ",
+  "30 يوم",
+  "60 يوم",
+  "90 يوم",
+  "حسب نوع المشروع",
+];
+
 const schema = z.object({
   name: z.string().min(2, "الاسم مطلوب"),
   vendorType: z.string().min(1, "نوع مقدم الخدمة مطلوب"),
@@ -45,6 +54,7 @@ const schema = z.object({
   services: z.array(z.string()).min(1, "يرجى تحديد نوع الخدمة"),
   serviceScope: z.string().min(1, "نطاق العمل مطلوب"),
   teamSize: z.string().optional(),
+  acceptedPaymentTerms: z.array(z.string()).optional(),
   dataConfirmed: z.boolean().refine(val => val === true, "يجب تأكيد صحة البيانات"),
 });
 
@@ -67,7 +77,7 @@ export default function RegisterVendor() {
     defaultValues: {
       name: "", vendorType: "", specialty: "", city: "",
       phone: "", email: "", services: [], serviceScope: "",
-      teamSize: "", dataConfirmed: false,
+      teamSize: "", acceptedPaymentTerms: [], dataConfirmed: false,
     },
   });
 
@@ -313,6 +323,40 @@ export default function RegisterVendor() {
                             {opt}
                           </button>
                         ))}
+                      </div>
+                    </FormItem>
+                  )} />
+
+                  {/* Payment Terms */}
+                  <FormField control={form.control} name="acceptedPaymentTerms" render={() => (
+                    <FormItem>
+                      <FormLabel>
+                        شروط السداد المقبولة لدى مورّدكم
+                        <span className="block text-xs font-normal text-gray-500 mt-0.5">
+                          يرجى تحديد شروط السداد التي يمكنكم العمل وفقها عند استقبال طلبات من المنشآت عبر منصة GSS
+                        </span>
+                      </FormLabel>
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {PAYMENT_TERMS_OPTIONS.map(opt => {
+                          const current = form.watch("acceptedPaymentTerms") as string[] ?? [];
+                          const isSelected = current.includes(opt);
+                          return (
+                            <button
+                              key={opt}
+                              type="button"
+                              onClick={() => {
+                                const vals = form.getValues("acceptedPaymentTerms") as string[] ?? [];
+                                form.setValue("acceptedPaymentTerms", isSelected ? vals.filter(v => v !== opt) : [...vals, opt]);
+                              }}
+                              className={`rounded-xl border px-4 py-2.5 text-sm font-medium transition-colors ${isSelected ? "border-primary bg-primary text-white" : "border-gray-200 hover:border-primary/50 text-gray-700"}`}
+                            >
+                              {opt}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      <div className="mt-2 text-xs text-blue-700 bg-blue-50 border border-blue-100 rounded-lg px-3 py-2">
+                        يتم مطابقة شروط السداد الخاصة بكم مع سياسة سداد المنشأة قبل إصدار أمر العمل — مما يضمن توافق الطرفين مسبقاً.
                       </div>
                     </FormItem>
                   )} />

@@ -363,6 +363,98 @@ export default function HowItWorks() {
             </p>
           </motion.div>
 
+          {/* Vendor Payment Terms Policy */}
+          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="bg-slate-50 border border-slate-200 rounded-2xl p-7">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-slate-200 rounded-xl flex items-center justify-center">
+                <FileText size={20} className="text-slate-600" />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900">{ar ? "سياسة آجال السداد مع الموردين المعتمدين" : "Payment Terms Policy with Certified Vendors"}</h3>
+            </div>
+            <p className="text-gray-600 text-sm leading-relaxed">
+              {ar
+                ? "تعتمد منصة GSS شبكة موردين معتمدين يتم الاتفاق معهم مسبقًا على شروط السداد وفق سياسات تشغيلية واضحة تشمل مدد سداد مختلفة حسب طبيعة الخدمة ونوع المشروع. وعند استلام طلب خدمة، تقوم GSS باختيار المورد المناسب بناءً على توافق شروط التنفيذ وآجال السداد المعتمدة لدى المنشأة مع سياسات المورد. ولا يتم إصدار أمر العمل إلا بعد التأكد من توافق شروط الدفع بين الطرفين."
+                : "GSS Platform operates a certified vendor network with pre-agreed payment terms according to clear operational policies covering varying payment periods based on the nature of the service and project type. When a request is received, GSS selects the appropriate vendor based on alignment between the execution terms and the facility's approved payment policy and the vendor's terms. A work order is only issued after confirming payment term compatibility between both parties."}
+            </p>
+          </motion.div>
+
+          {/* Facility's Existing Vendors */}
+          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.25 }} className="bg-blue-50 border border-blue-100 rounded-2xl p-7">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+                <Info size={20} className="text-blue-600" />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900">{ar ? "إدارة الموردين الحاليين لدى المنشأة" : "Managing the Facility's Existing Vendors"}</h3>
+            </div>
+            <p className="text-gray-600 text-sm leading-relaxed mb-3">
+              {ar
+                ? "في حال رغبت المنشأة بالاستمرار مع مورديها الحاليين، تقوم منصة GSS بإدارة ومتابعة تنفيذ الطلبات التشغيلية معهم وفق نطاق الخدمة المتفق عليه، دون أن تكون طرفًا ماليًا في العلاقة التعاقدية بينهم."
+                : "If a facility wishes to continue with its existing vendors, GSS Platform manages and follows up on operational request execution with them according to the agreed service scope — without being a financial party in the contractual relationship between them."}
+            </p>
+            <div className="bg-white border border-blue-100 rounded-xl px-4 py-3 text-xs text-blue-700">
+              {ar
+                ? "تبقى مسؤولية السداد مباشرة بين المنشأة والمورد، بينما يقتصر دور المنصة على التنسيق والمتابعة التشغيلية وإصدار تقارير الإنجاز."
+                : "Payment responsibility remains directly between the facility and the vendor. The platform's role is limited to operational coordination, follow-up, and issuing completion reports."}
+            </div>
+          </motion.div>
+
+          {/* Vendor Matching by Payment Terms */}
+          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }} className="bg-green-50 border border-green-100 rounded-2xl p-7">
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
+                <CheckCircle2 size={20} className="text-green-600" />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900">{ar ? "اختيار المورد وفق سياسة السداد المعتمدة" : "Vendor Selection Based on Approved Payment Policy"}</h3>
+            </div>
+            <p className="text-gray-600 text-sm leading-relaxed mb-4">
+              {ar
+                ? "تقوم منصة GSS باختيار المورد المناسب لكل طلب خدمة بناءً على معايير متكاملة:"
+                : "GSS Platform selects the appropriate vendor for each service request based on comprehensive criteria:"}
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-4">
+              {(ar ? [
+                "طبيعة الخدمة",
+                "سرعة التنفيذ",
+                "الموقع الجغرافي",
+                "مستوى الجودة",
+                "شروط السداد المعتمدة",
+                "تاريخ الأداء التشغيلي",
+              ] : [
+                "Nature of Service",
+                "Execution Speed",
+                "Geographic Location",
+                "Quality Level",
+                "Approved Payment Terms",
+                "Operational Performance History",
+              ]).map((item, i) => (
+                <div key={i} className="bg-white border border-green-100 rounded-lg px-3 py-2 flex items-center gap-2">
+                  <CheckCircle2 size={13} className="text-green-500 flex-shrink-0" />
+                  <span className="text-xs font-medium text-gray-700">{item}</span>
+                </div>
+              ))}
+            </div>
+            <div className="bg-white border border-green-200 rounded-xl px-4 py-3 text-xs text-green-800">
+              {ar
+                ? "عند اعتماد المنشأة لسياسة سداد محددة (30 أو 60 أو 90 يوم)، يتم ترشيح الموردين القادرين على العمل وفق نفس شروط الدفع فقط — مما يحمي الطرفين ويضمن استمرار التشغيل دون خلافات مالية."
+                : "When a facility adopts a specific payment policy (Net 30, 60, or 90 days), only vendors capable of working under the same payment terms are nominated — protecting both parties and ensuring continuous operations without financial disputes."}
+            </div>
+          </motion.div>
+
+          {/* GSS not a Financial Intermediary */}
+          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.35 }} className="bg-amber-50 border border-amber-200 rounded-2xl p-7">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
+                <AlertCircle size={20} className="text-amber-600" />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900">{ar ? "GSS ليست طرفًا ماليًا في عمليات السداد" : "GSS is Not a Financial Party in Payment Transactions"}</h3>
+            </div>
+            <p className="text-gray-600 text-sm leading-relaxed">
+              {ar
+                ? "لا تكون منصة GSS طرفًا ماليًا في عمليات السداد بين المنشأة والمورد. يقتصر دور المنصة على إدارة الطلبات التشغيلية والتنسيق والمتابعة حتى إغلاق الخدمة وفق المعايير المعتمدة. تُصدر GSS فاتورة منفصلة لرسوم إدارة الخدمة — وهي مستقلة تمامًا عن فواتير الموردين المنفذين."
+                : "GSS Platform is not a financial party in payment transactions between the facility and the vendor. The platform's role is limited to operational request management, coordination, and follow-up until service closure per approved standards. GSS issues a separate invoice for its service management fees — entirely independent of the executing vendors' invoices."}
+            </p>
+          </motion.div>
+
         </div>
       </section>
 

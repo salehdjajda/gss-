@@ -46,6 +46,7 @@ import RegisterCompany from "@/pages/register/RegisterCompany";
 import RegisterVendor from "@/pages/register/RegisterVendor";
 import RegisterConsultant from "@/pages/register/RegisterConsultant";
 import RegisterIndividual from "@/pages/register/RegisterIndividual";
+import TermsAndConditions from "@/pages/TermsAndConditions";
 
 // Dashboards
 import CompanyDashboard from "@/pages/dashboard/CompanyDashboard";
@@ -107,6 +108,7 @@ function MainLayout() {
           <Route path="/register/vendor" component={RegisterVendor} />
           <Route path="/register/consultant" component={RegisterConsultant} />
           <Route path="/register/individual" component={RegisterIndividual} />
+          <Route path="/terms" component={TermsAndConditions} />
 
           <Route path="/dashboard/company" component={CompanyDashboard} />
           <Route path="/dashboard/company/work-orders" component={WorkOrders} />

@@ -91,6 +91,7 @@ const schema = z.object({
   hasEmergencies: z.string().optional(),
   hasInternalTeam: z.string().optional(),
   hasTicketSystem: z.string().optional(),
+  paymentPolicy: z.string().optional(),
   collaborationModel: z.string().min(1, "يرجى تحديد نموذج التعاون"),
   budgetDefined: z.string().optional(),
   selectedPackage: z.string().optional(),
@@ -158,6 +159,7 @@ export default function RegisterCompany() {
       branches: [],
       hasCurrentVendors: "no", vendors: [],
       monthlyRequestsVolume: "", hasEmergencies: "", hasInternalTeam: "", hasTicketSystem: "",
+      paymentPolicy: "",
       collaborationModel: "", budgetDefined: "", selectedPackage: "",
       authorizationConfirmed: false, agreementConfirmed: false, feesConfirmed: false,
     },
@@ -1087,6 +1089,44 @@ export default function RegisterCompany() {
                       </FormItem>
                     )} />
                   </div>
+
+                  {/* Payment Policy */}
+                  <FormField control={form.control} name="paymentPolicy" render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        {ar ? "سياسة السداد المعتمدة لدى منشأتكم" : "Your Facility's Approved Payment Policy"}
+                        <span className="block text-xs font-normal text-gray-500 mt-0.5">
+                          {ar
+                            ? "يرجى تحديد سياسة السداد المعتمدة لديكم ليتم ترشيح الموردين المناسبين وفق شروط الدفع الخاصة بمنشأتكم"
+                            : "Please specify your payment policy so we can match vendors with compatible payment terms"}
+                        </span>
+                      </FormLabel>
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {(ar ? [
+                          "الدفع الفوري",
+                          "الدفع بعد التنفيذ",
+                          "الدفع خلال 30 يوم",
+                          "الدفع خلال 60 يوم",
+                          "الدفع خلال 90 يوم",
+                          "حسب نوع المشروع",
+                        ] : [
+                          "Immediate Payment",
+                          "Payment After Execution",
+                          "Net 30 Days",
+                          "Net 60 Days",
+                          "Net 90 Days",
+                          "Per Project Type",
+                        ]).map(opt => (
+                          <ToggleButton key={opt} value={opt} label={opt} current={field.value} onSelect={v => form.setValue("paymentPolicy", v)} />
+                        ))}
+                      </div>
+                      <div className="mt-2 text-xs text-blue-700 bg-blue-50 border border-blue-100 rounded-lg px-3 py-2">
+                        {ar
+                          ? "يتم ترشيح الموردين القادرين على العمل وفق نفس شروط الدفع المعتمدة لديكم — وذلك لضمان توافق الطرفين قبل إصدار أمر العمل."
+                          : "Vendors capable of working under your approved payment terms are matched — ensuring alignment between both parties before work order issuance."}
+                      </div>
+                    </FormItem>
+                  )} />
 
                   <FormField control={form.control} name="collaborationModel" render={({ field }) => (
                     <FormItem>
