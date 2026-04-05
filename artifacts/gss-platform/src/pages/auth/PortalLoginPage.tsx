@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link, useLocation } from "wouter";
-import { Eye, EyeOff, Phone, Lock, Building2, Wrench, Users, UserCircle2, ArrowRight, ArrowLeft, ShieldCheck, ExternalLink } from "lucide-react";
+import { Eye, EyeOff, Phone, Lock, Building2, Wrench, Users, ArrowRight, ArrowLeft, ShieldCheck, ExternalLink } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useIndividualAuth } from "@/contexts/IndividualAuthContext";
 import { useCompanyAuth, useVendorAuth, useConsultantAuth } from "@/contexts/AccountAuthContext";
 import logoImg from "@assets/image_1774909317242.png";
 
-type PortalType = "company" | "vendor" | "consultant" | "individual";
+type PortalType = "company" | "vendor" | "consultant";
 
 const TYPES: {
   id: PortalType;
@@ -24,31 +23,19 @@ const TYPES: {
   {
     id: "company",
     labelAr: "المنشآت والشركات",
-    labelEn: "Facilities",
+    labelEn: "Facilities & Companies",
     icon: Building2,
     color: "text-blue-600",
     bg: "bg-blue-50",
     registerHref: "/register/company",
     registerLabelAr: "تسجيل منشأة جديدة",
     registerLabelEn: "Register New Facility",
-    descAr: "انتقل لنموذج تسجيل المنشأة الكامل مع جميع البيانات التشغيلية",
-  },
-  {
-    id: "individual",
-    labelAr: "الأفراد",
-    labelEn: "Individuals",
-    icon: UserCircle2,
-    color: "text-green-600",
-    bg: "bg-green-50",
-    registerHref: "/register/individual",
-    registerLabelAr: "تسجيل فرد جديد",
-    registerLabelEn: "Register as Individual",
-    descAr: "سجّل كفرد واطلب خدماتك التشغيلية",
+    descAr: "اختر نموذج الخدمة المناسب وأكمل استمارة التسجيل",
   },
   {
     id: "vendor",
-    labelAr: "الموردون",
-    labelEn: "Vendors",
+    labelAr: "الموردون المعتمدون",
+    labelEn: "Certified Vendors",
     icon: Wrench,
     color: "text-orange-600",
     bg: "bg-orange-50",
@@ -84,12 +71,11 @@ function LoginForm({ portalType }: { portalType: PortalType }) {
   const companyAuth    = useCompanyAuth();
   const vendorAuth     = useVendorAuth();
   const consultantAuth = useConsultantAuth();
-  const individualAuth = useIndividualAuth();
 
-  const authMap = { company: companyAuth, vendor: vendorAuth, consultant: consultantAuth, individual: individualAuth };
+  const authMap = { company: companyAuth, vendor: vendorAuth, consultant: consultantAuth };
   const dashboardMap: Record<PortalType, string> = {
     company: "/dashboard/company", vendor: "/dashboard/vendor",
-    consultant: "/dashboard/consultant", individual: "/dashboard/individual",
+    consultant: "/dashboard/consultant",
   };
 
   const typeInfo = TYPES.find(t => t.id === portalType)!;
@@ -105,9 +91,7 @@ function LoginForm({ portalType }: { portalType: PortalType }) {
     setLoading(false);
     if (!result.success) { setError(result.error || ""); return; }
     const pendingSvc = sessionStorage.getItem("gss_pending_service");
-    if (pendingSvc && portalType === "individual") {
-      navigate("/request/service");
-    } else if (pendingSvc && portalType === "company") {
+    if (pendingSvc && portalType === "company") {
       navigate("/request/company-service");
     } else {
       navigate(dashboardMap[portalType]);
@@ -258,7 +242,7 @@ function LoginForm({ portalType }: { portalType: PortalType }) {
 export default function PortalLoginPage() {
   const { lang, isRTL } = useLanguage();
   const urlType = new URLSearchParams(window.location.search).get("type") as PortalType | null;
-  const validTypes: PortalType[] = ["company", "vendor", "consultant", "individual"];
+  const validTypes: PortalType[] = ["company", "vendor", "consultant"];
   const [selectedType, setSelectedType] = useState<PortalType | null>(
     urlType && validTypes.includes(urlType) ? urlType : null
   );

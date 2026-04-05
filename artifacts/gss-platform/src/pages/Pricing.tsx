@@ -187,9 +187,9 @@ export default function Pricing() {
                     </li>
                   ))}
                 </ul>
-                <Link href="/register/company">
+                <Link href="/register/company?model=on-demand">
                   <Button className="w-full font-bold">
-                    {isAr ? "ابدأ بالدفع حسب الطلب" : "Start with Pay Per Request"}
+                    {isAr ? "سجّل بنموذج حسب الطلب" : "Register with Pay Per Request"}
                   </Button>
                 </Link>
               </div>
@@ -244,9 +244,9 @@ export default function Pricing() {
                     ? "تُضاف رسوم منفصلة للخدمات المنفذة خارج نطاق الباقة الشهرية المتفق عليها."
                     : "Separate fees are added for services executed outside the agreed monthly package scope."}
                 </div>
-                <Link href="/contact">
+                <Link href="/register/company?model=monthly">
                   <Button className="w-full font-bold bg-primary hover:bg-primary/90 h-12">
-                    {isAr ? "احصل على عرض الباقة الشهرية" : "Get Monthly Package Offer"}
+                    {isAr ? "سجّل وابدأ بالباقة الشهرية" : "Register for Monthly Package"}
                   </Button>
                 </Link>
               </div>
@@ -375,14 +375,14 @@ export default function Pricing() {
                 <p className="text-4xl font-black text-secondary mb-2">{isAr ? "مخصص" : "Custom"}</p>
                 <p className="text-white/70 text-sm">{isAr ? "تسعير حسب نطاق المشروع وحجمه" : "Pricing based on project scope and size"}</p>
               </div>
-              <Link href="/contact">
+              <Link href="/register/company?model=both">
                 <Button size="lg" className="w-full h-13 font-bold bg-secondary hover:bg-secondary/90 text-primary">
-                  {isAr ? "تواصل لمناقشة مشروعكم" : "Contact Us to Discuss Your Project"}
+                  {isAr ? "ابدأ حسب الطلب + احصل على عرض باقة شهرية" : "Start Pay-Per-Request + Get Monthly Package Offer"}
                 </Button>
               </Link>
               <Link href="/register/company">
                 <Button size="lg" variant="outline" className="w-full h-11 font-bold text-white border-white hover:bg-white/10">
-                  {isAr ? "سجّل منشأتكم أولاً" : "Register Your Facility First"}
+                  {isAr ? "عرض جميع نماذج الخدمة" : "View All Service Models"}
                 </Button>
               </Link>
             </div>

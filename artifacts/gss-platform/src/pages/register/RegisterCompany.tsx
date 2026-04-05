@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useLocation } from "wouter";
+import { useLocation, useSearch } from "wouter";
 import { useCompanyAuth } from "@/contexts/AccountAuthContext";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -127,10 +127,14 @@ export default function RegisterCompany() {
   const { lang } = useLanguage();
   const ar = lang === "ar";
   const [, setLocation] = useLocation();
+  const search = useSearch();
+  const urlParams = new URLSearchParams(search);
+  const urlModel = urlParams.get("model") as "on-demand" | "monthly" | "both" | null;
   const { toast } = useToast();
   const companyAuth = useCompanyAuth();
   const registerMutation = useRegisterCompany();
-  const [phase, setPhase] = useState<"intro" | "form" | "success">("intro");
+  const [phase, setPhase] = useState<"intro" | "form" | "success">(urlModel ? "form" : "intro");
+  const [selectedModel, setSelectedModel] = useState<"on-demand" | "monthly" | "both" | null>(urlModel ?? null);
   const [step, setStep] = useState(1);
   const [accountNumber, setAccountNumber] = useState<string>("");
   const [savedPhone, setSavedPhone] = useState("");
@@ -253,63 +257,178 @@ export default function RegisterCompany() {
     <h3 className="text-xl font-bold text-gray-800 border-b pb-3 mb-5">{title}</h3>
   );
 
+  function startRegistration(model: "on-demand" | "monthly" | "both") {
+    setSelectedModel(model);
+    const collab = model === "on-demand" ? "on-demand" : model === "monthly" ? "subscription" : "on-demand";
+    form.setValue("collaborationModel", collab);
+    form.setValue("selectedPackage", model === "on-demand" ? "on-demand" : model === "monthly" ? "undecided" : "on-demand");
+    setPhase("form");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
   if (phase === "intro") {
-    const introCards = ar
-      ? [
-          { icon: Layers, title: "ندرس احتياجاتكم", desc: "تحليل دقيق لطبيعة عملياتكم التشغيلية" },
-          { icon: Users, title: "نقترح النموذج الأنسب", desc: "حسب حجم التشغيل وعدد الفروع" },
-          { icon: ShieldCheck, title: "نُرسل الاتفاقية", desc: "لتوقيعها وختمها وتفعيل حسابكم" },
-        ]
-      : [
-          { icon: Layers, title: "We Study Your Needs", desc: "Precise analysis of your operational requirements" },
-          { icon: Users, title: "We Suggest the Right Model", desc: "Based on your operational scale and branches" },
-          { icon: ShieldCheck, title: "We Send the Agreement", desc: "For signing, stamping, and account activation" },
-        ];
     return (
-      <div className="min-h-screen bg-gradient-to-b from-primary/5 to-white flex items-center justify-center py-12 px-4">
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="max-w-2xl w-full text-center">
-          <div className="w-20 h-20 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-lg">
-            <Building2 size={40} className="text-white" />
+      <div className="min-h-screen bg-gradient-to-b from-primary/5 to-white py-12 px-4">
+        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="max-w-3xl mx-auto">
+          <div className="text-center mb-10">
+            <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+              <Building2 size={32} className="text-white" />
+            </div>
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+              {ar ? "اختر نموذج التعاون مع GSS" : "Choose Your GSS Service Model"}
+            </h1>
+            <p className="text-gray-500 text-base leading-relaxed max-w-xl mx-auto">
+              {ar
+                ? "نقدم نموذجين للخدمة — اقرأ تفاصيل كل نموذج واختر ما يناسب منشأتكم، ثم أكمل استمارة التسجيل."
+                : "We offer two service models — read the details of each and choose what suits your facility, then complete the registration form."}
+            </p>
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            {ar ? "ابدأ بتنظيم عمليات منشأتك التشغيلية" : "Start Organizing Your Facility's Operations"}
-          </h1>
-          <p className="text-gray-600 text-lg leading-relaxed mb-10 max-w-xl mx-auto">
-            {ar
-              ? "يرجى تعبئة بيانات منشأتكم ليقوم فريق GSS بدراسة احتياجاتكم التشغيلية واقتراح نموذج الخدمة المناسب لكم."
-              : "Please fill in your facility's information so the GSS team can study your operational needs and suggest the appropriate service model for you."}
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10 text-right">
-            {introCards.map((item, i) => (
-              <div key={i} className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
-                <item.icon size={24} className="text-primary mb-3" />
-                <h4 className="font-bold text-gray-900 mb-1">{item.title}</h4>
-                <p className="text-gray-500 text-sm">{item.desc}</p>
+
+          <div className="grid md:grid-cols-2 gap-5 mb-6">
+            {/* Model A: On-Demand */}
+            <div className={`bg-white border-2 rounded-3xl p-6 flex flex-col transition-all ${selectedModel === "on-demand" ? "border-primary shadow-md" : "border-gray-200 hover:border-primary/40"}`}>
+              <div className="flex items-start justify-between mb-4">
+                <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-2xl">🔧</div>
+                <span className="text-xs font-bold bg-blue-100 text-blue-700 px-3 py-1 rounded-full">
+                  {ar ? "تفعيل فوري" : "Instant Activation"}
+                </span>
               </div>
-            ))}
+              <h3 className="text-xl font-bold text-gray-900 mb-2">{ar ? "الخدمة حسب الطلب" : "Pay Per Request"}</h3>
+              <p className="text-gray-500 text-sm leading-relaxed mb-4">
+                {ar
+                  ? "ادفع رسوم ثابتة عن كل طلب خدمة تشغيلية ترفعه. لا يوجد التزام شهري ولا رسوم اشتراك."
+                  : "Pay a fixed fee for each operational service request you submit. No monthly commitment or subscription fees."}
+              </p>
+              <ul className="space-y-2 mb-6 flex-1">
+                {(ar ? [
+                  "رسوم معلومة على كل طلب خدمة",
+                  "وصول كامل لشبكة الموردين المعتمدين",
+                  "متابعة أوامر العمل وإغلاقها",
+                  "لا يوجد التزام شهري",
+                  "مناسب للمنشآت ذات الطلبات المتفرقة",
+                ] : [
+                  "Fixed known fee per service request",
+                  "Full access to certified vendor network",
+                  "Work order tracking and closure",
+                  "No monthly commitment",
+                  "Ideal for facilities with occasional needs",
+                ]).map((f, i) => (
+                  <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
+                    <CheckCircle2 size={14} className="text-blue-500 flex-shrink-0 mt-0.5" />{f}
+                  </li>
+                ))}
+              </ul>
+              <Button className="w-full font-bold" onClick={() => startRegistration("on-demand")} data-testid="btn-start-company-registration">
+                {ar ? "سجّل بهذا النموذج" : "Register with This Model"} <ArrowLeft className="ms-2" size={16} />
+              </Button>
+            </div>
+
+            {/* Model B: Monthly Package */}
+            <div className={`bg-white border-2 rounded-3xl p-6 flex flex-col transition-all relative ${selectedModel === "monthly" ? "border-secondary shadow-md" : "border-gray-200 hover:border-secondary/40"}`}>
+              <span className="absolute top-4 left-4 text-xs font-bold bg-secondary text-primary px-3 py-1 rounded-full">
+                ⭐ {ar ? "للمنشآت الكبيرة" : "For Large Facilities"}
+              </span>
+              <div className="flex items-start justify-between mb-4 mt-2">
+                <div className="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center text-2xl">📋</div>
+                <span className="text-xs font-bold bg-amber-100 text-amber-700 px-3 py-1 rounded-full">
+                  {ar ? "سعر مخصص" : "Custom Pricing"}
+                </span>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">{ar ? "الباقة الشهرية المدارة" : "Managed Monthly Package"}</h3>
+              <p className="text-gray-500 text-sm leading-relaxed mb-4">
+                {ar
+                  ? "رسوم شهرية ثابتة تُحدَّد بعد دراسة احتياجات منشأتكم. مناسبة للمنشآت الكبيرة وذات الفروع المتعددة."
+                  : "Fixed monthly fee determined after studying your facility's needs. Best for large or multi-branch facilities."}
+              </p>
+              <ul className="space-y-2 mb-4 flex-1">
+                {(ar ? [
+                  "متابعة تشغيلية مستمرة لجميع فروعكم",
+                  "مدير حساب مخصص لمنشأتكم",
+                  "تقارير تشغيلية شهرية وربعية",
+                  "فاتورة شهرية موحدة لجميع الخدمات",
+                  "أولوية في الاستجابة والتنفيذ",
+                ] : [
+                  "Continuous operations monitoring for all branches",
+                  "Dedicated account manager",
+                  "Monthly and quarterly operational reports",
+                  "Unified monthly invoice for all services",
+                  "Priority response and execution",
+                ]).map((f, i) => (
+                  <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
+                    <CheckCircle2 size={14} className="text-secondary flex-shrink-0 mt-0.5" />{f}
+                  </li>
+                ))}
+              </ul>
+              <div className="bg-amber-50 border border-amber-100 rounded-xl px-4 py-2.5 mb-4 text-xs text-amber-800">
+                <strong>{ar ? "آلية التسعير: " : "Pricing Flow: "}</strong>
+                {ar
+                  ? "تملأون استمارة التقييم ← يدرس فريق GSS احتياجاتكم ← نُرسل عرض السعر المناسب لمنشأتكم."
+                  : "Fill assessment form → GSS team studies your needs → We send you a custom pricing proposal."}
+              </div>
+              <Button className="w-full font-bold bg-secondary hover:bg-secondary/90 text-primary" onClick={() => startRegistration("monthly")}>
+                {ar ? "أريد الباقة الشهرية" : "I Want the Monthly Package"} <ArrowLeft className="ms-2" size={16} />
+              </Button>
+            </div>
           </div>
-          <Button size="lg" className="h-14 px-12 text-lg font-bold" onClick={() => setPhase("form")} data-testid="btn-start-company-registration">
-            {ar ? "ابدأ التسجيل" : "Start Registration"} <ArrowLeft className="mr-2" size={20} />
-          </Button>
+
+          {/* Model C: Both */}
+          <div className={`bg-white border-2 rounded-2xl px-6 py-5 flex items-center justify-between gap-4 transition-all ${selectedModel === "both" ? "border-primary shadow-sm" : "border-dashed border-gray-300 hover:border-primary/40"}`}>
+            <div className="flex-1 min-w-0">
+              <p className="font-bold text-gray-900 text-sm mb-0.5">
+                🔀 {ar ? "أبدأ بحسب الطلب وأريد عرض سعر للباقة الشهرية" : "Start with Pay-Per-Request + Get Package Pricing"}
+              </p>
+              <p className="text-gray-400 text-xs leading-relaxed">
+                {ar
+                  ? "سجّل الآن وابدأ برفع طلباتك مباشرة، وفي نفس الوقت سيتواصل فريق GSS معك بعرض سعر الباقة الشهرية المناسبة لمنشأتكم."
+                  : "Register now and start submitting requests immediately — the GSS team will also contact you with a monthly package pricing proposal."}
+              </p>
+            </div>
+            <Button variant="outline" className="shrink-0 font-bold border-primary text-primary hover:bg-primary hover:text-white" onClick={() => startRegistration("both")}>
+              {ar ? "اختر هذا الخيار" : "Choose This Option"}
+            </Button>
+          </div>
+
+          <p className="text-center text-xs text-gray-400 mt-6">
+            {ar
+              ? "يمكنكم تغيير نموذج الخدمة في أي وقت بعد التسجيل بالتواصل مع فريق GSS."
+              : "You can change your service model at any time after registration by contacting the GSS team."}
+          </p>
         </motion.div>
       </div>
     );
   }
 
   if (phase === "success") {
+    const isMonthly = selectedModel === "monthly";
+    const isBoth = selectedModel === "both";
     return (
       <div className="min-h-screen bg-gradient-to-b from-green-50 to-white flex items-center justify-center py-12 px-4">
         <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="max-w-xl w-full text-center">
           <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <CheckCircle2 size={48} className="text-green-600" />
           </div>
+          <div className="inline-block bg-primary/10 text-primary text-xs font-bold px-4 py-1.5 rounded-full mb-4">
+            {isMonthly
+              ? (ar ? "الباقة الشهرية — تحت الدراسة" : "Monthly Package — Under Review")
+              : isBoth
+              ? (ar ? "حسب الطلب + عرض سعر الباقة" : "Pay Per Request + Package Quote")
+              : (ar ? "حسب الطلب — تفعيل قريب" : "Pay Per Request — Activating Soon")}
+          </div>
           <h2 className="text-3xl font-bold text-gray-900 mb-3">
-            {ar ? "تم استلام طلب تسجيل منشأتكم بنجاح" : "Your Facility Registration Request Was Received Successfully"}
+            {ar ? "تم استلام طلب التسجيل بنجاح" : "Registration Request Received Successfully"}
           </h2>
           <p className="text-gray-500 text-base leading-relaxed mb-6">
             {ar
-              ? "سيقوم فريق GSS بمراجعة بياناتكم وإرسال الاتفاقية التشغيلية إلى بريدكم الإلكتروني."
-              : "The GSS team will review your information and send the operational agreement to your email."}
+              ? isMonthly
+                ? "سيقوم فريق GSS بدراسة بيانات منشأتكم وتقديم عرض سعر الباقة الشهرية المناسبة لكم."
+                : isBoth
+                ? "سيتم تفعيل حسابكم للخدمة حسب الطلب، وسيتواصل معكم فريق GSS بعرض سعر الباقة الشهرية."
+                : "سيتم مراجعة بياناتكم وإرسال الاتفاقية التشغيلية لتفعيل حسابكم في أسرع وقت."
+              : isMonthly
+                ? "The GSS team will study your facility's data and send you a suitable monthly package pricing proposal."
+                : isBoth
+                ? "Your account will be activated for pay-per-request service, and the GSS team will contact you with a monthly package pricing proposal."
+                : "Your information will be reviewed and the operational agreement sent to activate your account as soon as possible."}
           </p>
           {accountNumber && (
             <div className="bg-primary text-white rounded-2xl p-6 mb-6">
@@ -321,9 +440,25 @@ export default function RegisterCompany() {
           <div className="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-6 text-right">
             <p className="text-amber-800 font-semibold text-sm mb-2">{ar ? "الخطوات التالية:" : "Next Steps:"}</p>
             <ul className="space-y-2 text-amber-700 text-sm">
-              <li className="flex items-start gap-2"><CheckCircle2 size={14} className="mt-0.5 flex-shrink-0 text-amber-600" /> {ar ? "ستصلكم الاتفاقية التشغيلية عبر البريد الإلكتروني" : "The operational agreement will be sent to your email"}</li>
-              <li className="flex items-start gap-2"><CheckCircle2 size={14} className="mt-0.5 flex-shrink-0 text-amber-600" /> {ar ? "قوموا بتوقيعها وختمها وإعادة رفعها" : "Sign it, stamp it, and upload it back"}</li>
-              <li className="flex items-start gap-2"><CheckCircle2 size={14} className="mt-0.5 flex-shrink-0 text-amber-600" /> {ar ? `سيتم تفعيل حسابكم وبدء الخدمة برقم ${accountNumber || "حسابكم"}` : `Your account will be activated and service started under account ${accountNumber || "your account"}`}</li>
+              {isMonthly ? (
+                <>
+                  <li className="flex items-start gap-2"><CheckCircle2 size={14} className="mt-0.5 flex-shrink-0 text-amber-600" /> {ar ? "سيدرس فريق GSS بيانات منشأتكم واحتياجاتكم التشغيلية" : "The GSS team will study your facility's data and operational needs"}</li>
+                  <li className="flex items-start gap-2"><CheckCircle2 size={14} className="mt-0.5 flex-shrink-0 text-amber-600" /> {ar ? "ستصلكم عروض أسعار الباقة الشهرية المناسبة" : "You'll receive a suitable monthly package pricing proposal"}</li>
+                  <li className="flex items-start gap-2"><CheckCircle2 size={14} className="mt-0.5 flex-shrink-0 text-amber-600" /> {ar ? "بعد الموافقة ترسل الاتفاقية ويُفعَّل الحساب" : "After approval, the agreement is sent and your account is activated"}</li>
+                </>
+              ) : isBoth ? (
+                <>
+                  <li className="flex items-start gap-2"><CheckCircle2 size={14} className="mt-0.5 flex-shrink-0 text-amber-600" /> {ar ? "ستصلكم الاتفاقية التشغيلية لتوقيعها وتفعيل حسابكم" : "The operational agreement will be sent for signing and account activation"}</li>
+                  <li className="flex items-start gap-2"><CheckCircle2 size={14} className="mt-0.5 flex-shrink-0 text-amber-600" /> {ar ? "يمكنكم رفع الطلبات فور تفعيل الحساب" : "You can submit requests as soon as your account is activated"}</li>
+                  <li className="flex items-start gap-2"><CheckCircle2 size={14} className="mt-0.5 flex-shrink-0 text-amber-600" /> {ar ? "سيتواصل معكم فريق GSS بعرض سعر الباقة الشهرية" : "The GSS team will contact you with a monthly package pricing proposal"}</li>
+                </>
+              ) : (
+                <>
+                  <li className="flex items-start gap-2"><CheckCircle2 size={14} className="mt-0.5 flex-shrink-0 text-amber-600" /> {ar ? "ستصلكم الاتفاقية التشغيلية عبر البريد الإلكتروني" : "The operational agreement will be sent to your email"}</li>
+                  <li className="flex items-start gap-2"><CheckCircle2 size={14} className="mt-0.5 flex-shrink-0 text-amber-600" /> {ar ? "قوموا بتوقيعها وختمها وإعادة رفعها" : "Sign it, stamp it, and upload it back"}</li>
+                  <li className="flex items-start gap-2"><CheckCircle2 size={14} className="mt-0.5 flex-shrink-0 text-amber-600" /> {ar ? "سيتم تفعيل حسابكم والبدء برفع الطلبات" : "Your account will be activated and you can start submitting requests"}</li>
+                </>
+              )}
             </ul>
           </div>
           {savedPhone && (
@@ -382,6 +517,29 @@ export default function RegisterCompany() {
         <div className="bg-white rounded-3xl shadow-lg p-8 border border-gray-100">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+
+              {/* Model Badge */}
+              {selectedModel && (
+                <div className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium border ${selectedModel === "monthly" ? "bg-amber-50 border-amber-200 text-amber-800" : "bg-blue-50 border-blue-100 text-blue-800"}`}>
+                  <span className="text-lg">{selectedModel === "monthly" ? "📋" : selectedModel === "both" ? "🔀" : "🔧"}</span>
+                  <span>
+                    {ar
+                      ? selectedModel === "monthly"
+                        ? "اخترتم: الباقة الشهرية المدارة — سيُرسل عرض السعر بعد دراسة بياناتكم"
+                        : selectedModel === "both"
+                        ? "اخترتم: حسب الطلب + عرض سعر الباقة الشهرية"
+                        : "اخترتم: الخدمة حسب الطلب"
+                      : selectedModel === "monthly"
+                        ? "Selected: Managed Monthly Package — pricing proposal sent after reviewing your data"
+                        : selectedModel === "both"
+                        ? "Selected: Pay Per Request + Monthly Package Quote"
+                        : "Selected: Pay Per Request Service"}
+                  </span>
+                  <button type="button" onClick={() => setPhase("intro")} className="ms-auto text-xs underline opacity-60 hover:opacity-100">
+                    {ar ? "تغيير" : "Change"}
+                  </button>
+                </div>
+              )}
 
               {/* ═══════════════════════════════════════════════ */}
               {/* STEP 1: بيانات المنشأة الأساسية */}
@@ -976,12 +1134,30 @@ export default function RegisterCompany() {
               {/* ═══════════════════════════════════════════════ */}
               {step === 8 && (
                 <div className="space-y-6">
-                  <SectionTitle title={ar ? "اختر الباقة المناسبة لمنشأتكم" : "Choose the Right Package for Your Facility"} />
-                  <p className="text-gray-500 text-sm leading-relaxed -mt-2">
-                    {ar
-                      ? "يمكنكم البدء بالخدمة مباشرةً دون اشتراك، أو اختيار باقة تشغيلية تمنح منشأتكم مستوى أعلى من المتابعة والدعم. الرسوم تُحدَّد بعد دراسة الاحتياج الفعلي."
-                      : "You can start the service directly without a subscription, or choose an operational package that gives your facility a higher level of follow-up and support. Fees are defined after assessing your actual needs."}
-                  </p>
+                  <SectionTitle title={ar ? "تأكيد نموذج الخدمة" : "Confirm Your Service Model"} />
+                  {selectedModel === "monthly" ? (
+                    <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-800 flex gap-3">
+                      <span className="text-2xl">📋</span>
+                      <div>
+                        <p className="font-bold mb-1">{ar ? "اخترتم الباقة الشهرية المدارة" : "You selected the Managed Monthly Package"}</p>
+                        <p>{ar ? "بعد إرسال هذه الاستمارة، سيدرس فريق GSS احتياجاتكم التشغيلية ويُرسل لكم عرض سعر مخصص. يمكنكم أيضاً تغيير اختياركم أدناه." : "After submitting this form, the GSS team will study your operational needs and send you a custom pricing proposal. You can also change your selection below."}</p>
+                      </div>
+                    </div>
+                  ) : selectedModel === "both" ? (
+                    <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-800 flex gap-3">
+                      <span className="text-2xl">🔀</span>
+                      <div>
+                        <p className="font-bold mb-1">{ar ? "حسب الطلب + عرض سعر الباقة الشهرية" : "Pay Per Request + Monthly Package Quote"}</p>
+                        <p>{ar ? "سيتم تفعيل حسابكم على نموذج حسب الطلب، وسيتواصل معكم فريق GSS لتزويدكم بعرض سعر الباقة الشهرية." : "Your account will be activated on Pay Per Request, and GSS will contact you with a monthly package pricing proposal."}</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-gray-500 text-sm leading-relaxed -mt-2">
+                      {ar
+                        ? "يمكنكم البدء بالخدمة مباشرةً دون اشتراك، أو طلب الترقية لباقة شهرية مدارة. الرسوم تُحدَّد بعد دراسة الاحتياج الفعلي."
+                        : "You can start the service directly without a subscription, or request an upgrade to a managed monthly package. Fees are defined after assessing your actual needs."}
+                    </p>
+                  )}
 
                   <FormField control={form.control} name="selectedPackage" render={({ field }) => (
                     <FormItem>
